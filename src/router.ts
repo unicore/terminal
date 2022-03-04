@@ -18,8 +18,8 @@ router.beforeEach((to, from, next) => {
       message: `У вас нет доступа на страницу ${to.path}`,
       type: 'warning',
     })
-    next('/');
-    return;
+    next('/')
+    return
   }
   next()
 })
