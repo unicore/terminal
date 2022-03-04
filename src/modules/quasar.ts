@@ -1,28 +1,15 @@
-// Import icon libraries
+import { App } from 'vue'
 import '@quasar/extras/material-icons/material-icons.css'
-// Import Quasar css
 import 'quasar/src/css/index.sass'
 
-import { Quasar, Notify, LocalStorage } from 'quasar'
+import { Quasar, Notify, LocalStorage, Loading, Meta } from 'quasar'
 import quasarLang from 'quasar/lang/ru'
 
 const config = {
-  plugins: { Notify, LocalStorage },
+  plugins: { Notify, LocalStorage, Loading, Meta },
   lang: quasarLang,
-  /*
-  config: {
-    brand: {
-      // primary: '#e46262',
-      // ... or all other brand colors
-    },
-    notify: {...}, // default set of options for Notify Quasar plugin
-    loading: {...}, // default set of options for Loading Quasar plugin
-    loadingBar: { ... }, // settings for LoadingBar Quasar plugin
-    // ..and many more (check Installation card on each Quasar component/directive/plugin)
-  }
-  */
 }
 
-export const install = (app: any) => {
+export const install = (app: App) => {
   app.use(Quasar, config)
 }

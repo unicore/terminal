@@ -1,2 +1,6 @@
 index:
   msg: Главная страница
+page:
+  index: Главная страница
+  secured:
+    page2: Страница 2

@@ -13,13 +13,16 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-      <!-- drawer content -->
+    <q-drawer v-model="leftDrawerOpen" show-if-above side="left" bordered>
       <q-list bordered separator class="min-w-25 pa-4">
         <template v-for="(item, index) in generatedRoutes">
-          <q-item clickable :key="index" v-if="item.name != 'index'" class="flex-col">
+          <q-item
+            v-if="item.name != 'all' && (userStore.hasAuth || !item.meta?.requiresAuth)"
+            :key="index"
+            clickable
+            class="flex-col">
             <q-item-section class="cursor-pointer" @click="router.push({ path: item.path })">
-              {{ item.name }}
+              {{ t(`page.${item.name.replace('secured-', 'secured.')}`) }}
             </q-item-section>
           </q-item>
         </template>
@@ -27,7 +30,6 @@
     </q-drawer>
 
     <q-page-container>
-      <div class="py-2 mx-auto text-center text-sm">[Default Layout]</div>
       <router-view v-slot="{ Component }">
         <transition name="slide-fade" mode="out-in">
           <component :is="Component" />
@@ -41,8 +43,15 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import generatedRoutes from 'virtual:generated-pages'
+  import { useI18n } from 'vue-i18n'
+  import { useUserStore } from '~/stores/user'
+
+  const { t } = useI18n()
   const router = useRouter()
+  const userStore = useUserStore()
+
   const leftDrawerOpen = ref<boolean>(false)
+
   const toggleLeftDrawer = () => {
     leftDrawerOpen.value = !leftDrawerOpen.value
   }
@@ -50,15 +59,15 @@
 
 <style lang="scss">
   .slide-fade-enter {
-    transform: translateX(10px);
+    transform: translateX(8px);
     opacity: 0;
   }
   .slide-fade-enter-active,
   .slide-fade-leave-active {
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
   }
   .slide-fade-leave-to {
-    transform: translateX(-10px);
+    transform: translateX(-8px);
     opacity: 0;
   }
 </style>

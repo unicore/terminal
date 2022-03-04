@@ -1,7 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <q-page-container>
-      <div class="py-2 mx-auto text-center text-sm bg-gray-100">[Blank Layout]</div>
       <router-view v-slot="{ Component }">
         <transition name="slide-fade" mode="out-in">
           <component :is="Component" />
@@ -18,7 +17,7 @@
   }
   .slide-fade-enter-active,
   .slide-fade-leave-active {
-    transition: all 0.2s ease;
+    transition: all 0.1s ease;
   }
   .slide-fade-leave-to {
     transform: translateX(-10px);

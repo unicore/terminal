@@ -18,6 +18,19 @@ export default defineConfig({
         { dir: 'src/pages', baseRoute: '' },
         { dir: 'src/pages/blank', baseRoute: '' },
       ],
+      extendRoute(route) {
+        if (route.path.startsWith('/secured')) {
+          return {
+            ...route,
+            meta: {
+              ...(route.meta || {}),
+              requiresAuth: true,
+            },
+          }
+        }
+
+        return route
+      },
     }),
     Layouts(),
     Unocss({

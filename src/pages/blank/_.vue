@@ -2,7 +2,7 @@
   <q-page class="p-md bg-gray-100 text-center pa-4">
     <div class="full-screen">404 not found!</div>
     <pre>Params - {{ all }}</pre>
-    <router-link to="/">Back to home page</router-link>
+    <router-link to="/"> Back to home page </router-link>
   </q-page>
 </template>
 <script setup lang="ts">
@@ -11,7 +11,10 @@
   const { all } = route.params
 </script>
 
-<route lang="yaml">
-meta:
-  layout: blank
+<route>
+{
+  meta: {
+    layout: "blank"
+  }
+}
 </route>
