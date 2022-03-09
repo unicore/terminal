@@ -7,6 +7,7 @@ import Pages from 'vite-plugin-pages'
 import Layouts from 'vite-plugin-vue-layouts'
 import { presetUno } from 'unocss'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
+import NodeGlobalsPolyfillPlugin from '@esbuild-plugins/node-globals-polyfill'
 
 export default defineConfig({
   plugins: [
@@ -40,17 +41,39 @@ export default defineConfig({
       include: resolve(__dirname, './src/locales/**'),
     }),
   ],
+  define: {
+    global: {},
+  },
   resolve: {
     alias: {
       src: resolve(__dirname, 'src'),
       '~': resolve(__dirname, 'src'),
+      process: 'process/browser',
+      stream: 'stream-browserify',
     },
   },
   server: {
     https: false,
     port: 3001,
   },
+  optimizeDeps: {
+    include: ['bip39'],
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          buffer: true,
+        }),
+      ],
+    },
+  },
   build: {
+    commonjsOptions: {
+      include: [/bip39/, /node_modules/],
+      transformMixedEsModules: true,
+    },
     reportCompressedSize: true,
     chunkSizeWarningLimit: 1024,
     rollupOptions: {
