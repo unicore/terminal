@@ -50,6 +50,10 @@ export default defineConfig({
       '~': resolve(__dirname, 'src'),
       process: 'process/browser',
       stream: 'stream-browserify',
+      zlib: 'browserify-zlib',
+      util: 'util',
+      crypto: 'crypto-browserify',
+      assert: 'assert-browserify',
     },
   },
   server: {

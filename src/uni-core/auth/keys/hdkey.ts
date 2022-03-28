@@ -1,4 +1,5 @@
 import hdkey from 'hdkey'
+import { Buffer } from 'buffer'
 
 export const seedToHd = (seed: string | Buffer) => {
   const isString = typeof seed === 'string'
@@ -9,4 +10,4 @@ export const seedToHd = (seed: string | Buffer) => {
 
 export const hdToFirstHdNode = (hd: hdkey) => hd.derive("m/44'/194'/0'/0/0")
 
-export const hdNodeToPublicKey = (hd: hdkey) => hd.publicKey.toString('hex')
+export const hdNodeToPublicKeyBuffer = (hd: hdkey) => hd.publicKey
