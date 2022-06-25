@@ -23,6 +23,7 @@ module.exports = {
       'error',
       { vars: 'all', args: 'after-used', ignoreRestSiblings: true, argsIgnorePattern: '^_' },
     ],
+    'vue/valid-attribute-name': 'off',
   },
   overrides: [
     {

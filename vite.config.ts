@@ -3,11 +3,12 @@ import { defineConfig } from 'vite'
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import Unocss from 'unocss/vite'
+import presetUno from '@unocss/preset-uno'
 import Pages from 'vite-plugin-pages'
 import Layouts from 'vite-plugin-vue-layouts'
-import { presetUno } from 'unocss'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
 import NodeGlobalsPolyfillPlugin from '@esbuild-plugins/node-globals-polyfill'
+import nodePolyfills from 'rollup-plugin-polyfill-node'
 
 export default defineConfig({
   plugins: [
@@ -39,11 +40,9 @@ export default defineConfig({
     }),
     VueI18n({
       include: resolve(__dirname, './src/locales/**'),
+      fullInstall: false,
     }),
   ],
-  define: {
-    global: {},
-  },
   resolve: {
     alias: {
       src: resolve(__dirname, 'src'),
@@ -59,9 +58,12 @@ export default defineConfig({
   server: {
     https: false,
     port: 3001,
+    proxy: {
+      '/api': 'https://gaia.holdings',
+      '/upload': 'https://storage.intellect.run',
+    },
   },
   optimizeDeps: {
-    include: ['bip39'],
     esbuildOptions: {
       define: {
         global: 'globalThis',
@@ -69,15 +71,13 @@ export default defineConfig({
       plugins: [
         NodeGlobalsPolyfillPlugin({
           buffer: true,
+          process: true,
         }),
+        // NodeModulesPolyfillPlugin(),
       ],
     },
   },
   build: {
-    commonjsOptions: {
-      include: [/bip39/, /node_modules/],
-      transformMixedEsModules: true,
-    },
     reportCompressedSize: true,
     chunkSizeWarningLimit: 1024,
     rollupOptions: {
@@ -90,6 +90,12 @@ export default defineConfig({
           }
         },
       },
+      plugins: [
+        nodePolyfills({
+          include: null,
+          sourceMap: true,
+        }),
+      ],
     },
   },
 })

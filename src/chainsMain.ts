@@ -1,6 +1,7 @@
-import ChainsSingleton from './uni-core/blockchain/chainsSingleton'
+import { ChainsSingleton } from 'unicore'
 import config from './config'
 
-ChainsSingleton.init(config)
+const instance = new ChainsSingleton()
+instance.init(config)
 
-export default ChainsSingleton
+export default instance

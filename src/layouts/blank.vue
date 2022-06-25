@@ -10,6 +10,8 @@
   </q-layout>
 </template>
 
+<script setup lang="ts"></script>
+
 <style lang="scss">
   .slide-fade-enter {
     transform: translateX(10px);
