@@ -12,6 +12,7 @@ import NodeModulesPolyfillPlugin from '@esbuild-plugins/node-modules-polyfill'
 import progress from 'vite-plugin-progress'
 
 import nodePolyfills from 'rollup-plugin-node-polyfills'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   plugins: [
@@ -120,6 +121,7 @@ export default defineConfig({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         nodePolyfills(),
+        visualizer(),
       ],
     },
   },
