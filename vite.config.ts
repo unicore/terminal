@@ -9,14 +9,13 @@ import Layouts from 'vite-plugin-vue-layouts'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
 import NodeGlobalsPolyfillPlugin from '@esbuild-plugins/node-globals-polyfill'
 import NodeModulesPolyfillPlugin from '@esbuild-plugins/node-modules-polyfill'
-import commonjs from '@rollup/plugin-commonjs'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
-import json from '@rollup/plugin-json'
+import progress from 'vite-plugin-progress'
 
 import nodePolyfills from 'rollup-plugin-node-polyfills'
 
 export default defineConfig({
   plugins: [
+    progress(),
     vue({ template: { transformAssetUrls } }),
     quasar({ sassVariables: 'src/assets/style/quasar-variables.sass' }),
     Pages({
