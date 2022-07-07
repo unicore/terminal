@@ -111,7 +111,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('/node_modules/')) {
-            const modules = ['quasar', '@quasar', 'vue', '@vue']
+            const modules = ['quasar', '@quasar', 'vue', '@vue', 'text-encoding']
             const chunk = modules.find((module) => id.includes(`${module}`))
             return chunk ? `vendor-${chunk}` : 'vendor'
           }
