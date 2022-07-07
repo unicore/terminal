@@ -1,6 +1,6 @@
 <template>
   <div class="pa-4">
-    <h5 class="text-h5">Мои NFT <NftCreateObject class="q-my-lg" /></h5>
+    <h5 class="text-h5">Мои NFT <NftCreateObject v-if="canCreateObjects" class="q-my-lg" /></h5>
 
     <div v-if="!nftStore.loading" class="row q-col-gutter-md">
       <NftObjectCard
@@ -58,10 +58,18 @@
   import NftCreateObject from '~/components/nft/NftCreateObject.vue'
   import { useNftStore } from '~/stores/nft'
   import { useUserStore } from '~/stores/user'
+  import config from '~/config'
 
   const nftStore = useNftStore()
   const userStore = useUserStore()
   const userNftIds = computed(() => nftStore.getNftIdsByUsername(userStore.username as string))
+  const canCreateObjects = computed(
+    () =>
+      userStore.hasAuth &&
+      (config.allowedNftCreatingAccounts || [userStore.username]).includes(
+        userStore.username as string
+      )
+  )
 
   const loadObjectsList = async () => {
     await nftStore.loadAvailableNfts()

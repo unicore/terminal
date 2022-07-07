@@ -1,5 +1,7 @@
 <template>
-  <div class="column flex-center pa-4">TODO HOME</div>
+  <div class="column flex-center pa-4">
+    <q-spinner color="primary" size="md" />
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -73,7 +73,7 @@
           icon="arrow_back"
           class="full-width"
           label="Вернуться"
-          @click="step = 4" />
+          @click="step = 3" />
         <q-btn
           class="full-width"
           color="primary"

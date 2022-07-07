@@ -8,7 +8,7 @@
           <!-- <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
           </q-avatar> -->
-          UNI
+          {{ config.header?.title || 'UNI' }}
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -57,6 +57,7 @@
   import { useI18n } from 'vue-i18n'
   import { useQuasar, Cookies } from 'quasar'
 
+  import config from '~/config'
   import { useUserStore } from '~/stores/user'
   import { useWalletStore } from '~/stores/wallet'
   import UserProfile from '~/components/user/UserProfile.vue'

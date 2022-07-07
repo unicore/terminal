@@ -1,7 +1,5 @@
 <template>
   <div class="pa-lg">
-    <h5 class="text-h5 q-mb-md">Рынок NFT</h5>
-
     <div v-if="!nftStore.loading" class="row q-col-gutter-md">
       <NftObjectCard
         v-for="id in nftStore.nftMarketIds"
