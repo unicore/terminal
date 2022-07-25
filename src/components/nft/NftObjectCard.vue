@@ -18,7 +18,7 @@
 
       <NftControlButtons v-if="withOwnerControls" :id="id" />
 
-      <NftMarketObject v-if="props.withMarket" :id="props.marketId as number" />
+      <NftMarketObject v-if="props.withMarket" :id="marketId" :readmore="readmore" />
     </q-card>
   </div>
 </template>
@@ -38,11 +38,13 @@
     withOwnerControls?: boolean
     withMarket?: boolean
     marketId?: number
+    readmore?: boolean
   }>()
   const nftStore = useNftStore()
   const userStore = useUserStore()
 
   const object = computed<NftObject>(() => nftStore.getNftById(props.id))
+  const marketId = computed(() => props.marketId as number)
 
   const owned = computed(() => object.value.creator === userStore.username)
 </script>

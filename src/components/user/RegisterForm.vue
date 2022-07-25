@@ -97,11 +97,13 @@
   import { generateAccount } from 'unicore'
   import { AccountData } from 'unicore/ts/src/auth'
   import emailRegex from 'email-regex'
+  import { useRouter } from 'vue-router'
 
   import chains from '~/chainsMain'
   import { useUserStore } from '~/stores/user'
 
   const userStore = useUserStore()
+  const router = useRouter()
 
   const step = ref(1)
   const generatedAccount: Ref<AccountData | null> = ref(null)
@@ -164,6 +166,7 @@
       )
       if (status === 'ok') {
         await userStore.login(account)
+        router.push({ name: 'lk' })
         Notify.create({
           message: 'Успешная регистрация',
           type: 'positive',

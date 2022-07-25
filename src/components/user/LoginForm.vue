@@ -26,6 +26,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { Notify } from 'quasar'
+  import { useRouter } from 'vue-router'
 
   import { isValidWif, makeAccountByWif, makeAccountByMnemonic } from 'unicore'
   import Chains from '~/chainsMain'
@@ -34,6 +35,7 @@
   const privateKey = ref('')
   const loading = ref(false)
   const userStore = useUserStore()
+  const router = useRouter()
 
   const submit = async () => {
     loading.value = true
@@ -62,6 +64,7 @@
         account.name = username
 
         await userStore.login(account)
+        router.push({ name: 'lk' })
         Notify.create({
           message: 'Успешный вход',
           type: 'positive',

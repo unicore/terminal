@@ -7,6 +7,7 @@
         :key="id"
         class="col-12 col-md-6"
         with-market
+        :readmore="props.readmore"
         :market-id="id" />
     </div>
     <div v-else class="row q-col-gutter-md">
@@ -57,6 +58,9 @@
   import { useNftStore } from '~/stores/nft'
 
   const nftStore = useNftStore()
+  const props = defineProps<{
+    readmore?: boolean
+  }>()
 
   const loadObjectsList = async () => {
     await nftStore.loadAvailableNfts()

@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import vue from '@vitejs/plugin-vue'
+import { createHtmlPlugin } from 'vite-plugin-html'
 import Unocss from 'unocss/vite'
 import presetUno from '@unocss/preset-uno'
 import Pages from 'vite-plugin-pages'
@@ -14,10 +15,18 @@ import progress from 'vite-plugin-progress'
 import nodePolyfills from 'rollup-plugin-node-polyfills'
 import { visualizer } from 'rollup-plugin-visualizer'
 
+import config from './src/config'
+
 export default defineConfig({
   plugins: [
     progress(),
     vue({ template: { transformAssetUrls } }),
+    createHtmlPlugin({
+      minify: true,
+      inject: {
+        data: { SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система' },
+      },
+    }),
     quasar({ sassVariables: 'src/assets/style/quasar-variables.sass' }),
     Pages({
       routeStyle: 'nuxt',
@@ -26,7 +35,7 @@ export default defineConfig({
         { dir: 'src/pages/blank', baseRoute: '' },
       ],
       extendRoute(route) {
-        if (route.path.startsWith('/secured')) {
+        if (route.path.startsWith('/lk')) {
           return {
             ...route,
             meta: {

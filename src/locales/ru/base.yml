@@ -2,10 +2,9 @@ index:
   msg: Главная страница
 pages:
   index: Главная страница
-  public: 
+  lk: 
+    index: Dashboard
     NftMarket: Рынок NFT
-  secured:
     NftMyObjects: Мои NFT
-    P2P: Касса взаимопомощи
 numbers:
   piece: ноль частей | одна часть | {n} часть | {n} части | {n} частей

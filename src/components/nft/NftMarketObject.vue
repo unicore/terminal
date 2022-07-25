@@ -9,12 +9,13 @@
 
   <q-card-actions>
     <q-btn
-      v-if="object.remain_pieces > 0"
+      v-if="object.remain_pieces > 0 && !props.readmore"
       dialog
       color="teal"
       label="Купить"
       :disable="!userStore.hasAuth"
       @click="showDialog = true" />
+    <q-btn v-if="props.readmore" dialog color="teal" label="Подробнее" disable />
     <q-dialog v-model="showDialog">
       <q-card>
         <q-card-section>
@@ -63,6 +64,7 @@
 
   const props = defineProps<{
     id: number
+    readmore?: boolean
   }>()
   const nftStore = useNftStore()
 

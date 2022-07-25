@@ -2,19 +2,20 @@
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white text-left">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn v-if="!isIndexLayout" dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <!-- <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar> -->
           {{ config.header?.title || 'UNI' }}
         </q-toolbar-title>
+
+        <q-btn v-if="isIndexLayout" dense flat icon="login" label="Личный кабинет" @click="login" />
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above side="left" bordered>
-      <q-list bordered separator class="min-w-25 pa-4">
+    <q-drawer v-if="!isIndexLayout" v-model="leftDrawerOpen" show-if-above side="left" bordered>
+      <UserProfile />
+
+      <q-list separator class="min-w-25 pa-4">
         <template v-for="(item, index) in generatedRoutes">
           <q-item
             v-if="
@@ -34,7 +35,9 @@
           </q-item>
         </template>
       </q-list>
+    </q-drawer>
 
+    <q-drawer v-if="isIndexLayout" v-model="rightDrawerOpen" overlay side="right" bordered>
       <UserProfile />
     </q-drawer>
 
@@ -74,6 +77,7 @@
   const route = useRoute()
 
   const leftDrawerOpen = ref<boolean>(false)
+  const rightDrawerOpen = ref<boolean>(false)
 
   const toggleLeftDrawer = () => {
     leftDrawerOpen.value = !leftDrawerOpen.value
@@ -83,8 +87,24 @@
     return route.name
   })
 
-  const makePageNameFromRoute = (route: RouteRecordRaw) =>
-    `pages.${String(route.name).replace('secured-', 'secured.').replace('public-', 'public.')}`
+  const isIndexLayout = computed(() => {
+    return !!route.meta?.indexLayout
+  })
+
+  const makePageNameFromRoute = (route: RouteRecordRaw) => {
+    if (String(route.name) === 'lk') {
+      return 'pages.lk.index'
+    }
+    return `pages.${String(route.name).replace('lk-', 'lk.').replace('public-', 'public.')}`
+  }
+
+  const login = () => {
+    if (userStore.hasAuth) {
+      router.push({ name: 'lk' })
+    } else {
+      rightDrawerOpen.value = !rightDrawerOpen.value
+    }
+  }
 
   onMounted(async () => {
     const ref = Cookies.get('referer') || String(route.query.r || '')

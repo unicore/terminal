@@ -21,18 +21,6 @@
           </q-item-label>
         </q-item-section>
       </q-item>
-      <q-item class="q-pt-none q-mb-md">
-        <q-item-section>
-          <q-item-label>
-            <q-btn
-              size="sm"
-              color="green"
-              icon="handshake"
-              label="Партнёрская ссылка"
-              @click="copyRLink" />
-          </q-item-label>
-        </q-item-section>
-      </q-item>
 
       <WalletsCarousel />
     </div>
@@ -40,9 +28,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { copyToClipboard, Notify } from 'quasar'
+  import { useRouter } from 'vue-router'
 
   import { useUserStore } from '~/stores/user'
   import AuthForm from '~/components/user/AuthForm.vue'
@@ -50,30 +36,10 @@
 
   const userStore = useUserStore()
   const router = useRouter()
-  const route = useRoute()
-
-  const currentRoute = computed(() => {
-    return String(route.name)
-  })
 
   const logout = () => {
-    if (currentRoute.value.startsWith('secured-')) {
-      router.push({ name: 'index' })
-    }
+    router.push({ name: 'index' })
     userStore.logout()
-  }
-
-  const copyRLink = () => {
-    copyToClipboard(`${location.protocol}//${location.host}/?r=${userStore.username}`)
-      .then(() => {
-        Notify.create({
-          message: 'Ссылка скопирована',
-          type: 'positive',
-        })
-      })
-      .catch((e) => {
-        console.log(e)
-      })
   }
 </script>
 
