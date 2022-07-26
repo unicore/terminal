@@ -5,7 +5,12 @@
         <q-btn v-if="!isIndexLayout" dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          {{ config.header?.title || 'UNI' }}
+          <q-btn
+            stretch
+            flat
+            :label="config.header?.title || 'UNI'"
+            class="btn-title"
+            @click="goToIndex" />
         </q-toolbar-title>
 
         <q-btn v-if="isIndexLayout" dense flat icon="login" label="Личный кабинет" @click="login" />
@@ -98,6 +103,10 @@
     return `pages.${String(route.name).replace('lk-', 'lk.').replace('public-', 'public.')}`
   }
 
+  const goToIndex = () => {
+    router.push({ name: 'index' })
+  }
+
   const login = () => {
     if (userStore.hasAuth) {
       router.push({ name: 'lk' })
@@ -128,5 +137,9 @@
   .slide-fade-leave-to {
     transform: translateX(-8px);
     opacity: 0;
+  }
+
+  .btn-title {
+    font-size: 20px;
   }
 </style>
