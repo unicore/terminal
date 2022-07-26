@@ -8,11 +8,11 @@ import presetUno from '@unocss/preset-uno'
 import Pages from 'vite-plugin-pages'
 import Layouts from 'vite-plugin-vue-layouts'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
-import NodeGlobalsPolyfillPlugin from '@esbuild-plugins/node-globals-polyfill'
-import NodeModulesPolyfillPlugin from '@esbuild-plugins/node-modules-polyfill'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill/dist'
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill/dist'
 import progress from 'vite-plugin-progress'
 
-import nodePolyfills from 'rollup-plugin-node-polyfills'
+import nodePolyfills from 'rollup-plugin-node-polyfills/dist'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 import config from './src/config'
@@ -22,7 +22,6 @@ export default defineConfig({
     progress(),
     vue({ template: { transformAssetUrls } }),
     createHtmlPlugin({
-      minify: true,
       inject: {
         data: { SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система' },
       },
