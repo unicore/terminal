@@ -1,5 +1,5 @@
 <template>
-  <q-btn color="primary" label="Выставить NFT на продажу" @click="open" />
+  <q-btn color="primary" label="продать" @click="open" />
 
   <q-dialog v-model="opened" persistent>
     <q-card style="max-width: 500px; width: 100vw">
@@ -14,9 +14,22 @@
       <q-card-section style="max-height: 80vh" class="scroll">
         <q-form class="q-gutter-md" @submit="save">
           <q-input
-            v-model="price"
+            v-model="base_price"
             filled
-            label="Ваша цена"
+            label="Себестоимость"
+            min="1"
+            type="number"
+            required
+            :readonly="loading">
+            <template #append>
+              <q-badge class="q-mr-sm q-ml-sm">{{ rootChain.coreSymbol }}</q-badge>
+            </template>
+          </q-input>
+
+          <q-input
+            v-model="min_price"
+            filled
+            label="Минимальная цена"
             min="1"
             type="number"
             required
@@ -41,24 +54,18 @@
             </template>
           </q-input>
 
-          <div>
+          <!-- <div>
             <span>Вы получите:</span>
             <q-badge size="md" class="q-pa-sm q-ma-sm">{{ totalSum }}</q-badge>
           </div>
-
-          <q-checkbox
-            v-model="withDelivery"
-            class="q-pl-md full-width"
-            label="С физической поставкой"
-            filled />
-
+          -->
+          
           <q-input
-            v-if="withDelivery"
             v-model="deliveryFrom"
             filled
             label="Откуда производится доставка" />
 
-          <q-card v-if="withDelivery" class="q-pa-md">
+          <q-card class="q-pa-md">
             <h6>Запросить у покупателя</h6>
             <div v-for="q in deliveryFromQuestions" :key="q.id" class="flex">
               <q-btn icon="delete" color="primary" flat size="md" @click="remove(q)" />
@@ -72,7 +79,7 @@
             color="primary"
             type="submit"
             :loading="loading"
-            :disable="!price || (!piecesToSell && object.total_pieces > 1)" />
+            :disable="!base_price || !min_price || (!piecesToSell && object.total_pieces > 1)" />
         </q-form>
       </q-card-section>
 
@@ -112,9 +119,9 @@
   })
   const opened = ref(false)
   const loading = ref(false)
-  const withDelivery = ref(false)
   const deliveryFrom = ref('')
-  const price = ref('')
+  const base_price = ref('')
+  const min_price = ref('')
   const piecesToSell = ref('')
   const userStore = useUserStore()
   let idCounter = 4
@@ -134,11 +141,12 @@
     deliveryFromQuestions.value = deliveryFromQuestions.value.filter((q) => q.id !== origQ.id)
   }
 
-  const safePrice = computed(() => Number(price.value) || 0)
+  const baseSafePrice = computed(() => Number(base_price.value) || 0)
+  const minSafePrice = computed(() => Number(min_price.value) || 0)
   const safePiecesToSell = computed(() => Number(piecesToSell.value) || 1)
 
   const totalSum = computed(
-    () => `${(safePrice.value * safePiecesToSell.value).toFixed(4)} ${rootChain.coreSymbol}`
+    () => `${(baseSafePrice.value * safePiecesToSell.value).toFixed(4)} ${rootChain.coreSymbol}`
   )
 
   const open = () => {
@@ -152,12 +160,8 @@
       object_id: object.value.id,
       pieces_to_sell: piecesToSell.value,
       token_contract: 'eosio.token',
-      one_piece_price: safePrice.value.toFixed(4) + ' ' + rootChain.coreSymbol,
-      buyer_can_offer_price: false,
-      with_delivery: withDelivery.value,
-      delivery_from: deliveryFrom.value,
-      delivery_methods: ['selfdelivery'],
-      delivery_operators: [],
+      base_piece_price: baseSafePrice.value.toFixed(4) + ' ' + rootChain.coreSymbol,
+      min_piece_price: minSafePrice.value.toFixed(4) + ' ' + rootChain.coreSymbol,
       meta: JSON.stringify({
         delivery_request: deliveryFromQuestions.value.map((q) => ({
           type: q.type,
