@@ -1,6 +1,5 @@
 <template>
   <div v-if="walletStore.symbols.length > 0">
-    
     <q-carousel
       v-model="slide"
       swipeable
