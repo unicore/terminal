@@ -14,7 +14,7 @@
       <q-card-section style="max-height: 80vh" class="scroll">
         <q-form class="q-gutter-md" @submit="save">
           <q-input
-            v-model="base_price"
+            v-model="basePrice"
             filled
             label="Себестоимость"
             min="1"
@@ -27,7 +27,7 @@
           </q-input>
 
           <q-input
-            v-model="min_price"
+            v-model="minPrice"
             filled
             label="Минимальная цена"
             min="1"
@@ -54,12 +54,6 @@
             </template>
           </q-input>
 
-          <!-- <div>
-            <span>Вы получите:</span>
-            <q-badge size="md" class="q-pa-sm q-ma-sm">{{ totalSum }}</q-badge>
-          </div>
-          -->
-          
           <q-input
             v-model="deliveryFrom"
             filled
@@ -79,7 +73,7 @@
             color="primary"
             type="submit"
             :loading="loading"
-            :disable="!base_price || !min_price || (!piecesToSell && object.total_pieces > 1)" />
+            :disable="!basePrice || !minPrice || (!piecesToSell && object.total_pieces > 1)" />
         </q-form>
       </q-card-section>
 
@@ -120,8 +114,8 @@
   const opened = ref(false)
   const loading = ref(false)
   const deliveryFrom = ref('')
-  const base_price = ref('')
-  const min_price = ref('')
+  const basePrice = ref('')
+  const minPrice = ref('')
   const piecesToSell = ref('')
   const userStore = useUserStore()
   let idCounter = 4
@@ -141,8 +135,8 @@
     deliveryFromQuestions.value = deliveryFromQuestions.value.filter((q) => q.id !== origQ.id)
   }
 
-  const baseSafePrice = computed(() => Number(base_price.value) || 0)
-  const minSafePrice = computed(() => Number(min_price.value) || 0)
+  const baseSafePrice = computed(() => Number(basePrice.value) || 0)
+  const minSafePrice = computed(() => Number(minPrice.value) || 0)
   const safePiecesToSell = computed(() => Number(piecesToSell.value) || 1)
 
   const totalSum = computed(
