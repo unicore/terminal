@@ -25,3 +25,5 @@ dist-ssr
 
 src/config/index.ts
 stats.html
+src/config/gaia.ts
+src/config/local.ts
