@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-btn color="teal" size="md" @click="open">Создать NFT</q-btn>
+    <q-btn color="teal" size="md" @click="open">Создать</q-btn>
 
     <q-dialog v-model="opened" persistent>
       <q-card style="max-width: 500px; width: 100vw">
@@ -18,19 +18,6 @@
               label="Заголовок"
               required
               :readonly="loading" />
-
-            <q-select
-              v-model="nftObject.category"
-              filled
-              label="Категория"
-              :options="categories"
-              option-value="id"
-              option-label="title"
-              option-disable="inactive"
-              :readonly="loading"
-              emit-value
-              required
-              map-options />
 
             <q-uploader
               class="full-width q-pl-md"
@@ -53,16 +40,7 @@
               :readonly="loading" />
 
             <div style="align-items: center" class="row bg-light-blue-1">
-              <div class="col-6">
-                <q-checkbox
-                  v-model="nftObject.pieced"
-                  class="full-width"
-                  label="Разделить на части"
-                  style="height: 56px"
-                  :readonly="loading"
-                  filled />
-              </div>
-              <div class="col-6">
+              <div class="col-12">
                 <q-input
                   v-if="nftObject.pieced"
                   v-model="nftObject.total_pieces"
@@ -109,10 +87,8 @@
     category: categories.value[0].id,
     description: '',
     images: [] as string[],
-    pieced: false,
-    creator_can_emit_new_pieces: false,
+    pieced: true,
     total_pieces: '',
-    ipns: '',
   })
 
   const nftObject = ref(makeNftObject())
@@ -132,7 +108,6 @@
       category: nftObject.value.category,
       images: JSON.stringify(nftObject.value.images),
       ipns: nftObject.value.ipns,
-      creator_can_emit_new_pieces: nftObject.value.creator_can_emit_new_pieces,
       meta: '{}',
       total_pieces: nftObject.value.pieced ? nftObject.value.total_pieces || 1 : 1,
     }

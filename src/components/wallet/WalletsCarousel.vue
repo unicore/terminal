@@ -1,8 +1,5 @@
 <template>
   <div v-if="walletStore.symbols.length > 0">
-    <div class="text-subtitle2 text-center text-uppercase q-mb-sm">
-      <q-icon name="account_balance_wallet" /> Кошельки
-    </div>
     <q-carousel
       v-model="slide"
       swipeable

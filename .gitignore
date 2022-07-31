@@ -25,3 +25,4 @@ dist-ssr
 
 src/config/index.ts
 stats.html
+src/config/*.ts

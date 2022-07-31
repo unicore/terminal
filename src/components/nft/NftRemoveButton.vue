@@ -1,5 +1,5 @@
 <template>
-  <q-btn color="red" label="Удалить NFT" @click="open" />
+  <q-btn color="red" label="Удалить" @click="open" />
 
   <q-dialog v-model="opened" persistent>
     <q-card>
