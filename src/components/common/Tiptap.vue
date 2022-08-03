@@ -1,57 +1,187 @@
 <template>
-  <div>
-    <q-card :class="owned && 'bg-light-green-1'">
-      <NftImages :id="props.id" />
-
-      <q-card-section class="q-py-sm">
-        <div class="text-h6">{{ object.title }}</div>
-        <NftObjectPieces :id="id" :with-market="withMarket" :market-id="props.marketId" />
-      </q-card-section>
-
-      <q-card-section v-if="object.description" class="q-py-sm markdown-root">
-        <VueMarkdown :source="object.description" />
-      </q-card-section>
-
-      <q-card-section class="q-py-sm">
-        NFT разместил: {{ object.creator }} <span v-if="owned">(это вы)</span>
-      </q-card-section>
-
-      <NftControlButtons v-if="withOwnerControls" :id="id" />
-
-      <NftMarketObject v-if="props.withMarket" :id="marketId" :readmore="readmore" />
-    </q-card>
-  </div>
+  <FloatingMenu
+    v-if="editor"
+    :editor="editor"
+    :tippy-options="{ duration: 100 }"
+    :should-show="() => true">
+    <button
+      :class="{ 'is-active': editor.isActive('bold') }"
+      @click="editor.chain().focus().toggleBold().run()">
+      <q-icon name="format_bold" size="16px" />
+    </button>
+    <button
+      :class="{ 'is-active': editor.isActive('italic') }"
+      @click="editor.chain().focus().toggleItalic().run()">
+      <q-icon name="format_italic" size="16px" />
+    </button>
+    <button
+      :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+      @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">
+      H3
+    </button>
+    <button
+      :class="{ 'is-active': editor.isActive('bulletList') }"
+      @click="editor.chain().focus().toggleBulletList().run()">
+      <q-icon name="list" size="16px" />
+    </button>
+  </FloatingMenu>
+  <EditorContent :editor="editor" :readonly="readonly" />
 </template>
 
-<script setup lang="ts">
-  import { computed } from 'vue'
-  import VueMarkdown from 'vue-markdown-render'
-  import { NftObject } from 'unicore/ts/src/blockchain/contracts/nft'
-  import { useUserStore } from '~/stores/user'
-  import { useNftStore } from '~/stores/nft'
-  import NftImages from './NftImages.vue'
-  import NftControlButtons from './NftControlButtons.vue'
-  import NftMarketObject from './NftMarketObject.vue'
-  import NftObjectPieces from './NftObjectPieces.vue'
+<script>
+  import StarterKit from '@tiptap/starter-kit'
+  import { Editor, EditorContent, FloatingMenu } from '@tiptap/vue-3'
+  import { createMarkdownEditor } from 'tiptap-markdown'
+  const MarkdownEditor = createMarkdownEditor(Editor)
 
-  const props = defineProps<{
-    id: number
-    withOwnerControls?: boolean
-    withMarket?: boolean
-    marketId?: number
-    readmore?: boolean
-  }>()
-  const nftStore = useNftStore()
-  const userStore = useUserStore()
+  export default {
+    components: {
+      EditorContent,
+      FloatingMenu,
+    },
 
-  const object = computed<NftObject>(() => nftStore.getNftById(props.id))
-  const marketId = computed(() => props.marketId as number)
+    props: {
+      modelValue: {
+        type: String,
+        default: '',
+      },
+      readonly: {
+        type: Boolean,
+        required: false,
+        default: false,
+      },
+    },
 
-  const owned = computed(() => object.value.creator === userStore.username)
+    emits: ['update:modelValue'],
+
+    data() {
+      return {
+        editor: null,
+      }
+    },
+
+    watch: {
+      modelValue(value) {
+        const isSame = this.editor.getMarkdown() === value
+
+        if (isSame) {
+          return
+        }
+
+        this.editor.commands.setContent(value, false)
+      },
+    },
+
+    mounted() {
+      this.editor = new MarkdownEditor({
+        extensions: [StarterKit],
+        content: this.modelValue,
+        onUpdate: () => {
+          this.$emit('update:modelValue', this.editor.getMarkdown())
+        },
+      })
+    },
+
+    beforeUnmount() {
+      this.editor.destroy()
+    },
+  }
 </script>
 
+<style lang="scss" scoped>
+  button {
+    font-size: 14px !important;
+    font-family: inherit;
+    color: #000;
+    margin: 0.1rem;
+    border: 1px solid black;
+    border-radius: 0.3rem;
+    padding: 0.06rem 0.2rem;
+    background: white;
+    accent-color: black;
+
+    &.is-active {
+      background: black;
+      color: #fff;
+    }
+  }
+</style>
+
 <style lang="scss">
-  .markdown-root {
+  .ProseMirror:focus {
+    outline: none;
+  }
+
+  .ProseMirror {
+    min-height: 100px;
+    max-height: 180px;
+    overflow: scroll;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    position: relative;
+  }
+  .ProseMirror {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    white-space: break-spaces;
+    -webkit-font-variant-ligatures: none;
+    font-variant-ligatures: none;
+    font-feature-settings: 'liga' 0; /* the above doesn't seem to work in Edge */
+  }
+  .ProseMirror [contenteditable='false'] {
+    white-space: normal;
+  }
+  .ProseMirror [contenteditable='false'] [contenteditable='true'] {
+    white-space: pre-wrap;
+  }
+  .ProseMirror pre {
+    white-space: pre-wrap;
+  }
+  img.ProseMirror-separator {
+    display: inline !important;
+    border: none !important;
+    margin: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+  }
+  .ProseMirror-gapcursor {
+    display: none;
+    pointer-events: none;
+    position: absolute;
+    margin: 0;
+  }
+  .ProseMirror-gapcursor:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -2px;
+    width: 20px;
+    border-top: 1px solid black;
+    animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite;
+  }
+  @keyframes ProseMirror-cursor-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+  .ProseMirror-hideselection *::selection {
+    background: transparent;
+  }
+  .ProseMirror-hideselection *::-moz-selection {
+    background: transparent;
+  }
+  .ProseMirror-hideselection * {
+    caret-color: transparent;
+  }
+  .ProseMirror-focused .ProseMirror-gapcursor {
+    display: block;
+  }
+  .tippy-box[data-animation='fade'][data-state='hidden'] {
+    opacity: 0;
+  }
+
+  .ProseMirror {
     --color-prettylights-syntax-comment: #6e7781;
     --color-prettylights-syntax-constant: #0550ae;
     --color-prettylights-syntax-entity: #8250df;
@@ -98,7 +228,7 @@
     -webkit-text-size-adjust: 100%;
     margin: 0;
     color: var(--color-fg-default);
-    // background-color: var(--color-canvas-default);
+    background-color: var(--color-canvas-default);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
       'Apple Color Emoji', 'Segoe UI Emoji';
     font-size: 16px;
@@ -106,46 +236,46 @@
     word-wrap: break-word;
   }
 
-  .markdown-root details,
-  .markdown-root figcaption,
-  .markdown-root figure {
+  .ProseMirror details,
+  .ProseMirror figcaption,
+  .ProseMirror figure {
     display: block;
   }
 
-  .markdown-root summary {
+  .ProseMirror summary {
     display: list-item;
   }
 
-  .markdown-root [hidden] {
+  .ProseMirror [hidden] {
     display: none !important;
   }
 
-  .markdown-root a {
+  .ProseMirror a {
     background-color: transparent;
     color: var(--color-accent-fg);
     text-decoration: none;
   }
 
-  .markdown-root a:active,
-  .markdown-root a:hover {
+  .ProseMirror a:active,
+  .ProseMirror a:hover {
     outline-width: 0;
   }
 
-  .markdown-root abbr[title] {
+  .ProseMirror abbr[title] {
     border-bottom: none;
     text-decoration: underline dotted;
   }
 
-  .markdown-root b,
-  .markdown-root strong {
+  .ProseMirror b,
+  .ProseMirror strong {
     font-weight: 600;
   }
 
-  .markdown-root dfn {
+  .ProseMirror dfn {
     font-style: italic;
   }
 
-  .markdown-root h1 {
+  .ProseMirror h1 {
     margin: 0.67em 0;
     font-weight: 600;
     padding-bottom: 0.3em;
@@ -153,51 +283,51 @@
     border-bottom: 1px solid var(--color-border-muted);
   }
 
-  .markdown-root mark {
+  .ProseMirror mark {
     background-color: var(--color-attention-subtle);
     color: var(--color-text-primary);
   }
 
-  .markdown-root small {
+  .ProseMirror small {
     font-size: 90%;
   }
 
-  .markdown-root sub,
-  .markdown-root sup {
+  .ProseMirror sub,
+  .ProseMirror sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
     vertical-align: baseline;
   }
 
-  .markdown-root sub {
+  .ProseMirror sub {
     bottom: -0.25em;
   }
 
-  .markdown-root sup {
+  .ProseMirror sup {
     top: -0.5em;
   }
 
-  .markdown-root img {
+  .ProseMirror img {
     border-style: none;
     max-width: 100%;
     box-sizing: content-box;
     background-color: var(--color-canvas-default);
   }
 
-  .markdown-root code,
-  .markdown-root kbd,
-  .markdown-root pre,
-  .markdown-root samp {
+  .ProseMirror code,
+  .ProseMirror kbd,
+  .ProseMirror pre,
+  .ProseMirror samp {
     font-family: monospace, monospace;
     font-size: 1em;
   }
 
-  .markdown-root figure {
+  .ProseMirror figure {
     margin: 1em 40px;
   }
 
-  .markdown-root hr {
+  .ProseMirror hr {
     box-sizing: content-box;
     overflow: hidden;
     background: transparent;
@@ -209,7 +339,7 @@
     border: 0;
   }
 
-  .markdown-root input {
+  .ProseMirror input {
     font: inherit;
     margin: 0;
     overflow: visible;
@@ -218,72 +348,72 @@
     line-height: inherit;
   }
 
-  .markdown-root [type='button'],
-  .markdown-root [type='reset'],
-  .markdown-root [type='submit'] {
+  .ProseMirror [type='button'],
+  .ProseMirror [type='reset'],
+  .ProseMirror [type='submit'] {
     -webkit-appearance: button;
   }
 
-  .markdown-root [type='button']::-moz-focus-inner,
-  .markdown-root [type='reset']::-moz-focus-inner,
-  .markdown-root [type='submit']::-moz-focus-inner {
+  .ProseMirror [type='button']::-moz-focus-inner,
+  .ProseMirror [type='reset']::-moz-focus-inner,
+  .ProseMirror [type='submit']::-moz-focus-inner {
     border-style: none;
     padding: 0;
   }
 
-  .markdown-root [type='button']:-moz-focusring,
-  .markdown-root [type='reset']:-moz-focusring,
-  .markdown-root [type='submit']:-moz-focusring {
+  .ProseMirror [type='button']:-moz-focusring,
+  .ProseMirror [type='reset']:-moz-focusring,
+  .ProseMirror [type='submit']:-moz-focusring {
     outline: 1px dotted ButtonText;
   }
 
-  .markdown-root [type='checkbox'],
-  .markdown-root [type='radio'] {
+  .ProseMirror [type='checkbox'],
+  .ProseMirror [type='radio'] {
     box-sizing: border-box;
     padding: 0;
   }
 
-  .markdown-root [type='number']::-webkit-inner-spin-button,
-  .markdown-root [type='number']::-webkit-outer-spin-button {
+  .ProseMirror [type='number']::-webkit-inner-spin-button,
+  .ProseMirror [type='number']::-webkit-outer-spin-button {
     height: auto;
   }
 
-  .markdown-root [type='search'] {
+  .ProseMirror [type='search'] {
     -webkit-appearance: textfield;
     outline-offset: -2px;
   }
 
-  .markdown-root [type='search']::-webkit-search-cancel-button,
-  .markdown-root [type='search']::-webkit-search-decoration {
+  .ProseMirror [type='search']::-webkit-search-cancel-button,
+  .ProseMirror [type='search']::-webkit-search-decoration {
     -webkit-appearance: none;
   }
 
-  .markdown-root ::-webkit-input-placeholder {
+  .ProseMirror ::-webkit-input-placeholder {
     color: inherit;
     opacity: 0.54;
   }
 
-  .markdown-root ::-webkit-file-upload-button {
+  .ProseMirror ::-webkit-file-upload-button {
     -webkit-appearance: button;
     font: inherit;
   }
 
-  .markdown-root a:hover {
+  .ProseMirror a:hover {
     text-decoration: underline;
   }
 
-  .markdown-root hr::before {
+  .ProseMirror hr::before {
     display: table;
     content: '';
   }
 
-  .markdown-root hr::after {
+  .ProseMirror hr::after {
     display: table;
     clear: both;
     content: '';
   }
 
-  .markdown-root table {
+  .ProseMirror table {
     border-spacing: 0;
     border-collapse: collapse;
     display: block;
@@ -292,20 +422,20 @@
     overflow: auto;
   }
 
-  .markdown-root td,
-  .markdown-root th {
+  .ProseMirror td,
+  .ProseMirror th {
     padding: 0;
   }
 
-  .markdown-root details summary {
+  .ProseMirror details summary {
     cursor: pointer;
   }
 
-  .markdown-root details:not([open]) > *:not(summary) {
+  .ProseMirror details:not([open]) > *:not(summary) {
     display: none !important;
   }
 
-  .markdown-root kbd {
+  .ProseMirror kbd {
     display: inline-block;
     padding: 3px 5px;
     font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
@@ -319,96 +449,96 @@
     box-shadow: inset 0 -1px 0 var(--color-neutral-muted);
   }
 
-  .markdown-root h1,
-  .markdown-root h2,
-  .markdown-root h3,
-  .markdown-root h4,
-  .markdown-root h5,
-  .markdown-root h6 {
+  .ProseMirror h1,
+  .ProseMirror h2,
+  .ProseMirror h3,
+  .ProseMirror h4,
+  .ProseMirror h5,
+  .ProseMirror h6 {
     margin-top: 24px;
     margin-bottom: 16px;
     font-weight: 600;
     line-height: 1.25;
   }
 
-  .markdown-root h2 {
+  .ProseMirror h2 {
     font-weight: 600;
     padding-bottom: 0.3em;
     font-size: 1.5em;
     border-bottom: 1px solid var(--color-border-muted);
   }
 
-  .markdown-root h3 {
+  .ProseMirror h3 {
     font-weight: 600;
     font-size: 1.25em;
   }
 
-  .markdown-root h4 {
+  .ProseMirror h4 {
     font-weight: 600;
     font-size: 1em;
   }
 
-  .markdown-root h5 {
+  .ProseMirror h5 {
     font-weight: 600;
     font-size: 0.875em;
   }
 
-  .markdown-root h6 {
+  .ProseMirror h6 {
     font-weight: 600;
     font-size: 0.85em;
     color: var(--color-fg-muted);
   }
 
-  .markdown-root p {
+  .ProseMirror p {
     margin-top: 0;
     margin-bottom: 10px !important;
   }
 
-  .markdown-root blockquote {
+  .ProseMirror blockquote {
     margin: 0;
     padding: 0 1em;
     color: var(--color-fg-muted);
     border-left: 0.25em solid var(--color-border-default);
   }
 
-  .markdown-root ul,
-  .markdown-root ol {
+  .ProseMirror ul,
+  .ProseMirror ol {
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 2em;
   }
 
-  .markdown-root ul {
+  .ProseMirror ul {
     list-style-type: disc;
   }
 
-  .markdown-root ol {
+  .ProseMirror ol {
     list-style-type: decimal;
   }
 
-  .markdown-root ol ol,
-  .markdown-root ul ol {
+  .ProseMirror ol ol,
+  .ProseMirror ul ol {
     list-style-type: lower-roman;
   }
 
-  .markdown-root ul ul ol,
-  .markdown-root ul ol ol,
-  .markdown-root ol ul ol,
-  .markdown-root ol ol ol {
+  .ProseMirror ul ul ol,
+  .ProseMirror ul ol ol,
+  .ProseMirror ol ul ol,
+  .ProseMirror ol ol ol {
     list-style-type: lower-alpha;
   }
 
-  .markdown-root dd {
+  .ProseMirror dd {
     margin-left: 0;
   }
 
-  .markdown-root tt,
-  .markdown-root code {
+  .ProseMirror tt,
+  .ProseMirror code {
     font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
     font-size: 12px;
   }
 
-  .markdown-root pre {
+  .ProseMirror pre {
     margin-top: 0;
     margin-bottom: 0;
     font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
@@ -416,7 +546,7 @@
     word-wrap: normal;
   }
 
-  .markdown-root g-emoji {
+  .ProseMirror g-emoji {
     font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     font-size: 1em;
     font-style: normal !important;
@@ -425,172 +555,172 @@
     vertical-align: -0.075em;
   }
 
-  .markdown-root g-emoji img {
+  .ProseMirror g-emoji img {
     width: 1em;
     height: 1em;
   }
 
-  .markdown-root::before {
+  .ProseMirror::before {
     display: table;
     content: '';
   }
 
-  .markdown-root::after {
+  .ProseMirror::after {
     display: table;
     clear: both;
     content: '';
   }
 
-  .markdown-root > *:first-child {
+  .ProseMirror > *:first-child {
     margin-top: 0 !important;
   }
 
-  .markdown-root > *:last-child {
+  .ProseMirror > *:last-child {
     margin-bottom: 0 !important;
   }
 
-  .markdown-root a:not([href]) {
+  .ProseMirror a:not([href]) {
     color: inherit;
     text-decoration: none;
   }
 
-  .markdown-root .absent {
+  .ProseMirror .absent {
     color: var(--color-danger-fg);
   }
 
-  .markdown-root .anchor {
+  .ProseMirror .anchor {
     float: left;
     padding-right: 4px;
     margin-left: -20px;
     line-height: 1;
   }
 
-  .markdown-root .anchor:focus {
+  .ProseMirror .anchor:focus {
     outline: none;
   }
 
-  .markdown-root p,
-  .markdown-root blockquote,
-  .markdown-root ul,
-  .markdown-root ol,
-  .markdown-root dl,
-  .markdown-root table,
-  .markdown-root pre,
-  .markdown-root details {
+  .ProseMirror p,
+  .ProseMirror blockquote,
+  .ProseMirror ul,
+  .ProseMirror ol,
+  .ProseMirror dl,
+  .ProseMirror table,
+  .ProseMirror pre,
+  .ProseMirror details {
     margin-top: 0;
     margin-bottom: 16px;
   }
 
-  .markdown-root blockquote > :first-child {
+  .ProseMirror blockquote > :first-child {
     margin-top: 0;
   }
 
-  .markdown-root blockquote > :last-child {
+  .ProseMirror blockquote > :last-child {
     margin-bottom: 0;
   }
 
-  .markdown-root sup > a::before {
+  .ProseMirror sup > a::before {
     content: '[';
   }
 
-  .markdown-root sup > a::after {
+  .ProseMirror sup > a::after {
     content: ']';
   }
 
-  .markdown-root h1 .octicon-link,
-  .markdown-root h2 .octicon-link,
-  .markdown-root h3 .octicon-link,
-  .markdown-root h4 .octicon-link,
-  .markdown-root h5 .octicon-link,
-  .markdown-root h6 .octicon-link {
+  .ProseMirror h1 .octicon-link,
+  .ProseMirror h2 .octicon-link,
+  .ProseMirror h3 .octicon-link,
+  .ProseMirror h4 .octicon-link,
+  .ProseMirror h5 .octicon-link,
+  .ProseMirror h6 .octicon-link {
     color: var(--color-fg-default);
     vertical-align: middle;
     visibility: hidden;
   }
 
-  .markdown-root h1:hover .anchor,
-  .markdown-root h2:hover .anchor,
-  .markdown-root h3:hover .anchor,
-  .markdown-root h4:hover .anchor,
-  .markdown-root h5:hover .anchor,
-  .markdown-root h6:hover .anchor {
+  .ProseMirror h1:hover .anchor,
+  .ProseMirror h2:hover .anchor,
+  .ProseMirror h3:hover .anchor,
+  .ProseMirror h4:hover .anchor,
+  .ProseMirror h5:hover .anchor,
+  .ProseMirror h6:hover .anchor {
     text-decoration: none;
   }
 
-  .markdown-root h1:hover .anchor .octicon-link,
-  .markdown-root h2:hover .anchor .octicon-link,
-  .markdown-root h3:hover .anchor .octicon-link,
-  .markdown-root h4:hover .anchor .octicon-link,
-  .markdown-root h5:hover .anchor .octicon-link,
-  .markdown-root h6:hover .anchor .octicon-link {
+  .ProseMirror h1:hover .anchor .octicon-link,
+  .ProseMirror h2:hover .anchor .octicon-link,
+  .ProseMirror h3:hover .anchor .octicon-link,
+  .ProseMirror h4:hover .anchor .octicon-link,
+  .ProseMirror h5:hover .anchor .octicon-link,
+  .ProseMirror h6:hover .anchor .octicon-link {
     visibility: visible;
   }
 
-  .markdown-root h1 tt,
-  .markdown-root h1 code,
-  .markdown-root h2 tt,
-  .markdown-root h2 code,
-  .markdown-root h3 tt,
-  .markdown-root h3 code,
-  .markdown-root h4 tt,
-  .markdown-root h4 code,
-  .markdown-root h5 tt,
-  .markdown-root h5 code,
-  .markdown-root h6 tt,
-  .markdown-root h6 code {
+  .ProseMirror h1 tt,
+  .ProseMirror h1 code,
+  .ProseMirror h2 tt,
+  .ProseMirror h2 code,
+  .ProseMirror h3 tt,
+  .ProseMirror h3 code,
+  .ProseMirror h4 tt,
+  .ProseMirror h4 code,
+  .ProseMirror h5 tt,
+  .ProseMirror h5 code,
+  .ProseMirror h6 tt,
+  .ProseMirror h6 code {
     padding: 0 0.2em;
     font-size: inherit;
   }
 
-  .markdown-root ul.no-list,
-  .markdown-root ol.no-list {
+  .ProseMirror ul.no-list,
+  .ProseMirror ol.no-list {
     padding: 0;
     list-style-type: none;
   }
 
-  .markdown-root ol[type='1'] {
+  .ProseMirror ol[type='1'] {
     list-style-type: decimal;
   }
 
-  .markdown-root ol[type='a'] {
+  .ProseMirror ol[type='a'] {
     list-style-type: lower-alpha;
   }
 
-  .markdown-root ol[type='i'] {
+  .ProseMirror ol[type='i'] {
     list-style-type: lower-roman;
   }
 
-  .markdown-root div > ol:not([type]) {
+  .ProseMirror div > ol:not([type]) {
     list-style-type: decimal;
   }
 
-  .markdown-root ul ul,
-  .markdown-root ul ol,
-  .markdown-root ol ol,
-  .markdown-root ol ul {
+  .ProseMirror ul ul,
+  .ProseMirror ul ol,
+  .ProseMirror ol ol,
+  .ProseMirror ol ul {
     margin-top: 0;
     margin-bottom: 0;
   }
 
-  .markdown-root li > p {
+  .ProseMirror li > p {
     margin-top: 16px;
     margin-bottom: 0;
   }
 
-  .markdown-root li > p:first-child {
+  .ProseMirror li > p:first-child {
     margin-top: 0;
     margin-bottom: 0;
   }
 
-  .markdown-root li + li {
+  .ProseMirror li + li {
     margin-top: 0.25em;
   }
 
-  .markdown-root dl {
+  .ProseMirror dl {
     padding: 0;
   }
 
-  .markdown-root dl dt {
+  .ProseMirror dl dt {
     padding: 0;
     margin-top: 16px;
     font-size: 1em;
@@ -598,32 +728,32 @@
     font-weight: 600;
   }
 
-  .markdown-root dl dd {
+  .ProseMirror dl dd {
     padding: 0 16px;
     margin-bottom: 16px;
   }
 
-  .markdown-root table th {
+  .ProseMirror table th {
     font-weight: 600;
   }
 
-  .markdown-root table th,
-  .markdown-root table td {
+  .ProseMirror table th,
+  .ProseMirror table td {
     padding: 6px 13px;
     border: 1px solid var(--color-border-default);
   }
 
-  .markdown-root table tr {
+  .ProseMirror table tr {
     background-color: var(--color-canvas-default);
     border-top: 1px solid var(--color-border-muted);
   }
 
-  .markdown-root table tr:nth-child(2n) {
+  .ProseMirror table tr:nth-child(2n) {
     background-color: var(--color-canvas-subtle);
   }
 
-  .markdown-root code,
-  .markdown-root tt {
+  .ProseMirror code,
+  .ProseMirror tt {
     padding: 0.2em 0.4em;
     margin: 0;
     font-size: 85%;
@@ -631,20 +761,20 @@
     border-radius: 6px;
   }
 
-  .markdown-root code br,
-  .markdown-root tt br {
+  .ProseMirror code br,
+  .ProseMirror tt br {
     display: none;
   }
 
-  .markdown-root del code {
+  .ProseMirror del code {
     text-decoration: inherit;
   }
 
-  .markdown-root pre code {
+  .ProseMirror pre code {
     font-size: 100%;
   }
 
-  .markdown-root pre > code {
+  .ProseMirror pre > code {
     padding: 0;
     margin: 0;
     word-break: normal;
@@ -653,13 +783,13 @@
     border: 0;
   }
 
-  .markdown-root .highlight pre {
+  .ProseMirror .highlight pre {
     margin-bottom: 0;
     word-break: normal;
   }
 
-  .markdown-root .highlight pre,
-  .markdown-root pre {
+  .ProseMirror .highlight pre,
+  .ProseMirror pre {
     padding: 16px;
     overflow: auto;
     font-size: 85%;
@@ -668,8 +798,8 @@
     border-radius: 6px;
   }
 
-  .markdown-root pre code,
-  .markdown-root pre tt {
+  .ProseMirror pre code,
+  .ProseMirror pre tt {
     display: inline;
     max-width: auto;
     padding: 0;

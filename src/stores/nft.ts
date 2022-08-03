@@ -109,7 +109,9 @@ export const useNftStore = defineStore('nft', {
           console.log('CACHE HIT!')
         }
 
-        return CACHE[k] as NftMarketObject
+        const v = CACHE[k] as number
+
+        return v || v === 0 ? v : null
       }
     },
     getNftMarketIdsByNftId() {

@@ -31,13 +31,8 @@
               @removed="removed"
               @uploaded="uploaded" />
 
-            <q-input
-              v-model="nftObject.description"
-              placeholder="Описание"
-              type="textarea"
-              rows="5"
-              filled
-              :readonly="loading" />
+            <div class="q-text-h6">Описание:</div>
+            <Tiptap v-model="nftObject.description" :readonly="loading" />
 
             <div style="align-items: center" class="row bg-light-blue-1">
               <div class="col-12">
@@ -75,6 +70,7 @@
   import { useNftStore } from '~/stores/nft'
   import chains from '~/chainsMain'
   import config from '~/config'
+  import Tiptap from '~/components/common/Tiptap.vue'
 
   const opened = ref(false)
   const loading = ref(false)
