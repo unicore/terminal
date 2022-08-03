@@ -5,6 +5,7 @@
 
   <q-card-actions>
     <NftMarketBuy :id="props.id" />
+    <NftMarketCancel :id="props.id" />
   </q-card-actions>
 </template>
 
@@ -13,6 +14,7 @@
   import { NftMarketObject } from 'unicore/ts/src/blockchain/contracts/nft'
   import { useNftStore } from '~/stores/nft'
   import NftMarketBuy from './NftMarketBuy.vue'
+  import NftMarketCancel from './NftMarketCancel.vue'
 
   const props = defineProps<{
     id: number
