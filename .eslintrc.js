@@ -24,6 +24,7 @@ module.exports = {
       { vars: 'all', args: 'after-used', ignoreRestSiblings: true, argsIgnorePattern: '^_' },
     ],
     'vue/valid-attribute-name': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
   overrides: [
     {

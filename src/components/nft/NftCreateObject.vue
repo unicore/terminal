@@ -89,6 +89,7 @@
     images: [] as string[],
     pieced: true,
     total_pieces: '',
+    ipns: '',
   })
 
   const nftObject = ref(makeNftObject())
@@ -102,14 +103,13 @@
     loading.value = true
     const data = {
       creator: userStore.username,
-      lang: 'ru',
       title: nftObject.value.title,
       description: nftObject.value.description,
+      total_pieces: nftObject.value.pieced ? nftObject.value.total_pieces || 1 : 1,
       category: nftObject.value.category,
       images: JSON.stringify(nftObject.value.images),
       ipns: nftObject.value.ipns,
       meta: '{}',
-      total_pieces: nftObject.value.pieced ? nftObject.value.total_pieces || 1 : 1,
     }
 
     try {

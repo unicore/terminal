@@ -14,7 +14,7 @@
         <q-item-section side>
           <q-item-label caption>
             <q-badge size="lg" color="teal" style="font-size: 14px" class="q-pa-sm">
-              {{ i.one_piece_price }} за 1 часть
+              от {{ i.min_piece_price }} за 1 часть
             </q-badge>
           </q-item-label>
         </q-item-section>

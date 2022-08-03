@@ -16,13 +16,13 @@
           <q-input
             v-model="basePrice"
             filled
-            label="Себестоимость"
+            label="Себестоимость (за 1 часть)"
             min="1"
             type="number"
             required
             :readonly="loading">
             <template #append>
-              <q-badge class="q-mr-sm q-ml-sm">{{ rootChain.coreSymbol }}</q-badge>
+              <q-badge class="q-mr-sm q-ml-sm">{{ nftWallet.symbol }}</q-badge>
             </template>
           </q-input>
 
@@ -35,7 +35,7 @@
             required
             :readonly="loading">
             <template #append>
-              <q-badge class="q-mr-sm q-ml-sm">{{ rootChain.coreSymbol }}</q-badge>
+              <q-badge class="q-mr-sm q-ml-sm">{{ nftWallet.symbol }}</q-badge>
             </template>
           </q-input>
 
@@ -54,10 +54,7 @@
             </template>
           </q-input>
 
-          <q-input
-            v-model="deliveryFrom"
-            filled
-            label="Откуда производится доставка" />
+          <q-input v-model="deliveryFrom" filled label="Откуда производится доставка" />
 
           <q-card class="q-pa-md">
             <h6>Запросить у покупателя</h6>
@@ -100,9 +97,10 @@
     remainPieces?: number
   }>()
   const nftStore = useNftStore()
+  const userStore = useUserStore()
 
   const object = computed<NftObject>(() => nftStore.getNftById(props.id))
-  const rootChain = chains.getRootChain()
+  const nftWallet = computed(() => nftStore.nftWallet)
 
   const maxPieces = computed(() => {
     if (!Number.isNaN(props.remainPieces)) {
@@ -117,7 +115,6 @@
   const basePrice = ref('')
   const minPrice = ref('')
   const piecesToSell = ref('')
-  const userStore = useUserStore()
   let idCounter = 4
   const deliveryFromQuestions = ref([
     { type: 'text', placeholder: 'Фамилия', id: 1 },
@@ -137,11 +134,6 @@
 
   const baseSafePrice = computed(() => Number(basePrice.value) || 0)
   const minSafePrice = computed(() => Number(minPrice.value) || 0)
-  const safePiecesToSell = computed(() => Number(piecesToSell.value) || 1)
-
-  const totalSum = computed(
-    () => `${(baseSafePrice.value * safePiecesToSell.value).toFixed(4)} ${rootChain.coreSymbol}`
-  )
 
   const open = () => {
     opened.value = true
@@ -153,9 +145,9 @@
       seller: userStore.username,
       object_id: object.value.id,
       pieces_to_sell: piecesToSell.value,
-      token_contract: 'eosio.token',
-      base_piece_price: baseSafePrice.value.toFixed(4) + ' ' + rootChain.coreSymbol,
-      min_piece_price: minSafePrice.value.toFixed(4) + ' ' + rootChain.coreSymbol,
+      token_contract: nftWallet.value.contract,
+      base_piece_price: baseSafePrice.value.toFixed(4) + ' ' + nftWallet.value.symbol,
+      min_piece_price: minSafePrice.value.toFixed(4) + ' ' + nftWallet.value.symbol,
       meta: JSON.stringify({
         delivery_request: deliveryFromQuestions.value.map((q) => ({
           type: q.type,
