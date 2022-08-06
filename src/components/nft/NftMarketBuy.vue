@@ -1,6 +1,6 @@
 <template>
   <q-btn
-    v-if="marketObject.remain_pieces > 0 && !props.readmore"
+    v-if="marketObject.remain_pieces > 0 && !props.readmore && !currentUserIsSeller"
     dialog
     color="teal"
     label="Купить"
@@ -58,6 +58,7 @@
 
 <script setup lang="ts">
   import { computed, ref, watch } from 'vue'
+  import { useRouter } from 'vue-router'
   import { Notify } from 'quasar'
   import { NftMarketObject, NftObject } from 'unicore/ts/src/blockchain/contracts/nft'
 
@@ -70,6 +71,7 @@
   const loading = ref(false)
   const piecesToBuy = ref('1')
   const deliveryAnswers = ref<any>([])
+  const router = useRouter()
 
   const props = defineProps<{
     id: number
@@ -79,6 +81,9 @@
 
   const marketObject = computed<NftMarketObject>(() => nftStore.getNftMarketById(props.id))
   const object = computed<NftObject>(() => nftStore.getNftById(marketObject.value.object_id))
+  const currentUserIsSeller = computed<boolean>(
+    () => marketObject.value.seller === userStore.username
+  )
 
   const makeDeliveryAnswers = () => {
     deliveryAnswers.value =
@@ -136,6 +141,7 @@
         color: 'positive',
       })
       await nftStore.loadAvailableNfts()
+      router.push({ name: 'lk-NftMyRequests' })
       showDialog.value = false
     } catch (e: any) {
       console.error(e)

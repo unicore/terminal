@@ -3,8 +3,9 @@ index:
 pages:
   index: Главная страница
   lk: 
-    index: Dashboard
-    NftMarket: Рынок NFT
-    NftMyObjects: Мои NFT
+    index: Главная
+    NftMarket: Рынок объектов
+    NftMyObjects: Мои объекты
+    NftMyRequests: Мои заявки
 numbers:
   piece: ноль частей | одна часть | {n} часть | {n} части | {n} частей

@@ -80,15 +80,8 @@
         <q-btn v-if="requestStatus === 'confirmed'" flat color="green" @click="issueOpt">
           Выпустить опционы
         </q-btn>
-        <q-btn v-if="requestStatus === 'issued'" flat color="green" @click="confirm">
-          Выкупить
-        </q-btn>
         <q-btn
-          v-if="
-            requestStatus !== 'declined' &&
-            requestStatus !== 'cancelled' &&
-            requestStatus !== 'completed'
-          "
+          v-if="requestStatus === 'accepted' || requestStatus === 'confirmed'"
           flat
           color="red"
           @click="declineReq">
@@ -98,6 +91,9 @@
       <template v-else>
         <q-btn v-if="requestStatus === 'accepted'" flat color="green" @click="acceptPrice">
           Принять цену
+        </q-btn>
+        <q-btn v-if="requestStatus === 'issued'" flat color="green" @click="confirm">
+          Выкупить
         </q-btn>
         <q-btn v-if="requestStatus === 'waiting'" flat color="red" @click="cancelReq">
           Отменить
@@ -541,7 +537,7 @@
       cancel: 'Нет',
     }).onOk(async () => {
       const data = {
-        seller: userStore.username,
+        seller: requestObject.value.seller,
         request_id: requestObject.value.id,
       }
 

@@ -6,21 +6,25 @@
     :should-show="() => true">
     <button
       :class="{ 'is-active': editor.isActive('bold') }"
+      type="button"
       @click="editor.chain().focus().toggleBold().run()">
       <q-icon name="format_bold" size="16px" />
     </button>
     <button
       :class="{ 'is-active': editor.isActive('italic') }"
+      type="button"
       @click="editor.chain().focus().toggleItalic().run()">
       <q-icon name="format_italic" size="16px" />
     </button>
     <button
       :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+      type="button"
       @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">
       H3
     </button>
     <button
       :class="{ 'is-active': editor.isActive('bulletList') }"
+      type="button"
       @click="editor.chain().focus().toggleBulletList().run()">
       <q-icon name="list" size="16px" />
     </button>

@@ -1,6 +1,9 @@
 <template>
   <div class="pa-4">
-    <h5 class="text-h5">Мои NFT <NftCreateObject v-if="canCreateObjects" class="q-my-lg" /></h5>
+    <h5 class="text-h5">
+      Мои объекты
+      <div v-if="canCreateObjects" class="q-mb-sm display-inline-block"><NftCreateObject /></div>
+    </h5>
 
     <div v-if="!nftStore.loading" class="row q-col-gutter-md">
       <NftObjectCard

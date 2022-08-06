@@ -30,7 +30,11 @@
   </q-card-section>
   <q-card-actions v-if="owned && (!hasMarketObjects || totalPiecesInMarket < object.total_pieces)">
     <NftSellButton :id="id" :remain-pieces="object.total_pieces - totalPiecesInMarket" />
+    <NftCreateObject :edit-id="id" is-editing />
     <NftRemoveButton v-if="!hasMarketObjects" :id="id" />
+  </q-card-actions>
+  <q-card-actions v-else-if="owned">
+    <NftCreateObject :edit-id="id" is-editing />
   </q-card-actions>
 </template>
 
@@ -44,6 +48,7 @@
 
   import NftSellButton from './NftSellButton.vue'
   import NftRemoveButton from './NftRemoveButton.vue'
+  import NftCreateObject from './NftCreateObject.vue'
 
   const props = defineProps<{
     id: number

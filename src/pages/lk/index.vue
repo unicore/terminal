@@ -21,7 +21,6 @@
   import { useUserStore } from '~/stores/user'
   import { useNftStore } from '~/stores/nft'
   import AccountEvents from '~/components/explorer/AccountEvents.vue'
-  import NftAllRequests from '~/components/nft/NftAllRequests.vue'
 
   const nftStore = useNftStore()
   const loadRequests = async () => {

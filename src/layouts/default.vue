@@ -20,22 +20,16 @@
     <q-drawer v-if="!isIndexLayout" v-model="leftDrawerOpen" show-if-above side="left" bordered>
       <UserProfile />
 
-      <q-list separator class="min-w-25 pa-4">
-        <template v-for="(item, index) in generatedRoutes">
+      <q-list separator class="min-w-25 pa-4 pt-0">
+        <template v-for="(item, index) in routesInMenu" :key="index">
           <q-item
-            v-if="
-              item.name != 'all' &&
-              (userStore.hasAuth || !item.meta?.requiresAuth) &&
-              !item.meta?.hide
-            "
-            :key="index"
             v-ripple
             :active="item.name === currentRoute"
             active-class="bg-teal-1 text-grey-8"
             clickable
             class="flex-col">
             <q-item-section class="cursor-pointer" @click="router.push({ path: item.path })">
-              {{ t(makePageNameFromRoute(item)) }}
+              {{ t(item.pageName) }}
             </q-item-section>
           </q-item>
         </template>
@@ -102,6 +96,26 @@
     }
     return `pages.${String(route.name).replace('lk-', 'lk.').replace('public-', 'public.')}`
   }
+
+  const routesInMenu = computed(() => {
+    const indexPageRoute = generatedRoutes.find((v) => String(v.name) === 'lk')
+    const res = generatedRoutes.filter((v) => {
+      const n = String(v.name)
+
+      return !['lk', 'all'].includes(n)
+    })
+    if (indexPageRoute) {
+      res.unshift(indexPageRoute)
+    }
+
+    return res
+      .filter((v) => !v.meta?.hide && (!v.meta?.requiresAuth || userStore.hasAuth))
+      .map((v) => ({
+        name: String(v.name),
+        pageName: makePageNameFromRoute(v),
+        path: v.path,
+      }))
+  })
 
   const goToIndex = () => {
     router.push({ name: 'index' })

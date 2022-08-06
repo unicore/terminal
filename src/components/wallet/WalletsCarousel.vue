@@ -1,6 +1,7 @@
 <template>
   <div v-if="walletStore.symbols.length > 0">
     <q-carousel
+      v-if="props.asCarousel"
       v-model="slide"
       swipeable
       animated
@@ -16,6 +17,15 @@
         <UserWallet :symbol="symbol" />
       </q-carousel-slide>
     </q-carousel>
+    <template v-else>
+      <div
+        v-for="symbol in walletStore.symbols"
+        :key="symbol"
+        class="bg-blue-grey-7 text-white shadow-1 rounded-borders q-mt-md"
+        style="height: 100px">
+        <UserWallet :symbol="symbol" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -27,6 +37,9 @@
 
   const walletStore = useWalletStore()
   const slide = ref('')
+  const props = defineProps<{
+    asCarousel?: boolean
+  }>()
 
   watch(
     () => walletStore.symbols,

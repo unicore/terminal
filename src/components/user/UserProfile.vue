@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md q-pb-sm">
     <div v-if="!userStore.hasAuth">
       <AuthForm />
     </div>
