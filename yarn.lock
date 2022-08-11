@@ -3989,9 +3989,9 @@ undici@^5.2.0:
   resolved "https://registry.yarnpkg.com/undici/-/undici-5.6.0.tgz#3fd695d4454970bae3d151326ee4ab645b8d1962"
   integrity sha512-mc+8SY1fXubTrdx4CXDkeFFGV8lI3Tq4I/70U1V8Z6g4iscGII0uLO7CPnDt56bXEbvaKwo2T2+VrteWbZiXiQ==
 
-"unicore@https://github.com/dacom-core/unicoreJS#v1.9.6":
-  version "1.9.6"
-  resolved "https://github.com/dacom-core/unicoreJS#34dfaae5f7786537f285148e1f73918b850efff4"
+"unicore@https://github.com/dacom-core/unicoreJS#v1.9.7":
+  version "1.9.7"
+  resolved "https://github.com/dacom-core/unicoreJS#4af35ce97004e389472ecef3761838b67da81188"
   dependencies:
     "@jsdevtools/ono" "^7.1.3"
     "@types/atob" "^2.1.2"
