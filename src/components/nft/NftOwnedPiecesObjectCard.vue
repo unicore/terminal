@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EstateObjectCard :id="pieceObject.object_id" :market-id="null">
+    <EstateObjectCard :id="pieceObject.object_id" :market-id="undefined">
       <template #moreData>
         <q-list padding dense separator>
           <q-item>

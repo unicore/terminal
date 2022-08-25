@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "target": "esnext",
     "useDefineForClassFields": true,
+    "skipLibCheck": true,
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
@@ -24,5 +25,8 @@
       "~/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
+  "exclude": [
+    "./node_modules/vue3-openlayers/index.d.ts"
+  ]
 }

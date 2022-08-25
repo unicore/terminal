@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EstateObjectCard :id="props.id" :market-id="null">
+    <EstateObjectCard :id="props.id" :market-id="undefined">
       <template #moreData>
         <NftMarketInfo :id="props.id" />
       </template>
