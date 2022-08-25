@@ -1,5 +1,5 @@
 <template>
-  <div class="fillable-pieces flex justify-end">
+  <div class="fillable-pieces flex justify-end no-wrap">
     <span class="amount">{{ props.from }}/{{ props.to }}</span>
     <div class="home-img">
       <svg
@@ -53,9 +53,13 @@
 <style scoped lang="scss">
   .fillable-pieces {
     width: 70px;
+    white-space: nowrap;
 
-    img {
+    img,
+    svg {
       display: inline-block;
+
+      white-space: nowrap;
     }
   }
 
@@ -66,12 +70,15 @@
     letter-spacing: 0;
     color: #181818;
     padding-right: 8px;
+    white-space: nowrap;
   }
 
   .home-img {
     width: 20px;
     height: 20px;
     position: relative;
+    display: inline-block;
+    white-space: nowrap;
 
     > svg {
       position: absolute;
