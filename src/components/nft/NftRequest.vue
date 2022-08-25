@@ -175,6 +175,7 @@
 
   const userStore = useUserStore()
   const nftStore = useNftStore()
+  const nftWallet = computed(() => nftStore.nftWallet)
   const $q = useQuasar()
 
   const props = defineProps<{
@@ -552,7 +553,7 @@
           {
             actions: [
               {
-                account: config.nft.nftTokenContract,
+                account: nftWallet.value.contract,
                 name: 'transfer',
                 authorization: [
                   {
