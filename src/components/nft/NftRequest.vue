@@ -546,7 +546,7 @@
 
       let transferData = {
         from: userStore.username as string,
-        to: nftWallet.value.contract,
+        to: rootChain.nftContract.name,
         quantity: requestObject.value.total_price,
         memo: userStore.username as string,
       }
