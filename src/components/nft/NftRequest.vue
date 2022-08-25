@@ -175,6 +175,7 @@
 
   const userStore = useUserStore()
   const nftStore = useNftStore()
+  const nftWallet = computed(() => nftStore.nftWallet)
   const $q = useQuasar()
 
   const props = defineProps<{
@@ -537,20 +538,39 @@
       cancel: 'Нет',
     }).onOk(async () => {
       const data = {
-        seller: requestObject.value.seller,
+        buyer: requestObject.value.buyer,
         request_id: requestObject.value.id,
       }
 
       console.log(data)
+
       $q.loading.show()
 
       try {
         const rootChain = chains.getRootChain()
         const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
 
+        const transferData = {
+          from: userStore.username as string,
+          to: rootChain.nftContract.name,
+          quantity: requestObject.value.total_price,
+          memo: userStore.username as string,
+        }
+
         await api.transact(
           {
             actions: [
+              {
+                account: nftWallet.value.contract,
+                name: 'transfer',
+                authorization: [
+                  {
+                    actor: userStore.username as string,
+                    permission: 'active',
+                  },
+                ],
+                data: transferData,
+              },
               {
                 account: rootChain.nftContract.name,
                 name: 'confirm',

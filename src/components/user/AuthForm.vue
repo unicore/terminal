@@ -3,7 +3,7 @@
     <h6 class="text-h6 q-mb-md">Вход</h6>
     <LoginForm />
     <div class="q-mt-lg text-center">
-      <q-btn flat rounded color="primary" label="Зарегистрироваться" @click="isRegister = true" />
+      <q-btn flat rounded color="teal" label="Зарегистрироваться" @click="isRegister = true" />
     </div>
   </div>
   <div v-else>
@@ -13,7 +13,7 @@
       <q-btn
         flat
         rounded
-        color="primary"
+        color="teal"
         label="Вернуться и войти по ключу"
         @click="isRegister = false" />
     </div>

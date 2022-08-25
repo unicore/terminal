@@ -6,12 +6,16 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 import Unocss from 'unocss/vite'
 import presetUno from '@unocss/preset-uno'
 import Pages from 'vite-plugin-pages'
+import pluginRewriteAll from 'vite-plugin-rewrite-all'
 import Layouts from 'vite-plugin-vue-layouts'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill/dist'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill/dist'
 import progress from 'vite-plugin-progress'
+import svgLoader from 'vite-svg-loader'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import nodePolyfills from 'rollup-plugin-node-polyfills/dist'
 import { visualizer } from 'rollup-plugin-visualizer'
 
@@ -21,12 +25,16 @@ export default defineConfig({
   plugins: [
     progress(),
     vue({ template: { transformAssetUrls } }),
+    svgLoader({
+      defaultImport: 'url',
+    }),
     createHtmlPlugin({
       inject: {
         data: { SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система' },
       },
     }),
     quasar({ sassVariables: 'src/assets/style/quasar-variables.sass' }),
+    pluginRewriteAll(),
     Pages({
       routeStyle: 'nuxt',
       dirs: [
@@ -39,7 +47,7 @@ export default defineConfig({
             ...route,
             meta: {
               ...(route.meta || {}),
-              requiresAuth: true,
+              requiresAuth: !route.meta?.allowNonAuth,
             },
           }
         }

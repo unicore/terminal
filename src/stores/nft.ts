@@ -3,6 +3,7 @@ import {
   NftObject,
   NftMarketObject,
   NftMarketRequest,
+  NftPieceObject,
 } from 'unicore/dist/src/blockchain/contracts/nft'
 
 import chains from '~/chainsMain'
@@ -21,10 +22,15 @@ interface NftMarketRequests {
   [id: number]: NftMarketRequest
 }
 
+export interface NftPieces {
+  [id: number]: NftPieceObject
+}
+
 interface NftState {
   nfts: Nfts
   markets: NftMarkets
   requests: NftMarketRequests
+  pieces: NftPieces
   loading: boolean
 }
 
@@ -46,16 +52,38 @@ export const useNftStore = defineStore('nft', {
       markets: {},
       requests: {},
       cache: {},
+      pieces: {},
       loading: false,
     } as NftState),
   actions: {
+    async loadMarketNftById(id: number) {
+      this.loading = true
+      const rootChain = chains.getRootChain()
+
+      const marketObjects = await rootChain.nftContract.getMarketObjectsById(id)
+      const allObjects = await rootChain.nftContract.getObjectsById(id)
+      await this.loadRequests()
+
+      this.nfts = {
+        ...this.nfts,
+        ...allObjects.reduce((a, n) => ({ ...a, [n.id]: n }), {}),
+      }
+      this.markets = marketObjects.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+      resetCache()
+      this.loading = false
+    },
     async loadAvailableNfts() {
       this.loading = true
       const rootChain = chains.getRootChain()
 
-      const [allObjects, marketObjects] = await Promise.all([
+      const userStore = useUserStore()
+
+      const [allObjects, marketObjects, ownedObjects] = await Promise.all([
         rootChain.nftContract.getAllObjects(),
         rootChain.nftContract.getMarket(),
+        userStore.username
+          ? rootChain.nftContract.getObjectsByOwner(userStore.username)
+          : Promise.resolve([]),
         this.loadRequests(),
       ])
       this.nfts = {
@@ -63,6 +91,7 @@ export const useNftStore = defineStore('nft', {
         ...allObjects.reduce((a, n) => ({ ...a, [n.id]: n }), {}),
       }
       this.markets = marketObjects.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+      this.pieces = ownedObjects.reduce((a, n) => ({ ...a, [n.id]: n }), {})
       resetCache()
       this.loading = false
     },
@@ -93,8 +122,10 @@ export const useNftStore = defineStore('nft', {
     nftIds: (state) => Object.keys(state.nfts).map(Number),
     nftMarketIds: (state) => Object.keys(state.markets).map(Number),
     nftRequestIds: (state) => Object.keys(state.requests).map(Number),
+    nftPieceIds: (state) => Object.keys(state.pieces).map(Number),
     getNftById: (state) => (id: number) => state.nfts[id],
     getNftMarketById: (state) => (id: number) => state.markets[id],
+    getPieceById: (state) => (id: number) => state.pieces[id],
     getNftMarketRequestById: (state) => (id: number) => state.requests[id],
     getNftIdByMarketId(state) {
       return (id: number) => state.markets[id].object_id

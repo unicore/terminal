@@ -1,19 +1,19 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white text-left">
+    <q-header elevated class="bg-white text-black text-left">
       <q-toolbar>
-        <q-btn v-if="!isIndexLayout" dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn v-if="isIndexLayout" dense flat round @click="login">
+          <img :src="MenuIcon" alt="Menu" />
+        </q-btn>
+        <q-btn v-else dense flat round @click="toggleLeftDrawer">
+          <img :src="MenuIcon" alt="Menu" />
+        </q-btn>
 
         <q-toolbar-title>
-          <q-btn
-            stretch
-            flat
-            :label="config.header?.title || 'UNI'"
-            class="btn-title"
-            @click="goToIndex" />
+          <q-btn stretch flat class="btn-title" @click="goToIndex">
+            <img :src="HeaderLogo" alt="Homeunity logo" />
+          </q-btn>
         </q-toolbar-title>
-
-        <q-btn v-if="isIndexLayout" dense flat icon="login" label="Личный кабинет" @click="login" />
       </q-toolbar>
     </q-header>
 
@@ -24,7 +24,10 @@
         <template v-for="(item, index) in routesInMenu" :key="index">
           <q-item
             v-ripple
-            :active="item.name === currentRoute"
+            :active="
+              (currentRoute.path.startsWith(item.path) && item.name !== 'lk') ||
+              item.name === currentRoute.name
+            "
             active-class="bg-teal-1 text-grey-8"
             clickable
             class="flex-col">
@@ -36,14 +39,14 @@
       </q-list>
     </q-drawer>
 
-    <q-drawer v-if="isIndexLayout" v-model="rightDrawerOpen" overlay side="right" bordered>
+    <q-drawer v-if="isIndexLayout" v-model="rightDrawerOpen" overlay side="left" bordered>
       <UserProfile />
     </q-drawer>
 
     <q-page-container>
       <router-view v-slot="{ Component }">
         <transition name="slide-fade" mode="out-in">
-          <q-page>
+          <q-page class="page">
             <component :is="Component" />
           </q-page>
         </transition>
@@ -59,7 +62,8 @@
   import { useI18n } from 'vue-i18n'
   import { useQuasar, Cookies } from 'quasar'
 
-  import config from '~/config'
+  import MenuIcon from '~/assets/menu.svg?url'
+  import HeaderLogo from '~/assets/header-logo.svg?url'
   import { useUserStore } from '~/stores/user'
   import { useWalletStore } from '~/stores/wallet'
   import UserProfile from '~/components/user/UserProfile.vue'
@@ -83,7 +87,7 @@
   }
 
   const currentRoute = computed(() => {
-    return route.name
+    return route
   })
 
   const isIndexLayout = computed(() => {
@@ -94,27 +98,43 @@
     if (String(route.name) === 'lk') {
       return 'pages.lk.index'
     }
+    if (String(route.name) === 'lk-estate') {
+      return 'pages.lk.estate.index'
+    }
     return `pages.${String(route.name).replace('lk-', 'lk.').replace('public-', 'public.')}`
   }
 
   const routesInMenu = computed(() => {
-    const indexPageRoute = generatedRoutes.find((v) => String(v.name) === 'lk')
+    // const indexPageRoute = generatedRoutes.find((v) => String(v.name) === 'lk')
     const res = generatedRoutes.filter((v) => {
       const n = String(v.name)
 
-      return !['lk', 'all'].includes(n)
+      return !['all'].includes(n)
     })
-    if (indexPageRoute) {
-      res.unshift(indexPageRoute)
-    }
+    // if (indexPageRoute) {
+    //   res.unshift(indexPageRoute)
+    // }
 
-    return res
+    const r = res
       .filter((v) => !v.meta?.hide && (!v.meta?.requiresAuth || userStore.hasAuth))
-      .map((v) => ({
-        name: String(v.name),
-        pageName: makePageNameFromRoute(v),
-        path: v.path,
-      }))
+      .map((v) => {
+        let menuOrder = v.meta?.menuOrder
+
+        if (!menuOrder && menuOrder !== 0) {
+          menuOrder = 9999
+        }
+
+        return {
+          name: String(v.name),
+          pageName: makePageNameFromRoute(v),
+          path: v.path,
+          order: menuOrder,
+        }
+      })
+
+    r.sort((a: any, b: any) => (a.order > b.order ? 1 : b.order > a.order ? -1 : 0))
+
+    return r
   })
 
   const goToIndex = () => {
@@ -155,5 +175,20 @@
 
   .btn-title {
     font-size: 20px;
+    height: 60px;
+    padding-top: 2px;
+    padding-bottom: 6px;
+  }
+
+  .page {
+    background-color: #f2f2f2;
+  }
+
+  .q-toolbar {
+    box-shadow: 0 5px 10px rgba(132, 132, 132, 0.2);
+  }
+
+  .q-layout__shadow:after {
+    box-shadow: none;
   }
 </style>

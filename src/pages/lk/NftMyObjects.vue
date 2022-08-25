@@ -6,12 +6,12 @@
     </h5>
 
     <div v-if="!nftStore.loading" class="row q-col-gutter-md">
-      <NftObjectCard
-        v-for="id in userNftIds"
+      <NftAdminObjectCard v-for="id in userNftIds" :id="id" :key="id" class="col-12 col-md-6" />
+      <NftOwnedPiecesObjectCard
+        v-for="id in ownedPieces"
         :id="id"
         :key="id"
-        class="col-12 col-md-6"
-        with-owner-controls />
+        class="col-12 col-md-6" />
     </div>
     <div v-else class="row q-col-gutter-md">
       <div v-for="i in 4" :key="i" class="col-12 col-md-6">
@@ -57,15 +57,17 @@
 
 <script setup lang="ts">
   import { onMounted, computed } from 'vue'
-  import NftObjectCard from '~/components/nft/NftObjectCard.vue'
+  import NftAdminObjectCard from '~/components/nft/NftAdminObjectCard.vue'
   import NftCreateObject from '~/components/nft/NftCreateObject.vue'
   import { useNftStore } from '~/stores/nft'
   import { useUserStore } from '~/stores/user'
   import config from '~/config'
+  import NftOwnedPiecesObjectCard from '~/components/nft/NftOwnedPiecesObjectCard.vue'
 
   const nftStore = useNftStore()
   const userStore = useUserStore()
   const userNftIds = computed(() => nftStore.getNftIdsByUsername(userStore.username as string))
+  const ownedPieces = computed(() => nftStore.nftPieceIds)
   const canCreateObjects = computed(
     () =>
       userStore.hasAuth &&
@@ -82,3 +84,8 @@
     loadObjectsList()
   })
 </script>
+
+<route lang="yaml">
+meta:
+  menuOrder: 2
+</route>

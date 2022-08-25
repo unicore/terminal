@@ -3,6 +3,7 @@
     <q-input
       v-model="privateKey"
       label="Приватный ключ или фраза"
+      hint="Введите приватный ключ или сид фразу"
       outlined
       class="full-width"
       type="password"
@@ -64,7 +65,7 @@
         account.name = username
 
         await userStore.login(account)
-        router.push({ name: 'lk' })
+        await router.push({ name: 'lk-estate' })
         Notify.create({
           message: 'Успешный вход',
           type: 'positive',

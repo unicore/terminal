@@ -3,8 +3,9 @@ index:
 pages:
   index: Главная страница
   lk: 
-    index: Главная
-    NftMarket: Рынок объектов
+    index: История действий
+    estate:
+      index: Рынок объектов
     NftMyObjects: Мои объекты
     NftMyRequests: Мои заявки
 numbers:
