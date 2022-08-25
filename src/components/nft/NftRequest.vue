@@ -552,6 +552,22 @@
           {
             actions: [
               {
+                account: config.nft.nftTokenContract,
+                name: 'transfer',
+                authorization: [
+                  {
+                    actor: userStore.username as string,
+                    permission: 'active',
+                  }
+                ],
+                data: {
+                  from: userStore.username as string,
+                  to: rootChain.nftContract.name,
+                  quantity: requestObject.value.total_price,
+                  memo: userStore.username as string,
+                }
+              },
+              {
                 account: rootChain.nftContract.name,
                 name: 'confirm',
                 authorization: [
