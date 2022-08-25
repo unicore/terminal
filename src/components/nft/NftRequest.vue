@@ -538,7 +538,7 @@
       cancel: 'Нет',
     }).onOk(async () => {
       const data = {
-        seller: requestObject.value.seller,
+        buyer: requestObject.value.buyer,
         request_id: requestObject.value.id,
       }
 
