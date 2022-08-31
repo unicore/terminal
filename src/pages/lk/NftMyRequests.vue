@@ -26,4 +26,5 @@
 <route lang="yaml">
 meta:
   menuOrder: 3
+  icon: order
 </route>

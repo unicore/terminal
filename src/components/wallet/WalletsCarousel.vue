@@ -14,7 +14,7 @@
         :key="symbol"
         :name="symbol"
         class="q-py-xs">
-        <UserWallet :symbol="symbol" />
+        <UserWallet :symbol="symbol" :mini="props.mini" />
       </q-carousel-slide>
     </q-carousel>
     <template v-else>
@@ -23,7 +23,7 @@
         :key="symbol"
         class="wallet-bg text-white shadow-1 rounded-borders q-mt-md"
         style="height: 120px">
-        <UserWallet :symbol="symbol" />
+        <UserWallet :symbol="symbol" :mini="props.mini" />
       </div>
     </template>
   </div>
@@ -39,6 +39,7 @@
   const slide = ref('')
   const props = defineProps<{
     asCarousel?: boolean
+    mini?: boolean
   }>()
 
   watch(

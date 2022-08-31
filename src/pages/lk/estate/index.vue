@@ -69,4 +69,5 @@
 <route lang="yaml">
 meta:
   menuOrder: 1
+  icon: union
 </route>

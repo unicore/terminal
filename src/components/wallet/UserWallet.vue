@@ -1,13 +1,17 @@
 <template>
-  <div class="column justify-between wallet">
-    <div class="col">
+  <div class="column justify-between" :class="props.mini ? 'wallet-mini' : 'wallet'">
+    <div v-if="!props.mini" class="col">
       <div class="wallet-header">Кошелёк {{ symbol }}</div>
     </div>
-    <div class="balance">
+    <div v-if="!props.mini" class="balance">
       <img :src="walletIcon" alt="" class="wallet-icon" />
       {{ userStore.userBalancesSafe[symbol] }}
     </div>
+    <div v-else class="balance-mini">
+      <img :src="walletIcon" alt="" class="wallet-icon-mini" />
+    </div>
     <div
+      v-if="!props.mini"
       class="buttons flex stretch"
       :class="wallet?.canDeposit && wallet?.canTransfer && 'two-items'">
       <div v-if="wallet?.canDeposit" class="stretch">
@@ -31,6 +35,10 @@
       type: String,
       required: true,
     },
+    mini: {
+      type: Boolean,
+      required: false,
+    },
   })
   const userStore = useUserStore()
   const symbol = computed(() => props.symbol)
@@ -44,6 +52,12 @@
 <style lang="scss" scoped>
   .wallet {
     padding: 11px 25px;
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  .wallet-mini {
     height: 100%;
     width: 100%;
     position: relative;
@@ -63,6 +77,17 @@
     top: 50%;
     transform: translate(-50%, -50%);
     margin-left: -13px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
+  .balance-mini {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -97,5 +122,10 @@
     display: inline-block;
     vertical-align: baseline;
     margin-right: 13px;
+  }
+
+  .wallet-icon-mini {
+    display: inline-block;
+    vertical-align: baseline;
   }
 </style>

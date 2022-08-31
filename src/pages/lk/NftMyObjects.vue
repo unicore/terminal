@@ -88,4 +88,5 @@
 <route lang="yaml">
 meta:
   menuOrder: 2
+  icon: cart
 </route>

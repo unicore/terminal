@@ -26,4 +26,5 @@
 <route lang="yaml">
 meta:
   menuOrder: 4
+  icon: history
 </route>
