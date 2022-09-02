@@ -30,7 +30,10 @@ export default defineConfig({
     }),
     createHtmlPlugin({
       inject: {
-        data: { SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система' },
+        data: { 
+          SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система',
+          SITE_DESCRIPTION: config.siteDescription || "собери DAO для сообществ и бизнеса"
+         },
       },
     }),
     quasar({ sassVariables: 'src/assets/style/quasar-variables.sass' }),
