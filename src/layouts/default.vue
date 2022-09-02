@@ -25,9 +25,7 @@
       persistent
       :mini-width="60"
       :width="240"
-      class="drawer"
-      @mouseenter="leftDrawerOverOpen = true"
-      @mouseleave="leftDrawerOverOpen = false">
+      class="drawer">
       <UserProfile :mini="!leftDrawerOpen && !leftDrawerOverOpen" />
 
       <Menu :mini="!leftDrawerOpen && !leftDrawerOverOpen" />
