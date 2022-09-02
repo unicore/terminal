@@ -1,9 +1,9 @@
 <template>
-  <NftMarket readmore />
+  <EstateMarket />
 </template>
 
 <script setup lang="ts">
-  import NftMarket from './lk/NftMarket.vue'
+  import EstateMarket from './lk/estate/index.vue'
 </script>
 
 <route lang="yaml">

@@ -1,18 +1,19 @@
 <template>
-  <q-stepper v-model="step" vertical color="primary" animated active-icon="none">
-    <q-step :name="1" title="Начало регистрации" icon="email" :done="step > 1">
+  <q-stepper v-model="step" vertical color="teal" animated active-icon="none">
+    <q-step :name="1" title="Начало регистрации" icon="email" :done="step > 1" color="teal">
       <q-input
         v-model.trim="email"
         filled
         type="email"
         label="Email"
         :readonly="inLoading"
+        color="teal"
         @keypress.enter="setEmail" />
 
       <q-stepper-navigation>
         <q-btn
           class="full-width"
-          color="primary"
+          color="teal"
           label="Продолжить"
           :disable="!emailIsValid"
           :loading="inLoading"
@@ -20,18 +21,18 @@
       </q-stepper-navigation>
     </q-step>
 
-    <q-step :name="2" title="Введение" icon="info" :done="step > 2">
+    <q-step :name="2" title="Введение" icon="info" :done="step > 2" color="teal">
       Для вас будет сгенерирована секретная фраза, с помощью которой вы сможете выполнять вход в
       систему.
       <br />
       Надёжно сохраните её.
 
       <q-stepper-navigation>
-        <q-btn color="primary" label="Сгенерировать" class="full-width" @click="step = 3" />
+        <q-btn color="teal" label="Сгенерировать" class="full-width" @click="step = 3" />
       </q-stepper-navigation>
     </q-step>
 
-    <q-step :name="3" title="Генерация фразы" icon="lock" :done="step > 3">
+    <q-step :name="3" title="Генерация фразы" icon="lock" :done="step > 3" color="teal">
       <q-skeleton v-if="!generatedAccount" type="QToolbar" />
       <pre v-else class="mnemonic shadow-1 q-pa-sm rounded-borders">{{
         generatedAccount.mnemonic
@@ -50,7 +51,7 @@
 
       <q-stepper-navigation>
         <q-btn
-          color="primary"
+          color="teal"
           label="Продолжить"
           :disable="!hasSavedCheckbox"
           class="full-width"
@@ -58,7 +59,7 @@
       </q-stepper-navigation>
     </q-step>
 
-    <q-step :name="4" title="Проверка фразы" icon="lock_open" :done="step > 4">
+    <q-step :name="4" title="Проверка фразы" icon="lock_open" :done="step > 4" color="teal">
       <q-input
         v-model.trim="mnemonicToCheck"
         filled
@@ -68,7 +69,7 @@
 
       <q-stepper-navigation>
         <q-btn
-          color="primary"
+          color="teal"
           flat
           icon="arrow_back"
           class="full-width"
@@ -76,14 +77,14 @@
           @click="step = 3" />
         <q-btn
           class="full-width"
-          color="primary"
+          color="teal"
           label="Завершить"
           :disable="mnemonicToCheck !== generatedAccount?.mnemonic"
           @click="completeRegister" />
       </q-stepper-navigation>
     </q-step>
 
-    <q-step :name="5" title="Завершение регистрации" icon="done" :done="step > 5">
+    <q-step :name="5" title="Завершение регистрации" icon="done" :done="step > 5" color="teal">
       <div class="flex flex-center q-pa-md">
         <q-circular-progress indeterminate size="50px" color="teal" />
       </div>
@@ -166,7 +167,7 @@
       )
       if (status === 'ok') {
         await userStore.login(account)
-        router.push({ name: 'lk' })
+        await router.push({ name: 'lk-estate' })
         Notify.create({
           message: 'Успешная регистрация',
           type: 'positive',

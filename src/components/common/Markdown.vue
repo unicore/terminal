@@ -1,53 +1,15 @@
 <template>
-  <div>
-    <q-card :class="owned && 'bg-light-green-1'">
-      <NftImages :id="props.id" />
-
-      <q-card-section class="q-py-sm">
-        <div class="text-h6">{{ object.title }}</div>
-        <NftObjectPieces :id="id" :with-market="withMarket" :market-id="props.marketId" />
-      </q-card-section>
-
-      <q-card-section v-if="object.description" class="q-py-sm markdown-root">
-        <VueMarkdown :source="object.description" />
-      </q-card-section>
-
-      <q-card-section class="q-py-sm">
-        NFT разместил: {{ object.creator }} <span v-if="owned">(это вы)</span>
-      </q-card-section>
-
-      <NftControlButtons v-if="withOwnerControls" :id="id" />
-
-      <NftMarketObject v-if="props.withMarket" :id="marketId" :readmore="readmore" />
-    </q-card>
+  <div class="markdown-root">
+    <VueMarkdown :source="props.text" />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
   import VueMarkdown from 'vue-markdown-render'
-  import { NftObject } from 'unicore/ts/src/blockchain/contracts/nft'
-  import { useUserStore } from '~/stores/user'
-  import { useNftStore } from '~/stores/nft'
-  import NftImages from './NftImages.vue'
-  import NftControlButtons from './NftControlButtons.vue'
-  import NftMarketObject from './NftMarketObject.vue'
-  import NftObjectPieces from './NftObjectPieces.vue'
 
   const props = defineProps<{
-    id: number
-    withOwnerControls?: boolean
-    withMarket?: boolean
-    marketId?: number
-    readmore?: boolean
+    text: string
   }>()
-  const nftStore = useNftStore()
-  const userStore = useUserStore()
-
-  const object = computed<NftObject>(() => nftStore.getNftById(props.id))
-  const marketId = computed(() => props.marketId as number)
-
-  const owned = computed(() => object.value.creator === userStore.username)
 </script>
 
 <style lang="scss">
@@ -98,11 +60,9 @@
     -webkit-text-size-adjust: 100%;
     margin: 0;
     color: var(--color-fg-default);
-    // background-color: var(--color-canvas-default);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji';
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
     word-wrap: break-word;
   }
 

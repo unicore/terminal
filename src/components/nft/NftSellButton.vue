@@ -54,7 +54,7 @@
             </template>
           </q-input>
 
-          <q-input v-model="deliveryFrom" filled label="Откуда производится доставка" />
+          <q-input v-model="deliveryFrom" filled label="Контакты для связи" />
 
           <q-card class="q-pa-md">
             <h6>Запросить у покупателя</h6>
@@ -121,6 +121,8 @@
     { type: 'text', placeholder: 'Имя', id: 2 },
     { type: 'text', placeholder: 'Отчество', id: 3 },
     { type: 'text', placeholder: 'Телефон', id: 4 },
+    { type: 'text', placeholder: 'Телеграм', id: 5 },
+    { type: 'text', placeholder: 'Почта', id: 6 },
   ])
   const plus = () => {
     deliveryFromQuestions.value = [

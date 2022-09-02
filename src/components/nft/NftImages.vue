@@ -1,20 +1,44 @@
 <template>
-  <q-carousel v-model="slide" v-model:fullscreen="fullscreen" animated arrows navigation infinite>
-    <q-carousel-slide v-for="(img, i) in images" :key="i" :name="i" :img-src="img" />
-
-    <template #control>
-      <q-carousel-control position="bottom-right" :offset="[18, 18]">
+  <div>
+    <q-carousel
+      v-model="slide"
+      v-model:fullscreen="fullscreen"
+      animated
+      navigation
+      arrows
+      infinite
+      prev-icon=""
+      next-icon=""
+      :height="height || '300px'"
+      class="rounded-borders">
+      <template #navigation-icon="{ active, btnProps, onClick }">
         <q-btn
-          push
+          size="10px"
+          :icon="btnProps.icon"
+          :color="active ? 'teal' : 'white'"
+          flat
           round
           dense
-          color="white"
-          text-color="primary"
-          :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="fullscreen = !fullscreen" />
-      </q-carousel-control>
-    </template>
-  </q-carousel>
+          @click="onClick" />
+      </template>
+
+      <q-carousel-slide v-for="(img, i) in images" :key="i" :name="i" :img-src="img" />
+
+      <template #control>
+        <q-carousel-control position="bottom-right" :offset="[18, 18]">
+          <q-btn
+            size="sm"
+            push
+            round
+            dense
+            color="white"
+            text-color="primary"
+            :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="fullscreen = !fullscreen" />
+        </q-carousel-control>
+      </template>
+    </q-carousel>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -25,6 +49,7 @@
 
   const props = defineProps<{
     id: number
+    height?: string
   }>()
   const nftStore = useNftStore()
 

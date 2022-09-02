@@ -544,21 +544,18 @@
 
       console.log(data)
 
-      
       $q.loading.show()
 
       try {
         const rootChain = chains.getRootChain()
         const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
 
-        let transferData = {
+        const transferData = {
           from: userStore.username as string,
           to: rootChain.nftContract.name,
           quantity: requestObject.value.total_price,
           memo: userStore.username as string,
         }
-
-        console.log(transferData)
 
         await api.transact(
           {
@@ -570,9 +567,9 @@
                   {
                     actor: userStore.username as string,
                     permission: 'active',
-                  }
+                  },
                 ],
-                data: transferData
+                data: transferData,
               },
               {
                 account: rootChain.nftContract.name,

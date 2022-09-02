@@ -1,13 +1,11 @@
 <template>
   <div class="pa-lg">
     <div v-if="!nftStore.loading" class="row q-col-gutter-md">
-      <NftObjectCard
+      <EstateObjectCard
         v-for="id in nftStore.nftMarketIds"
         :id="nftStore.getNftIdByMarketId(id)"
         :key="id"
         class="col-12 col-md-6"
-        with-market
-        :readmore="props.readmore"
         :market-id="id" />
     </div>
     <div v-else class="row q-col-gutter-md">
@@ -54,13 +52,10 @@
 
 <script setup lang="ts">
   import { onMounted } from 'vue'
-  import NftObjectCard from '~/components/nft/NftObjectCard.vue'
+  import EstateObjectCard from 'src/components/estate/EstateObjectCard.vue'
   import { useNftStore } from '~/stores/nft'
 
   const nftStore = useNftStore()
-  const props = defineProps<{
-    readmore?: boolean
-  }>()
 
   const loadObjectsList = async () => {
     await nftStore.loadAvailableNfts()
@@ -70,3 +65,9 @@
     loadObjectsList()
   })
 </script>
+
+<route lang="yaml">
+meta:
+  menuOrder: 1
+  icon: union
+</route>

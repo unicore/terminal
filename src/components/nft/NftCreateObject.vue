@@ -52,10 +52,39 @@
             @removed="removed"
             @uploaded="uploaded" />
 
-          <div class="q-text-h6">Описание:</div>
+          <q-input
+            v-model.trim="shortDescription"
+            filled
+            required
+            label="Краткое описание"
+            clearable
+            :readonly="loading" />
+
+          <div class="q-text-h6">Полное описание:</div>
           <Tiptap v-model="nftObject.description" :readonly="loading" />
 
-          <div v-if="props.isEditing" class="q-text-h6">Сколько частей у NFT:</div>
+          <q-input
+            v-model="gMapsLink"
+            filled
+            label="Ссылка на Google Maps"
+            clearable
+            :readonly="loading" />
+
+          <q-input
+            v-model="nftObject.meta.address"
+            filled
+            label="Адрес"
+            required
+            :readonly="loading" />
+
+          <q-input
+            v-model="nftObject.meta.gps"
+            filled
+            label="Координаты"
+            required
+            :readonly="loading" />
+
+          <!-- <div v-if="props.isEditing" class="q-text-h6">Сколько частей у NFT:</div>
           <div style="align-items: center" class="row bg-light-blue-1">
             <div class="col-12">
               <q-input
@@ -68,7 +97,37 @@
                 :readonly="loading || props.isEditing"
                 filled />
             </div>
-          </div>
+          </div> -->
+
+          <ol-map
+            :load-tiles-while-animating="true"
+            :load-tiles-while-interacting="true"
+            style="height: 400px">
+            <ol-view
+              ref="view"
+              :center="center"
+              :rotation="rotation"
+              :zoom="zoom"
+              :projection="projection" />
+
+            <ol-tile-layer>
+              <ol-source-osm />
+            </ol-tile-layer>
+
+            <ol-vector-layer>
+              <ol-source-vector>
+                <ol-feature>
+                  <ol-geom-point v-if="pinCenter" :coordinates="pinCenter"></ol-geom-point>
+                  <ol-style>
+                    <ol-style-circle :radius="5">
+                      <ol-style-fill color="white"></ol-style-fill>
+                      <ol-style-stroke color="red" :width="3"></ol-style-stroke>
+                    </ol-style-circle>
+                  </ol-style>
+                </ol-feature>
+              </ol-source-vector>
+            </ol-vector-layer>
+          </ol-map>
 
           <q-btn label="Сохранить" color="primary" type="submit" :loading="loading" />
         </q-form>
@@ -84,9 +143,10 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { Notify } from 'quasar'
   import { NftObject } from 'unicore/ts/src/blockchain/contracts/nft'
+  import 'vue3-openlayers/dist/vue3-openlayers.css'
 
   import { useUserStore } from '~/stores/user'
   import { useNftStore } from '~/stores/nft'
@@ -101,8 +161,16 @@
 
   const opened = ref(false)
   const loading = ref(false)
+  const gMapsLink = ref('')
+  const shortDescription = ref('')
   const userStore = useUserStore()
   const nftStore = useNftStore()
+
+  const center = ref([40, 40])
+  const projection = ref('EPSG:4326')
+  const zoom = ref(8)
+  const rotation = ref(0)
+
   const categories = ref([{ id: 'property', title: 'Недвижимость' }])
   const object = computed(() =>
     props.editId || props.editId === 0 ? nftStore.getNftById(props.editId) : null
@@ -115,15 +183,70 @@
     images: [] as string[],
     originalImages: baseObject?.images || ([] as string[]),
     pieced: true,
-    total_pieces: baseObject?.total_pieces || '',
+    total_pieces: baseObject?.total_pieces || '26',
     ipns: baseObject?.ipns || '',
+    meta: {
+      address: baseObject?.meta?.address || '',
+      gps: baseObject?.meta?.gps || null,
+    } as {
+      address: string
+      gps: string
+    },
   })
 
   const nftObject = ref(makeNftObject())
 
+  const pinCenter = computed(() => {
+    const parts = nftObject.value.meta?.gps?.split(',').map(Number)
+    if (!parts) {
+      return null
+    }
+    return [parts[1], parts[0]]
+  })
+
+  watch(gMapsLink, () => {
+    const parts = gMapsLink.value.split('/')
+    console.log(parts)
+    if (parts[4] !== 'place') {
+      return
+    }
+    const partsGps = parts[6].split(',')
+
+    const newAddress = {
+      address: decodeURIComponent(parts[5].replace(/\+/g, '%20')),
+      gps: `${partsGps[0].replace('@', '')},${partsGps[1]}`,
+    }
+    nftObject.value.meta = {
+      ...nftObject.value.meta,
+      ...newAddress,
+    }
+  })
+
+  watch(pinCenter, () => {
+    if (pinCenter.value) {
+      center.value = pinCenter.value
+      zoom.value = 16
+    }
+  })
+
   const open = () => {
     opened.value = true
     nftObject.value = makeNftObject(object.value)
+    gMapsLink.value = ''
+    shortDescription.value = ''
+    if (object.value) {
+      let descriptionObject = {
+        short: '',
+        full: object.value.description,
+      }
+      try {
+        descriptionObject = JSON.parse(object.value.description)
+      } catch (e) {
+        console.log(e)
+      }
+      nftObject.value.description = descriptionObject.full
+      shortDescription.value = descriptionObject.short
+    }
   }
 
   const removeImg = (src: string) => {
@@ -138,16 +261,19 @@
     let data: Record<string, unknown> = {
       creator: userStore.username,
       title: nftObject.value.title,
-      description: nftObject.value.description,
+      description: JSON.stringify({
+        short: shortDescription.value,
+        full: nftObject.value.description,
+      }),
       category: nftObject.value.category,
       ipns: nftObject.value.ipns,
-      meta: '{}',
+      meta: JSON.stringify(nftObject.value.meta || {}),
     }
 
     if (!props.isEditing) {
       data = {
         ...data,
-        total_pieces: nftObject.value.pieced ? nftObject.value.total_pieces || 1 : 1,
+        total_pieces: nftObject.value.pieced ? Number(nftObject.value.total_pieces) || 1 : 1,
         images: JSON.stringify(nftObject.value.images),
       }
     } else {

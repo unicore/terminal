@@ -8,22 +8,22 @@
       control-color="white"
       arrows
       height="150px"
-      class="bg-blue-grey-7 text-white shadow-1 rounded-borders">
+      class="wallet-bg text-white shadow-1 rounded-borders">
       <q-carousel-slide
         v-for="symbol in walletStore.symbols"
         :key="symbol"
         :name="symbol"
         class="q-py-xs">
-        <UserWallet :symbol="symbol" />
+        <UserWallet :symbol="symbol" :mini="props.mini" />
       </q-carousel-slide>
     </q-carousel>
     <template v-else>
       <div
         v-for="symbol in walletStore.symbols"
         :key="symbol"
-        class="bg-blue-grey-7 text-white shadow-1 rounded-borders q-mt-md"
-        style="height: 100px">
-        <UserWallet :symbol="symbol" />
+        class="wallet-bg text-white shadow-1 rounded-borders q-mt-md"
+        style="height: 120px">
+        <UserWallet :symbol="symbol" :mini="props.mini" />
       </div>
     </template>
   </div>
@@ -39,6 +39,7 @@
   const slide = ref('')
   const props = defineProps<{
     asCarousel?: boolean
+    mini?: boolean
   }>()
 
   watch(
@@ -52,4 +53,8 @@
   )
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .wallet-bg {
+    background: rgba(9, 104, 114, 1);
+  }
+</style>

@@ -1,9 +1,10 @@
 <template>
   <q-btn
-    v-if="marketObject.remain_pieces > 0 && !props.readmore && !currentUserIsSeller"
+    v-if="marketObject.remain_pieces > 0 && !props.readmore"
+    class="buy-btn"
     dialog
     color="teal"
-    label="Купить"
+    label="Подать заявку"
     :disable="!userStore.hasAuth"
     @click="showDialog = true" />
   <q-btn v-if="props.readmore" dialog color="teal" label="Подробнее" disable />
@@ -154,4 +155,15 @@
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .buy-btn {
+    text-transform: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    text-align: left;
+  }
+</style>
