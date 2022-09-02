@@ -32,7 +32,7 @@ export default defineConfig({
       inject: {
         data: { 
           SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система',
-          SITE_DESCRIPTION: config.siteDiscription || "собери DAO для сообществ и бизнеса"
+          SITE_DESCRIPTION: config.siteDescription || "собери DAO для сообществ и бизнеса"
          },
       },
     }),
