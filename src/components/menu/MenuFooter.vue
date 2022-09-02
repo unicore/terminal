@@ -4,7 +4,7 @@
       <q-icon name="logout" color="teal" size="16px" />
       <span v-if="!props.mini" class="logout-text">Выйти</span>
     </div>
-    <div :style="props.mini && 'opacity: 0'" class="copyright">
+    <div :style="props.mini ? 'opacity: 0' : ''" class="copyright">
       2022 simply estate все права защищены
     </div>
   </div>

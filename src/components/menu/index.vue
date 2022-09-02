@@ -14,7 +14,7 @@
       @click="router.push({ path: item.path })">
       <q-item-section class="menu-item-section">
         <div class="menu-item-icon">
-          <component :is="ICONS[item.icon]" />
+          <component :is="ICONS[item.icon]" v-if="ICONS[item.icon]" />
         </div>
         <div v-if="!props.mini" class="menu-item-text">
           {{ t(item.pageName) }}
@@ -77,7 +77,7 @@
       .filter((v) => !v.meta?.hide && (!v.meta?.requiresAuth || userStore.hasAuth))
       .map((v) => {
         let menuOrder = v.meta?.menuOrder
-        let icon = v.meta?.icon || 'union'
+        let icon = String(v.meta?.icon || 'union') as keyof typeof ICONS
 
         if (!menuOrder && menuOrder !== 0) {
           menuOrder = 9999
