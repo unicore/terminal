@@ -23,7 +23,10 @@ export default defineConfig({
     vue({ template: { transformAssetUrls } }),
     createHtmlPlugin({
       inject: {
-        data: { SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система' },
+        data: { 
+          SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система',
+          SITE_DESCRIPTION: config.siteDiscription || "собери DAO для сообществ и бизнеса"
+         },
       },
     }),
     quasar({ sassVariables: 'src/assets/style/quasar-variables.sass' }),
