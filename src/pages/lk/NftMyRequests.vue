@@ -1,7 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <h5 class="text-h5">Мои заявки на покупку</h5>
-
+    
     <NftAllRequests />
   </div>
 </template>
