@@ -31,7 +31,7 @@
         </template>
       </div>
 
-      <WalletsCarousel :mini="props.mini" />
+      <WalletsCarousel v-if="!props.mini" :mini="props.mini" />
     </div>
   </div>
 </template>
@@ -103,11 +103,11 @@
   }
 
   .layout-full {
-    padding: 52px 10px 20px 10px;
+    padding: 10px 10px 20px 10px;
   }
 
   .layout-mini {
-    padding: 52px 5px 20px 5px;
+    padding: 10px 5px 20px 5px;
   }
 
   .username {

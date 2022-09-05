@@ -4,8 +4,8 @@
       <q-icon name="logout" color="teal" size="16px" />
       <span v-if="!props.mini" class="logout-text">Выйти</span>
     </div>
-    <div :style="props.mini ? 'opacity: 0' : ''" class="copyright">
-      2022 simply estate все права защищены
+    <div v-if="!props.mini" class="copyright">
+      2022 homeunity, все права защищены
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@
 
 <style lang="scss">
   .footer-root {
-    padding: 10px 20px;
+    text-align: center;
   }
 
   .copyright {
