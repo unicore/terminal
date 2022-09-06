@@ -47,11 +47,9 @@
 
     <q-page-container>
       <router-view v-slot="{ Component }">
-        <transition name="slide-fade" mode="out-in">
-          <q-page class="page">
-            <component :is="Component" />
-          </q-page>
-        </transition>
+        <q-page class="page">
+          <component :is="Component" />
+        </q-page>
       </router-view>
     </q-page-container>
   </q-layout>
