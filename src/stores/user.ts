@@ -3,6 +3,7 @@ import { AccountData } from 'unicore/ts/src/auth'
 
 import chains from '~/chainsMain'
 import { useWalletStore } from './wallet'
+import { useNftStore } from './nft'
 
 interface UserBalances {
   [symbol: string]: string
@@ -63,6 +64,8 @@ export const useUserStore = defineStore('user', {
       await this.getUserBalances()
     },
     logout() {
+      const nftStore = useNftStore()
+      nftStore.clearPersonalData()
       this.authData = null
     },
   },

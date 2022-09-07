@@ -59,12 +59,9 @@
           <q-item-label caption>{{ requestObject.base_piece_price }}</q-item-label>
         </q-item-section>
       </q-item>
-      <q-item v-for="(d, i) in requestObject.delivery_to" :key="`${i}_${d.placeholder}`">
-        <q-item-section>
-          <q-item-label>{{ d.placeholder }}</q-item-label>
-          <q-item-label caption>{{ d.value }}</q-item-label>
-        </q-item-section>
-      </q-item>
+      <PersonalDataList
+        :data-object="requestObject.delivery_to"
+        :as-sender="!currentUserIsSeller" />
       <q-item v-if="!currentUserIsSeller && requestStatus === 'accepted'">
         <q-item-section>
           <q-item-label>Инструкция по оплате</q-item-label>
@@ -164,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-  import { NftObject } from 'unicore/dist/src/blockchain/contracts/nft'
+  import { NftObject } from 'unicore/dist/esm/src/blockchain/contracts/nft'
   import { computed, ref } from 'vue'
   import { Notify, useQuasar } from 'quasar'
 
@@ -172,6 +169,7 @@
   import { useNftStore } from '~/stores/nft'
   import { useUserStore } from '~/stores/user'
   import config from '~/config'
+  import PersonalDataList from '~/components/nft/PersonalDataList.vue'
 
   const userStore = useUserStore()
   const nftStore = useNftStore()

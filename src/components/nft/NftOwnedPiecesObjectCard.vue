@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
   import { computed } from 'vue'
-  import { NftPieceObject } from 'unicore/dist/src/blockchain/contracts/nft'
+  import { NftPieceObject } from 'unicore/dist/esm/src/blockchain/contracts/nft'
   import EstateObjectCard from '~/components/estate/EstateObjectCard.vue'
   import { useNftStore } from '~/stores/nft'
 

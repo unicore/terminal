@@ -38,7 +38,7 @@
   import { useI18n } from 'vue-i18n'
 
   import { useNftStore } from '~/stores/nft'
-  import { NftObject } from 'unicore/dist/src/blockchain/contracts/nft'
+  import { NftObject } from 'unicore/dist/esm/src/blockchain/contracts/nft'
 
   const props = defineProps<{
     id: number

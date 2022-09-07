@@ -129,14 +129,32 @@
       buyer: userStore.username,
       market_id: marketObject.value.id,
       requested_pieces: piecesToBuy.value,
-      delivery_to: JSON.stringify(deliveryAnswers.value),
+      delivery_to: JSON.stringify({
+        personalDataId: null,
+      }),
       meta: '{}',
     }
+
+    const personalData = JSON.stringify({
+      rows: deliveryAnswers.value,
+    })
 
     console.log(data)
 
     try {
       const rootChain = chains.getRootChain()
+
+      const { id: personalDataId } = await rootChain.sendPersonalData(
+        userStore.authData?.wif as string,
+        userStore.username as string,
+        marketObject.value.seller,
+        personalData
+      )
+
+      data.delivery_to = JSON.stringify({
+        personalDataId,
+      })
+
       const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
 
       await api.transact(

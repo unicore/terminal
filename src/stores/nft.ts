@@ -4,7 +4,7 @@ import {
   NftMarketObject,
   NftMarketRequest,
   NftPieceObject,
-} from 'unicore/dist/src/blockchain/contracts/nft'
+} from 'unicore/dist/esm/src/blockchain/contracts/nft'
 
 import chains from '~/chainsMain'
 import config from '~/config'
@@ -26,11 +26,21 @@ export interface NftPieces {
   [id: number]: NftPieceObject
 }
 
+interface PersonalData {
+  [id: string]: any
+}
+
+interface PersonalDataLoading {
+  [id: string]: boolean
+}
+
 interface NftState {
   nfts: Nfts
   markets: NftMarkets
   requests: NftMarketRequests
   pieces: NftPieces
+  personalData: PersonalData
+  personalDataLoading: PersonalDataLoading
   loading: boolean
 }
 
@@ -53,6 +63,8 @@ export const useNftStore = defineStore('nft', {
       requests: {},
       cache: {},
       pieces: {},
+      personalData: {},
+      personalDataLoading: {},
       loading: false,
     } as NftState),
   actions: {
@@ -116,6 +128,43 @@ export const useNftStore = defineStore('nft', {
           return a
         }, {} as Nfts)
       resetCache()
+    },
+    clearPersonalData() {
+      this.personalData = {}
+      this.personalDataLoading = {}
+    },
+    async loadPersonalData(id: string, asSender = false) {
+      if (!this.personalData[id]) {
+        this.personalDataLoading[id] = true
+        try {
+          const rootChain = chains.getRootChain()
+          const userStore = useUserStore()
+          const username = userStore.username
+          const wif = userStore.authData?.wif
+          if (wif && username) {
+            let data = null
+
+            if (asSender) {
+              data = await rootChain.getPersonalAsSender(wif, username, [id])
+            } else {
+              data = await rootChain.getPersonalAsRecipient(wif, username, [id])
+            }
+
+            if (data && data.length) {
+              this.personalData = {
+                ...this.personalData,
+                [id]: data[0],
+              }
+            }
+          }
+        } catch (e) {
+          console.log(e)
+        }
+
+        this.personalDataLoading[id] = false
+      }
+
+      return this.personalData[id]
     },
   },
   getters: {
@@ -228,6 +277,27 @@ export const useNftStore = defineStore('nft', {
         }
 
         return CACHE[k] as number[]
+      }
+    },
+    getPersonalDataById() {
+      return (id: string) => {
+        if (this.personalData[id]) {
+          const { data } = this.personalData[id]
+          if (!data) {
+            return null
+          }
+          try {
+            return JSON.parse(data)
+          } catch (e) {
+            console.log(e)
+          }
+        }
+        return this.personalData[id]
+      }
+    },
+    getPersonalDataLoadingById() {
+      return (id: string) => {
+        return !!this.personalDataLoading[id]
       }
     },
   },

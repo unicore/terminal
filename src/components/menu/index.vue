@@ -20,6 +20,10 @@
           {{ t(item.pageName) }}
         </div>
       </q-item-section>
+
+      <q-tooltip v-if="props.mini" anchor="center right" self="center left" :offset="[10, 10]">
+        {{ t(item.pageName) }}
+      </q-tooltip>
     </q-item>
   </q-list>
 </template>
