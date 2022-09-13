@@ -46,11 +46,11 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view v-slot="{ Component }">
-        <q-page class="page">
+      <q-page class="page">
+        <router-view v-slot="{ Component }">
           <component :is="Component" />
-        </q-page>
-      </router-view>
+        </router-view>
+      </q-page>
     </q-page-container>
   </q-layout>
 </template>
