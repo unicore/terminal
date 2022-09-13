@@ -65,7 +65,7 @@
       })
     }
 
-    return ['https://placeimg.com/1920/1080/nature', 'https://placeimg.com/1920/1080/tech']
+    return []
   })
   const slide = ref(0)
   const fullscreen = ref(false)
