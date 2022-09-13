@@ -84,7 +84,7 @@
             required
             :readonly="loading" />
 
-          <!-- <div v-if="props.isEditing" class="q-text-h6">Сколько частей у NFT:</div>
+          <div v-if="props.isEditing" class="q-text-h6">Сколько частей у NFT:</div>
           <div style="align-items: center" class="row bg-light-blue-1">
             <div class="col-12">
               <q-input
@@ -97,7 +97,7 @@
                 :readonly="loading || props.isEditing"
                 filled />
             </div>
-          </div> -->
+          </div>
 
           <ol-map
             :load-tiles-while-animating="true"
