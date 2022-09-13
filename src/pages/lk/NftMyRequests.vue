@@ -1,6 +1,5 @@
 <template>
   <div class="q-pa-md">
-    
     <NftAllRequests />
   </div>
 </template>

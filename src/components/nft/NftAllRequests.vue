@@ -2,12 +2,10 @@
   <NftRequests
     v-if="nftRequestIdsAsSeller.length > 0"
     :ids="nftRequestIdsAsSeller"
-    
     title="Входящие заявки на покупку" />
   <NftRequests
     v-if="nftRequestIdsAsBuyer.length > 0"
     :ids="nftRequestIdsAsBuyer"
-    
     title="Ваши заявки на покупку" />
 </template>
 

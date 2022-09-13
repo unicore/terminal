@@ -63,6 +63,21 @@
           <div class="q-text-h6">Полное описание:</div>
           <Tiptap v-model="nftObject.description" :readonly="loading" />
 
+          <div class="q-text-h6">Сколько частей у NFT:</div>
+          <div style="align-items: center" class="row bg-light-blue-1">
+            <div class="col-12">
+              <q-input
+                v-if="nftObject.pieced"
+                v-model="nftObject.total_pieces"
+                class="full-width"
+                type="number"
+                min="1"
+                placeholder="Сколько частей у NFT"
+                :readonly="loading || props.isEditing"
+                filled />
+            </div>
+          </div>
+
           <q-input
             v-model="gMapsLink"
             filled
@@ -83,21 +98,6 @@
             label="Координаты"
             required
             :readonly="loading" />
-
-          <div v-if="props.isEditing" class="q-text-h6">Сколько частей у NFT:</div>
-          <div style="align-items: center" class="row bg-light-blue-1">
-            <div class="col-12">
-              <q-input
-                v-if="nftObject.pieced"
-                v-model="nftObject.total_pieces"
-                class="full-width"
-                type="number"
-                min="1"
-                placeholder="Сколько частей у NFT"
-                :readonly="loading || props.isEditing"
-                filled />
-            </div>
-          </div>
 
           <ol-map
             :load-tiles-while-animating="true"

@@ -67,7 +67,12 @@
   const nftStore = useNftStore()
   const userStore = useUserStore()
   const userNftIds = computed(() => nftStore.getNftIdsByUsername(userStore.username as string))
-  const ownedPieces = computed(() => nftStore.nftPieceIds)
+  const ownedPieces = computed(() =>
+    nftStore.nftPieceIds.filter((id) => {
+      const piece = nftStore.getPieceById(id)
+      return nftStore.getNftById(piece.object_id)?.creator !== piece.owner
+    })
+  )
   const canCreateObjects = computed(
     () =>
       userStore.hasAuth &&
