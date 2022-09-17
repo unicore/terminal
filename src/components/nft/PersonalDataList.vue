@@ -1,28 +1,14 @@
 <template>
   <template v-if="isLoading">
-    <q-item>
-      <q-item-section>
-        <q-skeleton class="q-my-md" />
-      </q-item-section>
-    </q-item>
-    <q-item>
-      <q-item-section>
-        <q-skeleton class="q-my-md" />
-      </q-item-section>
-    </q-item>
-    <q-item>
-      <q-item-section>
-        <q-skeleton class="q-my-md" />
-      </q-item-section>
-    </q-item>
+    <div v-for="n in 3" :key="n" :class="props.containerClass">
+      <q-skeleton class="q-my-md" />
+    </div>
   </template>
   <template v-else-if="dataValue">
-    <q-item v-for="(d, i) in dataValue" :key="`${i}_${d.placeholder}`">
-      <q-item-section>
-        <q-item-label>{{ d.placeholder }}</q-item-label>
-        <q-item-label caption>{{ d.value }}</q-item-label>
-      </q-item-section>
-    </q-item>
+    <div v-for="(d, i) in dataValue" :key="`${i}_${d.placeholder}`" :class="props.containerClass">
+      <div :class="props.titleClass">{{ d.placeholder }}</div>
+      <div :class="props.valueClass">{{ d.value }}</div>
+    </div>
   </template>
 </template>
 
@@ -35,6 +21,9 @@
   const props = defineProps<{
     dataObject: any
     asSender?: boolean
+    containerClass: string
+    titleClass: string
+    valueClass: string
   }>()
 
   const personalDataId = computed(() => {

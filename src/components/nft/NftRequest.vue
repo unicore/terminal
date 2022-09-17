@@ -1,103 +1,87 @@
 <template>
-  <q-card>
-    <q-card-section class="text-white" :class="CLASSES_STATUSES[requestStatus] || 'bg-primary'">
-      <div class="text-h6">Заявка на покупку {{ nftObject?.title }}</div>
-      <div class="text-subtitle2">Статус: {{ TEXT_STATUSES[requestStatus] }}</div>
-    </q-card-section>
-    <q-list>
-      <q-item v-if="currentUserIsSeller">
-        <q-item-section>
-          <q-item-label>Покупатель</q-item-label>
-          <q-item-label caption>{{ requestObject.buyer }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item v-else>
-        <q-item-section>
-          <q-item-label>Продавец</q-item-label>
-          <q-item-label caption>{{ requestObject.seller }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label>Частей к покупке</q-item-label>
-          <q-item-label caption>{{ requestObject.requested_pieces }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label>Цена одной части</q-item-label>
-          <q-item-label caption>{{ requestObject.one_piece_price }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label>Сумма</q-item-label>
-          <q-item-label caption>{{ requestObject.total_price }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label>Себестоимость одной части</q-item-label>
-          <q-item-label caption>{{ requestObject.base_piece_price }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item v-if="requestObject.day_start">
-        <q-item-section>
-          <q-item-label>День в году начала</q-item-label>
-          <q-item-label caption>{{ requestObject.day_start }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item v-if="requestObject.day_finish">
-        <q-item-section>
-          <q-item-label>День в году окончания</q-item-label>
-          <q-item-label caption>{{ requestObject.day_finish }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label>Себестоимость одной части</q-item-label>
-          <q-item-label caption>{{ requestObject.base_piece_price }}</q-item-label>
-        </q-item-section>
-      </q-item>
+  <div :class="$style.requestCard">
+    <div :class="[$style.requestCardHeader, CLASSES_BORDER_STATUSES[requestStatus]]">
+      <div :class="$style.requestCardTitle">Заявка на покупку {{ nftObject?.title }}</div>
+      <div :class="$style.requestCardSubTitle">
+        Статус:
+        <span :class="CLASSES_COLOR_STATUSES[requestStatus]">
+          {{ TEXT_STATUSES[requestStatus] }}
+        </span>
+      </div>
+    </div>
+    <div :class="$style.requestCardItems">
+      <div v-if="currentUserIsSeller" :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">Покупатель</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.buyer }}</div>
+      </div>
+      <div v-else :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">Продавец</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.seller }}</div>
+      </div>
+      <div :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">Частей к покупке</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.requested_pieces }}</div>
+      </div>
+      <div :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">Цена одной части</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.one_piece_price }}</div>
+      </div>
+      <div :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">Сумма</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.total_price }}</div>
+      </div>
+      <div :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">Себестоимость одной части</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.base_piece_price }}</div>
+      </div>
+      <div v-if="requestObject.day_start" :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">День в году начала</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.day_start }}</div>
+      </div>
+      <div v-if="requestObject.day_finish" :class="$style.requestCardItem">
+        <div :class="$style.requestCardItemTitle">День в году окончания</div>
+        <div :class="$style.requestCardItemValue">{{ requestObject.day_finish }}</div>
+      </div>
       <PersonalDataList
+        :container-class="$style.requestCardItem"
+        :title-class="$style.requestCardItemTitle"
+        :value-class="$style.requestCardItemValue"
         :data-object="requestObject.delivery_to"
         :as-sender="!currentUserIsSeller" />
-      <q-item v-if="!currentUserIsSeller && requestStatus === 'accepted'">
-        <q-item-section>
-          <q-item-label>Инструкция по оплате</q-item-label>
-          <q-item-label caption>{{ config.nft.buyString }}</q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
-    <q-card-actions>
-      <template v-if="currentUserIsSeller">
-        <q-btn v-if="requestStatus === 'waiting'" flat color="green" @click="openAcceptReqPopup">
-          Начать
-        </q-btn>
-        <q-btn v-if="requestStatus === 'confirmed'" flat color="green" @click="issueOpt">
-          Выпустить опционы
-        </q-btn>
-        <q-btn
-          v-if="requestStatus === 'accepted' || requestStatus === 'confirmed'"
-          flat
-          color="red"
-          @click="declineReq">
-          Отклонить
-        </q-btn>
-      </template>
-      <template v-else>
-        <q-btn v-if="requestStatus === 'accepted'" flat color="green" @click="acceptPrice">
-          Принять цену
-        </q-btn>
-        <q-btn v-if="requestStatus === 'issued'" flat color="green" @click="confirm">
-          Выкупить
-        </q-btn>
-        <q-btn v-if="requestStatus === 'waiting'" flat color="red" @click="cancelReq">
-          Отменить
-        </q-btn>
-      </template>
-    </q-card-actions>
-  </q-card>
+      <div v-if="!currentUserIsSeller && requestStatus === 'accepted'">
+        <div :class="$style.requestCardItemTitle">Инструкция по оплате</div>
+        <div :class="$style.requestCardItemValue">{{ config.nft.buyString }}</div>
+      </div>
+      <div :class="$style.requestCardActions">
+        <template v-if="currentUserIsSeller">
+          <q-btn v-if="requestStatus === 'waiting'" flat color="green" @click="openAcceptReqPopup">
+            Начать
+          </q-btn>
+          <q-btn v-if="requestStatus === 'confirmed'" flat color="green" @click="issueOpt">
+            Выпустить опционы
+          </q-btn>
+          <q-btn
+            v-if="requestStatus === 'accepted' || requestStatus === 'confirmed'"
+            flat
+            color="red"
+            @click="declineReq">
+            Отклонить
+          </q-btn>
+        </template>
+        <template v-else>
+          <q-btn v-if="requestStatus === 'accepted'" flat color="green" @click="acceptPrice">
+            Принять цену
+          </q-btn>
+          <q-btn v-if="requestStatus === 'issued'" flat color="green" @click="confirm">
+            Выкупить
+          </q-btn>
+          <q-btn v-if="requestStatus === 'waiting'" flat color="red" @click="cancelReq">
+            Отменить
+          </q-btn>
+        </template>
+      </div>
+    </div>
+  </div>
 
   <q-dialog v-model="openedAcceptReqPopup" persistent>
     <q-card style="max-width: 500px; width: 100vw">
@@ -162,7 +146,8 @@
 
 <script setup lang="ts">
   import { NftObject } from 'unicore/dist/esm/src/blockchain/contracts/nft'
-  import { computed, ref } from 'vue'
+  import { computed, ref, useCssModule } from 'vue'
+
   import { Notify, useQuasar } from 'quasar'
 
   import chains from '~/chainsMain'
@@ -180,24 +165,36 @@
     id: number
   }>()
 
-  const CLASSES_STATUSES: Record<string, unknown> = {
-    waiting: 'bg-primary',
-    accepted: 'bg-orange',
-    confirmed: 'bg-red',
-    issued: 'bg-yellow-10',
-    declined: 'bg-blue-grey',
-    cancelled: 'bg-blue-grey',
-    completed: 'bg-green',
+  const $style = useCssModule()
+
+  const CLASSES_BORDER_STATUSES: Record<string, unknown> = {
+    waiting: $style.borderLeftYellow,
+    accepted: $style.borderLeftGreen,
+    confirmed: $style.borderLeftGreen,
+    issued: $style.borderLeftGreen,
+    declined: $style.borderLeftRed,
+    cancelled: $style.borderLeftRed,
+    completed: $style.borderLeftGreen,
+  }
+
+  const CLASSES_COLOR_STATUSES: Record<string, unknown> = {
+    waiting: $style.colorYellow,
+    accepted: $style.colorGreen,
+    confirmed: $style.colorGreen,
+    issued: $style.colorGreen,
+    declined: $style.colorRed,
+    cancelled: $style.colorRed,
+    completed: $style.colorGreen,
   }
 
   const TEXT_STATUSES: Record<string, unknown> = {
-    waiting: 'создана',
-    accepted: 'принята',
-    confirmed: 'цена принята',
-    issued: 'опционы выпущены',
-    declined: 'отменена оператором',
-    cancelled: 'отменена покупателем',
-    completed: 'завершено',
+    waiting: 'Создана',
+    accepted: 'Принята',
+    confirmed: 'Цена принята',
+    issued: 'Опционы выпущены',
+    declined: 'Отменена оператором',
+    cancelled: 'Отменена покупателем',
+    completed: 'Завершено',
   }
 
   const requestObject = computed(() => nftStore.getNftMarketRequestById(props.id))
@@ -608,4 +605,91 @@
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style module>
+  .requestCard {
+    box-shadow: none;
+    background-color: #fff;
+    padding-top: 14px;
+    padding-bottom: 16px;
+    border-radius: 10px;
+  }
+
+  .requestCardHeader {
+    border-left: 10px solid #607d8b;
+    padding-left: 10px;
+    padding-right: 20px;
+  }
+
+  .requestCardTitle {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+
+  .requestCardSubTitle {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0;
+    text-align: left;
+  }
+
+  .borderLeftGreen {
+    border-left-color: #3ac922;
+  }
+
+  .borderLeftYellow {
+    border-left-color: #f7d523;
+  }
+
+  .borderLeftRed {
+    border-left-color: #ff3030;
+  }
+
+  .colorGreen {
+    color: #3ac922;
+  }
+
+  .colorYellow {
+    color: #f7d523;
+  }
+
+  .colorRed {
+    color: #ff3030;
+  }
+
+  .requestCardItems {
+    padding: 20px 20px 0 20px;
+  }
+
+  .requestCardItem {
+    padding: 5px 0;
+  }
+
+  .requestCardItem + .requestCardItem {
+    border-top: 1px solid #d7d7d7;
+  }
+
+  .requestCardItemTitle {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #747474;
+    margin-bottom: 5px;
+  }
+
+  .requestCardItemValue {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 18px;
+    color: #5c5c5c;
+  }
+
+  .requestCardActions {
+  }
+</style>
