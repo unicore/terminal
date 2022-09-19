@@ -2,7 +2,7 @@
   <q-layout view="hHh LpR fFf">
     <q-header elevated class="bg-white text-black text-left">
       <q-toolbar>
-        <q-btn v-if="isIndexLayout" dense flat round @click="login">
+        <q-btn v-if="isIndexLayout || !loggedIn" dense flat round @click="login">
           <img :src="MenuIcon" alt="Menu" />
         </q-btn>
         <q-btn v-else dense flat round @click="toggleLeftDrawer">
@@ -18,23 +18,46 @@
     </q-header>
 
     <q-drawer
-      v-if="!isIndexLayout"
-      :mini="!leftDrawerOpen && !leftDrawerOverOpen"
+      v-if="!isIndexLayout && loggedIn && !isMobile"
+      :mini="isMini"
       show-if-above
       side="left"
       persistent
       :mini-width="60"
       :width="240"
       class="drawer">
-      <UserProfile :mini="!leftDrawerOpen && !leftDrawerOverOpen" />
+      <UserProfile :mini="isMini" />
 
-      <Menu :mini="!leftDrawerOpen && !leftDrawerOverOpen" />
+      <Menu :mini="isMini" />
 
-      <MenuFooter :mini="!leftDrawerOpen && !leftDrawerOverOpen" />
+      <MenuFooter :mini="isMini" />
+    </q-drawer>
+    <q-drawer
+      v-if="!isIndexLayout && loggedIn && isMobile"
+      v-model="leftDrawerOpen"
+      behavior="mobile"
+      side="left"
+      persistent
+      :mini-width="60"
+      :width="240"
+      class="drawer">
+      <div
+        class="flex justify-end q-pr-sm q-pt-sm"
+        style="margin-bottom: -40px; z-index: 1; position: relative">
+        <q-btn dense flat round @click="toggleLeftDrawer">
+          <q-icon name="close" color="teal" size="20px" />
+        </q-btn>
+      </div>
+
+      <UserProfile :mini="false" />
+
+      <Menu :mini="false" />
+
+      <MenuFooter :mini="false" />
     </q-drawer>
 
     <q-drawer
-      v-if="isIndexLayout"
+      v-if="isIndexLayout || !loggedIn"
       v-model="rightDrawerOpen"
       overlay
       side="left"
@@ -42,6 +65,15 @@
       bordered
       :width="240"
       persistent>
+      <div
+        v-if="isMobile"
+        class="flex justify-end q-pr-sm q-pt-sm"
+        style="margin-bottom: -40px; z-index: 1; position: relative">
+        <q-btn dense flat round @click="login">
+          <q-icon name="close" color="teal" size="20px" />
+        </q-btn>
+      </div>
+
       <UserProfile />
     </q-drawer>
 
@@ -59,6 +91,7 @@
   import { ref, computed, onMounted, watch } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { useQuasar, Cookies } from 'quasar'
+  import { useWindowSize } from 'vue-window-size'
 
   import MenuIcon from '~/assets/menu.svg?url'
   import HeaderLogo from '~/assets/header-logo.svg?url'
@@ -77,6 +110,7 @@
   const userStore = useUserStore()
   const walletStore = useWalletStore()
   const route = useRoute()
+  const { width } = useWindowSize()
 
   const leftDrawerOpen = ref<boolean>(false)
   const leftDrawerOverOpen = ref<boolean>(false)
@@ -88,6 +122,18 @@
 
   const isIndexLayout = computed(() => {
     return !!route.meta?.indexLayout
+  })
+
+  const isMobile = computed(() => {
+    return width.value < 1024
+  })
+
+  const isMini = computed(() => {
+    return !leftDrawerOpen.value && !leftDrawerOverOpen.value && !isMobile.value
+  })
+
+  const loggedIn = computed(() => {
+    return userStore.hasAuth
   })
 
   watch(route, () => {

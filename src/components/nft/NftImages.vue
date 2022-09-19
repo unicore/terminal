@@ -10,7 +10,7 @@
       prev-icon=""
       next-icon=""
       :height="height || '300px'"
-      class="rounded-borders">
+      :class="!noRounded && 'rounded-borders'">
       <template #navigation-icon="{ active, btnProps, onClick }">
         <q-btn
           size="10px"
@@ -50,6 +50,7 @@
   const props = defineProps<{
     id: number
     height?: string
+    noRounded?: boolean
   }>()
   const nftStore = useNftStore()
 

@@ -9,6 +9,20 @@
           {{ object.title }}
         </q-card-section>
         <q-card-section class="object-card-subheader"> #{{ marketId }} </q-card-section>
+        <div class="mobile-only">
+          <NftImages :id="object.id" no-rounded height="380px" style="margin: 0 -16px 0 -25px" />
+
+          <div class="flex flex-row justify-between q-py-md">
+            <div class="pieces-mobile">
+              <FillablePieces
+                :from="marketObject.blocked_pieces"
+                :to="marketObject.remain_pieces + marketObject.blocked_pieces" />
+            </div>
+            <div class="flex justify-end">
+              <Stars :amount="4.9" />
+            </div>
+          </div>
+        </div>
 
         <q-card-section
           v-if="description.short || description.full"
@@ -30,7 +44,7 @@
           <NftMarketBuy :id="marketId" />
         </q-card-section>
       </div>
-      <div class="card-right">
+      <div class="card-right desktop-only">
         <div class="images-left flex flex-col content-end">
           <div class="flex justify-end">
             <Stars :amount="4.9" />
@@ -47,7 +61,7 @@
       </div>
     </q-card>
     <div class="row q-col-gutter-lg second-row">
-      <div class="col-7">
+      <div class="col-xs-12 col-7">
         <q-card class="object-card">
           <q-card-section class="object-card-small-header"> Отзывы </q-card-section>
           <div class="field-review">
@@ -58,7 +72,7 @@
           </div>
         </q-card>
       </div>
-      <div class="col-5">
+      <div class="col-xs-12 col-5">
         <q-card v-if="object.meta.address" class="object-card address-card col-4">
           <q-card-section class="object-card-small-header"> Адрес </q-card-section>
           <q-card-section class="object-card-address">
