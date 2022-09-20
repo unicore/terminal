@@ -36,6 +36,10 @@
         </g>
       </svg>
     </div>
+
+    <q-tooltip anchor="bottom middle" self="top middle" :offset="[10, 10]">
+      Доступно частей {{ props.from }} из {{ props.to }}
+    </q-tooltip>
   </div>
 </template>
 
@@ -52,7 +56,7 @@
 
 <style scoped lang="scss">
   .fillable-pieces {
-    width: 70px;
+    width: 90px;
     white-space: nowrap;
 
     img,

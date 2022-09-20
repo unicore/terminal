@@ -14,9 +14,7 @@
 
           <div class="flex flex-row justify-between q-py-md">
             <div class="pieces-mobile">
-              <FillablePieces
-                :from="marketObject.blocked_pieces"
-                :to="marketObject.remain_pieces + marketObject.blocked_pieces" />
+              <FillablePieces :from="pieces.from" :to="pieces.to" />
             </div>
             <div class="flex justify-end">
               <Stars :amount="4.9" />
@@ -50,9 +48,7 @@
             <Stars :amount="4.9" />
           </div>
           <div class="pieces">
-            <FillablePieces
-              :from="marketObject.blocked_pieces"
-              :to="marketObject.remain_pieces + marketObject.blocked_pieces" />
+            <FillablePieces :from="pieces.from" :to="pieces.to" />
           </div>
         </div>
         <div class="card-images">
@@ -155,6 +151,23 @@
 
   const priceStr = computed(() => numeral(marketObject.value.min_piece_price).format('0,0'))
   const symbolStr = computed(() => marketObject.value.min_piece_price.split(' ')[1])
+
+  const pieces = computed(() => {
+    const v = {
+      from: 14,
+      to: 260,
+    }
+
+    if (marketObject.value && object.value) {
+      // v.from =
+      //   object.value.total_pieces -
+      //   (marketObject.value.remain_pieces + marketObject.value.blocked_pieces) +
+      //   marketObject.value.blocked_pieces
+      // v.to = object.value.total_pieces
+    }
+
+    return v
+  })
 
   const description = computed(() => {
     let descriptionObject = {
@@ -261,7 +274,7 @@
     width: 546px;
     text-align: right;
     padding-top: 16px;
-    padding-left: 96px;
+    padding-left: 106px;
     position: relative;
   }
 
@@ -334,7 +347,7 @@
   }
 
   .pieces {
-    width: 70px;
+    width: 90px;
     margin-top: 27px;
   }
 

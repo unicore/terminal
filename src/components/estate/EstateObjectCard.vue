@@ -20,9 +20,7 @@
             </div>
 
             <div class="pieces">
-              <FillablePieces
-                :from="marketObject.blocked_pieces"
-                :to="marketObject.remain_pieces + marketObject.blocked_pieces" />
+              <FillablePieces :from="pieces.from" :to="pieces.to" />
             </div>
           </div>
         </div>
@@ -71,6 +69,22 @@
     () => marketObject.value && marketObject.value.min_piece_price.split(' ')[1]
   )
   const router = useRouter()
+  const pieces = computed(() => {
+    const v = {
+      from: 14,
+      to: 260,
+    }
+
+    if (marketObject.value && object.value) {
+      // v.from =
+      //   object.value.total_pieces -
+      //   marketObject.value.remain_pieces +
+      //   marketObject.value.blocked_pieces
+      // v.to = object.value.total_pieces
+    }
+
+    return v
+  })
 
   const openObject = () => {
     router.push({ name: 'lk-estate-id', params: { id: props.marketId } })
@@ -120,16 +134,16 @@
   }
 
   .pieces {
-    width: 70px;
+    width: 90px;
     margin-top: 21px;
   }
 
   .card-left {
-    width: calc(100% - 80px);
+    width: calc(100% - 90px);
   }
 
   .card-right {
-    width: 80px;
+    width: 90px;
 
     &-inner {
       padding-top: 17px;
