@@ -77,9 +77,7 @@
 
     if (marketObject.value && object.value) {
       v.from =
-        marketObject.value.total_pieces_on_sell -
-        (marketObject.value.blocked_pieces + marketObject.value.solded_pieces) +
-        marketObject.value.backed_pieces
+        marketObject.value.remain_pieces
       v.to = object.value.total_pieces
     }
 

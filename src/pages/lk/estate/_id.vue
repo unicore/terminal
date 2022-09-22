@@ -160,12 +160,10 @@
 
     if (marketObject.value && object.value) {
       v.from =
-        marketObject.value.total_pieces_on_sell
+        marketObject.value.remain_pieces
       v.to = object.value.total_pieces
     }
 
-    console.log("PIECES: ", v, marketObject, object)
-    
     return v
   })
 
