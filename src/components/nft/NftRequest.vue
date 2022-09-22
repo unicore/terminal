@@ -30,10 +30,10 @@
         <div :class="$style.requestCardItemTitle">Сумма</div>
         <div :class="$style.requestCardItemValue">{{ requestObject.total_price }}</div>
       </div>
-      <div :class="$style.requestCardItem">
+<!--       <div :class="$style.requestCardItem">
         <div :class="$style.requestCardItemTitle">Себестоимость одной части</div>
         <div :class="$style.requestCardItemValue">{{ requestObject.base_piece_price }}</div>
-      </div>
+      </div> -->
       <div v-if="requestObject.day_start" :class="$style.requestCardItem">
         <div :class="$style.requestCardItemTitle">День в году начала</div>
         <div :class="$style.requestCardItemValue">{{ requestObject.day_start }}</div>
