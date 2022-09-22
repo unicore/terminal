@@ -130,8 +130,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2021',
-    // minify: true,
-    minify: false,
+    minify: true,
     reportCompressedSize: true,
     chunkSizeWarningLimit: 2048,
     rollupOptions: {

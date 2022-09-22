@@ -71,16 +71,16 @@
   const router = useRouter()
   const pieces = computed(() => {
     const v = {
-      from: 14,
-      to: 260,
+      from: 0,
+      to: 0,
     }
 
     if (marketObject.value && object.value) {
-      // v.from =
-      //   object.value.total_pieces -
-      //   marketObject.value.remain_pieces +
-      //   marketObject.value.blocked_pieces
-      // v.to = object.value.total_pieces
+      v.from =
+        marketObject.value.total_pieces_on_sell -
+        (marketObject.value.blocked_pieces + marketObject.value.solded_pieces) +
+        marketObject.value.backed_pieces
+      v.to = object.value.total_pieces
     }
 
     return v

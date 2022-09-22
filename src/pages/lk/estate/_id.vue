@@ -57,7 +57,7 @@
       </div>
     </q-card>
     <div class="row q-col-gutter-lg second-row">
-      <div class="col-xs-12 col-7">
+      <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-7">
         <q-card class="object-card">
           <q-card-section class="object-card-small-header"> Отзывы </q-card-section>
           <div class="field-review">
@@ -68,7 +68,7 @@
           </div>
         </q-card>
       </div>
-      <div class="col-xs-12 col-5">
+      <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-5">
         <q-card v-if="object.meta.address" class="object-card address-card col-4">
           <q-card-section class="object-card-small-header"> Адрес </q-card-section>
           <q-card-section class="object-card-address">
@@ -154,16 +154,16 @@
 
   const pieces = computed(() => {
     const v = {
-      from: 14,
-      to: 260,
+      from: 0,
+      to: 0,
     }
 
     if (marketObject.value && object.value) {
-      // v.from =
-      //   object.value.total_pieces -
-      //   (marketObject.value.remain_pieces + marketObject.value.blocked_pieces) +
-      //   marketObject.value.blocked_pieces
-      // v.to = object.value.total_pieces
+      v.from =
+        marketObject.value.total_pieces_on_sell -
+        (marketObject.value.blocked_pieces + marketObject.value.solded_pieces) +
+        marketObject.value.backed_pieces
+      v.to = object.value.total_pieces
     }
 
     return v
