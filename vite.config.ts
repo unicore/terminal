@@ -13,6 +13,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill/dist'
 import progress from 'vite-plugin-progress'
 import svgLoader from 'vite-svg-loader'
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -30,10 +31,10 @@ export default defineConfig({
     }),
     createHtmlPlugin({
       inject: {
-        data: { 
+        data: {
           SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система',
-          SITE_DESCRIPTION: config.siteDescription || "собери DAO для сообществ и бизнеса"
-         },
+          SITE_DESCRIPTION: config.siteDescription || 'собери DAO для сообществ и бизнеса',
+        },
       },
     }),
     quasar({ sassVariables: 'src/assets/style/quasar-variables.sass' }),
@@ -66,6 +67,9 @@ export default defineConfig({
       include: resolve(__dirname, './src/locales/**'),
       fullInstall: false,
     }),
+    chunkSplitPlugin({
+      strategy: 'single-vendor',
+    }),
   ],
   resolve: {
     alias: {
@@ -75,6 +79,8 @@ export default defineConfig({
       assert: 'assert-browserify',
       'readable-stream': 'vite-compatible-readable-stream',
       util: 'util',
+      long: resolve(__dirname, 'node_modules/long/umd/index.js'),
+      bytebuffer: resolve(__dirname, 'node_modules/bytebuffer/dist/bytebuffer.js'),
       sys: 'util',
       events: 'rollup-plugin-node-polyfills/polyfills/events',
       stream: 'rollup-plugin-node-polyfills/polyfills/stream',
@@ -104,6 +110,7 @@ export default defineConfig({
     port: 3001,
     proxy: {
       '/api': 'https://gaia.holdings',
+      '/personal-data': 'https://platform.simply.estate/private-api',
       '/upload': 'https://storage.intellect.run',
     },
   },
@@ -123,19 +130,11 @@ export default defineConfig({
   },
   build: {
     target: 'es2021',
-    minify: true,
+    // minify: true,
+    minify: false,
     reportCompressedSize: true,
     chunkSizeWarningLimit: 2048,
     rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('/node_modules/')) {
-            const modules = ['quasar', '@quasar', 'vue', '@vue', 'text-encoding']
-            const chunk = modules.find((module) => id.includes(`${module}`))
-            return chunk ? `vendor-${chunk}` : 'vendor'
-          }
-        },
-      },
       plugins: [
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
