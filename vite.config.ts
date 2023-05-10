@@ -32,8 +32,8 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          SITE_TITLE: config.siteTitle || 'UNICORE | Социальная Операционная Система',
-          SITE_DESCRIPTION: config.siteDescription || 'собери DAO для сообществ и бизнеса',
+          SITE_TITLE: config.siteTitle || 'HELIXO | маркетплейс доходных NFT',
+          SITE_DESCRIPTION: config.siteDescription || 'покупай и продавай NFT, зарабатывая на разнице цен',
         },
       },
     }),

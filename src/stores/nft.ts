@@ -51,7 +51,6 @@ interface CacheProp {
 let CACHE: CacheProp = {}
 
 const resetCache = () => {
-  console.log('RESET NFT CACHE')
   CACHE = {}
 }
 
@@ -67,6 +66,7 @@ export const useNftStore = defineStore('nft', {
       personalDataLoading: {},
       loading: false,
     } as NftState),
+    
   actions: {
     async loadMarketNftById(id: number) {
       this.loading = true

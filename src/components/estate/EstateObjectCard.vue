@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <q-card class="object-card">
+  <div @click="openObject" class="pa-4">
+    <q-card class="object-card" >
       <NftImages :id="props.id" />
 
-      <div class="card-sides flex justify-between">
+      <div class="card-sides flex justify-between" >
         <div class="card-left">
-          <q-card-section class="object-card-header" @click="openObject">
+          <q-card-section class="object-card-header" >
             {{ object.title }}
           </q-card-section>
 
           <q-card-section class="object-card-tags">
-            <Tags />
+            <!-- <Tags /> -->
           </q-card-section>
         </div>
         <div class="card-right">
@@ -29,14 +29,14 @@
       <slot name="moreData"></slot>
 
       <q-card-section v-if="priceStr" class="object-card-price flex justify-between">
-        <slot name="buttons">
+        <!-- <slot name="buttons">
           <q-btn color="teal" label="Посмотреть" @click="openObject" />
-        </slot>
+        </slot> -->
         <div class="price">от {{ priceStr }} {{ symbolStr }}</div>
       </q-card-section>
-      <slot v-else name="buttons">
+      <!-- <slot v-else name="buttons">
         <q-btn color="teal" label="Посмотреть" @click="openObject" />
-      </slot>
+      </slot> -->
     </q-card>
   </div>
 </template>
@@ -96,10 +96,16 @@
   }
 
   .object-card {
-    box-shadow: 0 5px 10px 0 rgba(132, 132, 132, 0.2);
+    cursor: pointer;
     padding: 15px 10px;
-  }
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+  }
   .object-card-header {
     padding-top: 16px;
     padding-bottom: 0;

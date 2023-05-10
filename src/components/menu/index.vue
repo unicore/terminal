@@ -5,7 +5,6 @@
       :key="index"
       v-ripple
       :active="
-        (currentRoute.path.startsWith(item.path) && item.name !== 'lk') ||
         item.name === currentRoute.name
       "
       active-class="menu-item-active"
@@ -60,50 +59,85 @@
     return route
   })
 
-  const makePageNameFromRoute = (route: RouteRecordRaw) => {
-    if (String(route.name) === 'lk') {
-      return 'pages.lk.index'
-    }
-    if (String(route.name) === 'lk-estate') {
-      return 'pages.lk.estate.index'
-    }
-    return `pages.${String(route.name).replace('lk-', 'lk.').replace('public-', 'public.')}`
-  }
-
   const routesInMenu = computed(() => {
-    const res = generatedRoutes.filter((v) => {
-      const n = String(v.name)
+    return [
+    {
+      path: '',
+      name: "index",
+      pageName: "Рынок NFT",
+      icon: 'cart'
+    },
+    {
+      path: 'market',
+      name: "market",
+      pageName: "Рынок NFT",
+      icon: 'history'
+    },
+    {
+      path: 'market',
+      name: "market",
+      pageName: "Мои NFT",
+      icon: 'history'
+    },
+    {
+      path: 'market',
+      name: "market",
+      pageName: "Моя команда",
+      icon: 'history'
+    },
+    {
+      path: 'market',
+      name: "market",
+      pageName: "Обозреватель",
+      icon: 'history'
+    },
+    {
+      path: 'market',
+      name: "market",
+      pageName: "Справка",
+      icon: 'history'
+    },
+    {
+      path: 'market',
+      name: "market",
+      pageName: "Поддержка",
+      icon: 'history'
+    }
+    ]
+    // const res = generatedRoutes.filter((v) => {
+    //   const n = String(v.name)
 
-      return !['all'].includes(n)
-    })
+    //   return !['all'].includes(n)
+    // })
 
-    const r = res
-      .filter((v) => !v.meta?.hide && (!v.meta?.requiresAuth || userStore.hasAuth))
-      .map((v) => {
-        let menuOrder = v.meta?.menuOrder
-        let icon = String(v.meta?.icon || 'union') as keyof typeof ICONS
+    // const r = res
+    //   .filter((v) => !v.meta?.hide && (!v.meta?.requiresAuth || userStore.hasAuth))
+    //   .map((v) => {
+    //     let menuOrder = v.meta?.menuOrder
+    //     let icon = String(v.meta?.icon || 'union') as keyof typeof ICONS
 
-        if (!menuOrder && menuOrder !== 0) {
-          menuOrder = 9999
-        }
+    //     if (!menuOrder && menuOrder !== 0) {
+    //       menuOrder = 9999
+    //     }
 
-        return {
-          name: String(v.name),
-          pageName: makePageNameFromRoute(v),
-          path: v.path,
-          order: menuOrder,
-          icon,
-        }
-      })
+    //     return {
+    //       name: String(v.name),
+    //       pageName: makePageNameFromRoute(v),
+    //       path: v.path,
+    //       order: menuOrder,
+    //       icon,
+    //     }
+    //   })
 
-    r.sort((a: any, b: any) => (a.order > b.order ? 1 : b.order > a.order ? -1 : 0))
+    // r.sort((a: any, b: any) => (a.order > b.order ? 1 : b.order > a.order ? -1 : 0))
 
-    return r
+    // return r
   })
 </script>
 
 <style lang="scss">
   .menu {
+    margin-top: 10px;
   }
 
   .menu-item-section {
@@ -143,11 +177,11 @@
     }
 
     &.menu-item-active {
-      .menu-item-section:after {
+      .menu-item-section:before {
         position: absolute;
         content: '';
         top: -10px;
-        right: 0;
+        left: -15px;
         bottom: -10px;
         width: 5px;
         background: #52a49d;

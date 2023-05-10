@@ -1,5 +1,5 @@
-<template>
-  <EstateMarket />
+<template lang="pug">
+EstateMarket
 </template>
 
 <script setup lang="ts">

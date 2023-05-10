@@ -1,91 +1,43 @@
-<template>
-  <q-layout view="hHh LpR fFf">
-    <q-header elevated class="bg-white text-black text-left">
-      <q-toolbar>
-        <q-btn v-if="isIndexLayout || !loggedIn" dense flat round @click="login">
-          <img :src="MenuIcon" alt="Menu" />
-        </q-btn>
-        <q-btn v-else dense flat round @click="toggleLeftDrawer">
-          <img :src="MenuIcon" alt="Menu" />
-        </q-btn>
+<template lang="pug">
+q-layout(view="hHh LpR fFf")
+  q-header( class="bg-white text-black text-left")
+    q-toolbar
+      q-toolbar-title
+        q-btn(stretch flat class="btn-title" @click="goToIndex")
+          img(:src="HeaderLogo" alt="Homeunity logo")
 
-        <q-toolbar-title>
-          <q-btn stretch flat class="btn-title" @click="goToIndex">
-            <img :src="HeaderLogo" alt="Homeunity logo" />
-          </q-btn>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
+      q-btn(v-if="isIndexLayout || !loggedIn" dense flat round @click="login")
+        img(:src="MenuIcon" alt="Menu")
+      q-btn(v-else dense flat round @click="toggleRightDrawer")
+        img(:src="MenuIcon" alt="Menu")
+      
+  q-drawer(v-if="loggedIn && !isMobile" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer")
+    UserProfile(:mini="isMini")
+    Menu(:mini="isMini")
+    MenuFooter(:mini="isMini")
 
-    <q-drawer
-      v-if="!isIndexLayout && loggedIn && !isMobile"
-      :mini="isMini"
-      show-if-above
-      side="left"
-      persistent
-      :mini-width="60"
-      :width="240"
-      class="drawer">
-      <UserProfile :mini="isMini" />
 
-      <Menu :mini="isMini" />
+  // q-drawer(v-if="!isIndexLayout && loggedIn && isMobile" v-model="leftDrawerOpen" behavior="mobile" side="left" persistent :mini-width="60" :width="300" class="drawer")
+  //   div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
+  //     q-btn(dense flat round @click="toggleLeftDrawer")
+  //       q-icon(name="close" color="teal" size="20px")
+  //   UserProfile(:mini="false")
+  //   p here 2
+  //   Menu(:mini="false")
+  //   MenuFooter(:mini="false")
 
-      <MenuFooter :mini="isMini" />
-    </q-drawer>
-    <q-drawer
-      v-if="!isIndexLayout && loggedIn && isMobile"
-      v-model="leftDrawerOpen"
-      behavior="mobile"
-      side="left"
-      persistent
-      :mini-width="60"
-      :width="240"
-      class="drawer">
-      <div
-        class="flex justify-end q-pr-sm q-pt-sm"
-        style="margin-bottom: -40px; z-index: 1; position: relative">
-        <q-btn dense flat round @click="toggleLeftDrawer">
-          <q-icon name="close" color="teal" size="20px" />
-        </q-btn>
-      </div>
+  q-drawer(v-if="!loggedIn" v-model="rightDrawerOpen" overlay side="right" class="drawer" bordered :width="300" persistent)
+    div(v-if="isMobile" class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
+      q-btn(dense flat round @click="login")
+        q-icon(name="close" color="teal" size="20px")
+    UserProfile
 
-      <UserProfile :mini="false" />
-
-      <Menu :mini="false" />
-
-      <MenuFooter :mini="false" />
-    </q-drawer>
-
-    <q-drawer
-      v-if="isIndexLayout || !loggedIn"
-      v-model="rightDrawerOpen"
-      overlay
-      side="left"
-      class="drawer"
-      bordered
-      :width="240"
-      persistent>
-      <div
-        v-if="isMobile"
-        class="flex justify-end q-pr-sm q-pt-sm"
-        style="margin-bottom: -40px; z-index: 1; position: relative">
-        <q-btn dense flat round @click="login">
-          <q-icon name="close" color="teal" size="20px" />
-        </q-btn>
-      </div>
-
-      <UserProfile />
-    </q-drawer>
-
-    <q-page-container>
-      <q-page class="page">
-        <router-view v-slot="{ Component }">
-          <component :is="Component" />
-        </router-view>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+  q-page-container
+    q-page(class="page")
+      router-view(v-slot="{ Component }")
+        component(:is="Component")
 </template>
+
 
 <script setup lang="ts">
   import { ref, computed, onMounted, watch } from 'vue'
@@ -120,6 +72,10 @@
     leftDrawerOpen.value = !leftDrawerOpen.value
   }
 
+  const toggleRightDrawer = () => {
+    rightDrawerOpen.value = !rightDrawerOpen.value
+  }
+
   const isIndexLayout = computed(() => {
     return !!route.meta?.indexLayout
   })
@@ -129,7 +85,7 @@
   })
 
   const isMini = computed(() => {
-    return !leftDrawerOpen.value && !leftDrawerOverOpen.value && !isMobile.value
+    return !rightDrawerOpen.value && !rightDrawerOpen.value && !isMobile.value
   })
 
   const loggedIn = computed(() => {
@@ -166,10 +122,11 @@
   .slide-fade-enter {
     transform: translateX(8px);
     opacity: 0;
+    transition: all 0.1s ease;
   }
   .slide-fade-enter-active,
   .slide-fade-leave-active {
-    transition: all 0.15s ease;
+    transition: all 0.35s ease;
   }
   .slide-fade-leave-to {
     transform: translateX(-8px);
@@ -183,20 +140,13 @@
     padding-bottom: 6px;
   }
 
-  .page {
-    background-color: #f2f2f2;
-  }
-
   .q-toolbar {
-    box-shadow: 0 5px 10px rgba(132, 132, 132, 0.2);
+    border-bottom: 1px solid #00800038 !important;
+    padding-left: 0px !important;
   }
 
-  .q-layout__shadow:after {
-    box-shadow: none;
-  }
-
+ 
   .drawer {
-    border-right: none !important;
-    box-shadow: 0 0 30px rgba(132, 132, 132, 0.25) !important;
+    border-left: 1px solid #00800038 !important;
   }
 </style>

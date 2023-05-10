@@ -67,16 +67,12 @@
 
 <style lang="scss" scoped>
   .ref-link {
-    margin-top: 22px;
-    margin-bottom: 20px;
-    border-top: 1px solid #ecb464;
     border-bottom: 1px solid #ecb464;
-    padding: 16px 0;
     cursor: pointer;
     height: 90px;
-
+    padding: 21px 0;
     &-mini {
-      padding: 21px 0;
+      
       text-align: center;
 
       &-container {

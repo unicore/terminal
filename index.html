@@ -10,66 +10,47 @@
     <!-- <meta property="og:image" content="https://ia.media-imdb.com/images/rock.jpg" /> -->
   </head>
   <body>
-    <div id="app">
-      <style>
-        .loader-page,
-        .loader-page:before,
-        .loader-page:after {
-          border-radius: 50%;
-          width: 2.5em;
-          height: 2.5em;
-          -webkit-animation-fill-mode: both;
-          animation-fill-mode: both;
-          -webkit-animation: load7 1.8s infinite ease-in-out;
-          animation: load7 1.8s infinite ease-in-out;
+    <style>
+      
+      body, html {
+        height: 100%;
+        margin: 0;
+      }
+      p {
+        font-size: 16px;
+      }
+
+      .loader-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 9999; /* устанавливаем z-index для размещения поверх контейнера с id="app" */
+      }
+
+      .loader-page {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        position: relative;
+        animation: rotate 2s linear infinite;
+        border-top: 3px solid #3498db;
+        border-right: 3px solid transparent;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
         }
-        .loader-page {
-          color: #2b2b2b;
-          font-size: 10px;
-          margin: 80px auto;
-          position: relative;
-          text-indent: -9999em;
-          -webkit-transform: translateZ(0);
-          -ms-transform: translateZ(0);
-          transform: translateZ(0);
-          -webkit-animation-delay: -0.16s;
-          animation-delay: -0.16s;
+        100% {
+          transform: rotate(360deg);
         }
-        .loader-page:before,
-        .loader-page:after {
-          content: '';
-          position: absolute;
-          top: 0;
-        }
-        .loader-page:before {
-          left: -3.5em;
-          -webkit-animation-delay: -0.32s;
-          animation-delay: -0.32s;
-        }
-        .loader-page:after {
-          left: 3.5em;
-        }
-        @-webkit-keyframes load7 {
-          0%,
-          80%,
-          100% {
-            box-shadow: 0 2.5em 0 -1.3em;
-          }
-          40% {
-            box-shadow: 0 2.5em 0 0;
-          }
-        }
-        @keyframes load7 {
-          0%,
-          80%,
-          100% {
-            box-shadow: 0 2.5em 0 -1.3em;
-          }
-          40% {
-            box-shadow: 0 2.5em 0 0;
-          }
-        }
-      </style>
+      }
+    </style>
+    <div id="app"></div>
+    <div class="loader-container">
       <div class="loader-page"></div>
     </div>
     <script type="module" src="/src/main.ts"></script>

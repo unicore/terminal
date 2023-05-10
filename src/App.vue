@@ -1,5 +1,23 @@
-<template>
-  <router-view />
+<template lang="pug">
+router-view
 </template>
 
-<script setup lang="ts"></script>
+<script lang="ts">
+  
+export default {
+  name: "App",
+  mounted() {
+    // удаление загрузчика после загрузки компонента
+    this.removeLoader();
+  },
+  methods: {
+    removeLoader() {
+      const loaderContainer = document.querySelector(".loader-container");
+      if (loaderContainer) {
+        loaderContainer.remove();
+      }
+    },
+  },
+};
+
+</script>
