@@ -14,23 +14,18 @@ div().full-width
   import chains from '~/chainsMain'
   import config from '~/config'
   import { Notify } from 'quasar'
+  
+  const userStore = useUserStore()
+
   const address = computed(async () => {
+    
     const params = {
-      // username: user.eosname,
-      // currency,
-      // type,
-      // chat: {
-      //   union_chat_id: unionchat,
-      //   reply_to_message_id: ctx.update.message.reply_to_message.message_id,
-      //   reply_to_message_chat_id: ctx.update.message.reply_to_message.chat.id,
-      //   goal_message_id: ctx.update.message.reply_to_message.forward_from_message_id,
-      //   goal_channel_id: ctx.update.message.reply_to_message.forward_from_chat.id,
-      // },
-      // botName: bot.instanceName,
-      // hostname: host,
-      // contract: helix.host.root_token_contract,
-      // symbol: helix.host.symbol,
-      // meta,
+      username: userStore.username,
+      currency: "USDT.TRC20",
+      type: 'issue',
+      hostname: "core",
+      contract: "usdt.token",
+      symbol: "USDT",
     };
 
     try{
