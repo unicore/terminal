@@ -9,7 +9,7 @@ div().full-width
 
 <script setup lang="ts">
   import axios from 'axios'
-  import { computed, ref } from 'vue'
+  import { computed, ref, onMounted } from 'vue'
   import { useUserStore } from '~/stores/user'
   import chains from '~/chainsMain'
   import config from '~/config'
