@@ -238,7 +238,6 @@
       day_finish: dayFinish.value,
     }
 
-    console.log(data)
 
     try {
       const rootChain = chains.getRootChain()

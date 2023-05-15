@@ -9,8 +9,12 @@
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@esbuild-plugins": "https://github.com/moodpulse/esbuild-plugins#a9715debdde71cc2e039cf230992e40429551c4a",
     "@fontsource/mulish": "^4.5.12",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-brands-svg-icons": "^6.4.0",
+    "@fortawesome/free-regular-svg-icons": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/vue-fontawesome": "^3.0.3",
     "@jsdevtools/ono": "^7.1.3",
     "@quasar/extras": "^1.12.5",
     "@tiptap/extension-floating-menu": "^2.0.0-beta.56",
@@ -28,6 +32,7 @@
     "email-regex": "^5.0.0",
     "long": "^5.2.0",
     "moment": "^2.29.4",
+    "moment-with-locales-es6": "^1.0.1",
     "numeral": "^2.0.6",
     "path": "^0.12.7",
     "pinia": "^2.0.11",
@@ -43,7 +48,8 @@
     "text-encoding": "^0.7.0",
     "tiptap-markdown": "^0.5.0",
     "ts-transformer-keys": "^0.4.3",
-    "unicore": "https://github.com/dacom-core/uniJS#v1.13.9",
+    "unicore": "https://github.com/unicore/uniJS#v1.13.9",
+    "unicore-esbuild-plugins": "0.0.1",
     "util": "^0.12.4",
     "vite-compatible-readable-stream": "^3.6.1",
     "vite-plugin-chunk-split": "^0.4.0",
@@ -51,8 +57,10 @@
     "vue": "^3.2.25",
     "vue-i18n": "^9.1.10",
     "vue-markdown-render": "^2.0.0",
+    "vue-notion": "3.0.0-beta.1",
     "vue-router": "^4.0.13",
     "vue-window-size": "^1.1.2",
+    "vue3-horizontal-list": "^0.0.3",
     "vue3-openlayers": "^0.1.70"
   },
   "devDependencies": {

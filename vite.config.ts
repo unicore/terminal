@@ -9,8 +9,8 @@ import Pages from 'vite-plugin-pages'
 import pluginRewriteAll from 'vite-plugin-rewrite-all'
 import Layouts from 'vite-plugin-vue-layouts'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill/dist'
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill/dist'
+import { NodeGlobalsPolyfillPlugin } from 'unicore-esbuild-plugins/node-globals-polyfill/dist'
+import { NodeModulesPolyfillPlugin } from 'unicore-esbuild-plugins/node-modules-polyfill/dist'
 import progress from 'vite-plugin-progress'
 import svgLoader from 'vite-svg-loader'
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split'
@@ -32,8 +32,9 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          SITE_TITLE: config.siteTitle || 'HELIXO | маркетплейс доходных NFT',
+          SITE_TITLE: config.siteTitle || 'AMM | autonomous money machine',
           SITE_DESCRIPTION: config.siteDescription || 'покупай и продавай NFT, зарабатывая на разнице цен',
+          SITE_IMAGE: config.siteImage || 'https://ia.media-imdb.com/images/rock.jpg',
         },
       },
     }),

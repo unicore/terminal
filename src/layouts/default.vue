@@ -1,36 +1,46 @@
 <template lang="pug">
 q-layout(view="hHh LpR fFf")
+  
   q-header( class="bg-white text-black text-left")
     q-toolbar
-      q-toolbar-title
-        q-btn(stretch flat class="btn-title" @click="goToIndex")
-          img(:src="HeaderLogo" alt="Homeunity logo")
-
-      q-btn(v-if="isIndexLayout || !loggedIn" dense flat round @click="login")
-        img(:src="MenuIcon" alt="Menu")
-      q-btn(v-else dense flat round @click="toggleRightDrawer")
-        img(:src="MenuIcon" alt="Menu")
       
+      q-toolbar-title
+        q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
+          i.fa-solid.fa-circle-chevron-left
+        
+        q-btn(v-if="router.currentRoute.value.name == 'index'" stretch flat class="btn-title" @click="goToIndex")
+          img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
+          
+          
+      // q-btn(color="teal" v-if="loggedIn" stretch size="lg" flat @click="router.push({name: 'create'})") 
+        // p(style="font-size: 12px; font-weight: 600; padding-right: 10px;") создать NFT
+        // i.fa.fa-plus
+      q-btn(color="teal" class="btn-menu" v-if="!loggedIn" stretch size="lg" flat @click="login") 
+        i.fa-solid.fa-right-to-bracket
+    
+      q-btn(color="teal" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer")
+        i.fa.fa-user
+
   q-drawer(v-if="loggedIn && !isMobile" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer")
     UserProfile(:mini="isMini")
     Menu(:mini="isMini")
     MenuFooter(:mini="isMini")
 
 
-  // q-drawer(v-if="!isIndexLayout && loggedIn && isMobile" v-model="leftDrawerOpen" behavior="mobile" side="left" persistent :mini-width="60" :width="300" class="drawer")
-  //   div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
-  //     q-btn(dense flat round @click="toggleLeftDrawer")
-  //       q-icon(name="close" color="teal" size="20px")
-  //   UserProfile(:mini="false")
-  //   p here 2
-  //   Menu(:mini="false")
-  //   MenuFooter(:mini="false")
+  q-drawer(v-if="loggedIn && isMobile" v-model="rightDrawerOpen" behavior="mobile" side="right" persistent :mini-width="60" :width="300" class="drawer")
+    div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
+      q-btn(dense flat round @click="toggleRightDrawer")
+        q-icon(name="close" color="teal" size="20px")
+    UserProfile(:mini="false")
+    Menu(:mini="false")
+    MenuFooter(:mini="false")
 
   q-drawer(v-if="!loggedIn" v-model="rightDrawerOpen" overlay side="right" class="drawer" bordered :width="300" persistent)
     div(v-if="isMobile" class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
       q-btn(dense flat round @click="login")
         q-icon(name="close" color="teal" size="20px")
     UserProfile
+    MenuFooter(:mini="isMini")
 
   q-page-container
     q-page(class="page")
@@ -44,9 +54,9 @@ q-layout(view="hHh LpR fFf")
   import { useRouter, useRoute } from 'vue-router'
   import { useQuasar, Cookies } from 'quasar'
   import { useWindowSize } from 'vue-window-size'
-
+  import config from '~/config'
   import MenuIcon from '~/assets/menu.svg?url'
-  import HeaderLogo from '~/assets/header-logo.svg?url'
+  import HeaderLogo from '~/assets/logo.svg?url'
   import { useUserStore } from '~/stores/user'
   import { useWalletStore } from '~/stores/wallet'
   import UserProfile from '~/components/user/UserProfile.vue'
@@ -101,9 +111,15 @@ q-layout(view="hHh LpR fFf")
     router.push({ name: 'index' })
   }
 
+  const goToBack = () => {
+    if (route.name == 'explorer' && route.params.search)
+      router.push({name: "explorer"})
+    else router.back()
+  }
+
   const login = () => {
     if (userStore.hasAuth) {
-      router.push({ name: 'lk-estate' })
+      router.push({ name: 'index' })
     } else {
       rightDrawerOpen.value = !rightDrawerOpen.value
     }
@@ -140,9 +156,17 @@ q-layout(view="hHh LpR fFf")
     padding-bottom: 6px;
   }
 
+  .btn-menu {
+    font-size: 20px;
+    height: 60px;
+    width: 60px;
+  }
+
+
   .q-toolbar {
     border-bottom: 1px solid #00800038 !important;
     padding-left: 0px !important;
+    padding-right: 0px !important;
   }
 
  

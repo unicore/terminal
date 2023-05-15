@@ -95,17 +95,6 @@
     padding-right: 2px;
   }
 
-  .object-card {
-    cursor: pointer;
-    padding: 15px 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
-    &:hover {
-      transform: scale(1.03);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-  }
   .object-card-header {
     padding-top: 16px;
     padding-bottom: 0;

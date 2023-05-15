@@ -7,7 +7,8 @@
     <title><%- SITE_TITLE %></title>
     <meta property="og:title" content="<%- SITE_TITLE %>" />
     <meta property="og:description" content="<%- SITE_DESCRIPTION %>" />
-    <!-- <meta property="og:image" content="https://ia.media-imdb.com/images/rock.jpg" /> -->
+    <meta property="og:image" content="<%- SITE_IMAGE %>" />
+    
   </head>
   <body>
     <style>
@@ -18,7 +19,22 @@
       }
       p {
         font-size: 16px;
+        word-break: break-word; // или используйте 'overflow-wrap: break-word;' вместо этого
+ 
       }
+
+      h1{
+        font-size: 28px;
+      }
+
+      h2{
+        font-size: 24px;
+      }
+
+      h3{
+        font-size: 20px;
+      }
+
 
       .loader-container {
         display: flex;
@@ -54,5 +70,7 @@
       <div class="loader-page"></div>
     </div>
     <script type="module" src="/src/main.ts"></script>
+    
+
   </body>
 </html>

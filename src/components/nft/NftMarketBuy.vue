@@ -139,7 +139,6 @@
       rows: deliveryAnswers.value,
     })
 
-    console.log(data)
 
     try {
       const rootChain = chains.getRootChain()

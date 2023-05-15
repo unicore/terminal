@@ -1,19 +1,19 @@
 <template>
-  <q-list class="pa-4 pt-0 pr-0 pl-0 menu">
+  <q-list class="pt-0 pr-0 pl-0 menu">
     <q-item
       v-for="(item, index) in routesInMenu"
       :key="index"
       v-ripple
-      :active="
-        item.name === currentRoute.name
-      "
+      :active="isRouteActive(item)"
       active-class="menu-item-active"
       clickable
       class="cursor-pointer menu-item"
-      @click="router.push({ path: item.path })">
+      @click="router.push({ name: item.name })">
       <q-item-section class="menu-item-section">
         <div class="menu-item-icon">
-          <component :is="ICONS[item.icon]" v-if="ICONS[item.icon]" />
+          <i :class="item.icon" ></i>
+          <!-- <font-awesome-icon :name="item.icon"></font-awesome-icon> -->
+          <!-- <component :is="ICONS[item.icon]" v-if="ICONS[item.icon]" /> -->
         </div>
         <div v-if="!props.mini" class="menu-item-text">
           {{ t(item.pageName) }}
@@ -22,6 +22,19 @@
 
       <q-tooltip v-if="props.mini" anchor="center right" self="center left" :offset="[10, 10]">
         {{ t(item.pageName) }}
+      </q-tooltip>
+    </q-item>
+    <q-item @click="logout" class="cursor-pointer menu-item" active-class="menu-item-active" v-ripple clickable>
+      <q-item-section class="menu-item-section">
+        <div class="menu-item-icon">
+          <q-icon name="logout"></q-icon>
+        </div>
+        <div v-if="!props.mini" class="menu-item-text">
+          Выход
+        </div>
+      </q-item-section>
+      <q-tooltip v-if="props.mini" anchor="center right" self="center left" :offset="[10, 10]">
+        Выйти из приложения
       </q-tooltip>
     </q-item>
   </q-list>
@@ -59,87 +72,68 @@
     return route
   })
 
+
+  const loggedIn = computed(() => {
+    return userStore.hasAuth
+  })
+
+
+  const logout = () => {
+    router.push({ name: 'index' })
+    userStore.logout()
+  }
+
+  const isRouteActive = (item) => {
+    if (item.name === route.name) {
+      return true
+    }
+
+    // Проверка, совпадает ли родительский маршрут с именем элемента в routesInMenu
+    if (route.matched.some(record => record.name === item.name)) {
+      return true
+    }
+    return false
+  }
+
   const routesInMenu = computed(() => {
     return [
     {
-      path: '',
+      path: '/',
       name: "index",
       pageName: "Рынок NFT",
-      icon: 'cart'
+      icon: 'fa-solid fa-store'
     },
     {
-      path: 'market',
-      name: "market",
-      pageName: "Рынок NFT",
-      icon: 'history'
-    },
-    {
-      path: 'market',
-      name: "market",
+      path: 'my-nft',
+      name: "my-nft",
       pageName: "Мои NFT",
-      icon: 'history'
+      icon: 'fa-solid fa-ticket'
     },
     {
-      path: 'market',
-      name: "market",
+      path: 'my-team',
+      name: "my-team",
       pageName: "Моя команда",
-      icon: 'history'
+      icon: 'fa-solid fa-people-group'
     },
     {
-      path: 'market',
-      name: "market",
+      path: 'explorer',
+      name: "explorer",
       pageName: "Обозреватель",
-      icon: 'history'
+      icon: 'fa-solid fa-cube'
     },
     {
-      path: 'market',
-      name: "market",
+      path: 'info',
+      name: "info",
       pageName: "Справка",
-      icon: 'history'
+      icon: 'fa-solid fa-info'
     },
-    {
-      path: 'market',
-      name: "market",
-      pageName: "Поддержка",
-      icon: 'history'
-    }
     ]
-    // const res = generatedRoutes.filter((v) => {
-    //   const n = String(v.name)
 
-    //   return !['all'].includes(n)
-    // })
-
-    // const r = res
-    //   .filter((v) => !v.meta?.hide && (!v.meta?.requiresAuth || userStore.hasAuth))
-    //   .map((v) => {
-    //     let menuOrder = v.meta?.menuOrder
-    //     let icon = String(v.meta?.icon || 'union') as keyof typeof ICONS
-
-    //     if (!menuOrder && menuOrder !== 0) {
-    //       menuOrder = 9999
-    //     }
-
-    //     return {
-    //       name: String(v.name),
-    //       pageName: makePageNameFromRoute(v),
-    //       path: v.path,
-    //       order: menuOrder,
-    //       icon,
-    //     }
-    //   })
-
-    // r.sort((a: any, b: any) => (a.order > b.order ? 1 : b.order > a.order ? -1 : 0))
-
-    // return r
   })
 </script>
 
 <style lang="scss">
-  .menu {
-    margin-top: 10px;
-  }
-
+  
   .menu-item-section {
     display: flex !important;
     gap: 7px;
@@ -152,7 +146,7 @@
   .menu-item {
     text-align: left !important;
     justify-content: flex-start;
-    padding: 10px 0 10px 15px !important;
+    padding: 10px 0 10px 13px !important;
     min-width: 0;
     font-style: normal;
     font-weight: 400;
@@ -174,6 +168,11 @@
 
     &-text {
       align-self: center;
+    }
+
+    .menu-item-icon {
+      width: 45px;
+      text-align: center;
     }
 
     &.menu-item-active {

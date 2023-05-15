@@ -1,19 +1,16 @@
-<template>
-  <div class="footer-root">
-    <div class="logout" @click="logout">
-      <q-icon name="logout" color="teal" size="16px" />
-      <span v-if="!props.mini" class="logout-text">Выйти</span>
-    </div>
-    <div v-if="!props.mini" class="copyright">
-      2022 homeunity, все права защищены
-    </div>
-  </div>
+<template lang="pug">
+div.footer-root
+  div().copyright
+    blockInfo
+  
+  
 </template>
 
 <script setup lang="ts">
   import { useRouter } from 'vue-router'
-
+  import blockInfo from '~/components/menu/blockInfo.vue'
   import { useUserStore } from '~/stores/user'
+  import { computed } from 'vue'
 
   const props = defineProps<{
     mini?: boolean
@@ -21,6 +18,11 @@
 
   const router = useRouter()
   const userStore = useUserStore()
+
+  const loggedIn = computed(() => {
+    return userStore.hasAuth
+  })
+
 
   const logout = () => {
     router.push({ name: 'index' })
@@ -34,12 +36,15 @@
   }
 
   .copyright {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 10px;
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 16px;
     color: #8a8a8a;
-    padding-top: 17px;
   }
 
   .logout {

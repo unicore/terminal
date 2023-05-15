@@ -2,8 +2,8 @@
   <form class="full-width" @submit.prevent="submit">
     <q-input
       v-model="privateKey"
-      label="Приватный ключ или фраза"
-      hint="Введите приватный ключ или сид фразу"
+      label="Введите приватный ключ"
+      hint=""
       outlined
       class="full-width"
       type="password"
@@ -65,21 +65,22 @@
         account.name = username
 
         await userStore.login(account)
-        await router.push({ name: 'lk-estate' })
+        // await router.push({ name: 'index' })
         Notify.create({
-          message: 'Успешный вход',
+          message: 'Добро пожаловать обратно',
           type: 'positive',
         })
         loading.value = false
         return
       }
     } catch (e) {
-      console.error('COMMON', e)
+      console.log("e.message: ", e)
+      Notify.create({
+        message: 'Ключ не верный или не принадлежит ни одному аккаунту',
+        type: 'negative',
+      })
     }
-    Notify.create({
-      message: 'Профиль не найден',
-      type: 'negative',
-    })
+    
     loading.value = false
   }
 </script>

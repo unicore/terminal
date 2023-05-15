@@ -206,7 +206,7 @@
 
   watch(gMapsLink, () => {
     const parts = gMapsLink.value.split('/')
-    console.log(parts)
+    
     if (parts[4] !== 'place') {
       return
     }

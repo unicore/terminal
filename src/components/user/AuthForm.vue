@@ -7,14 +7,14 @@
     </div>
   </div>
   <div v-else>
-    <h6 class="text-h6 q-mb-md">Регистрация</h6>
     <RegisterForm />
     <div class="q-mt-lg text-center">
+      <p class="text-grey">Уже есть ключ?</p>
       <q-btn
         flat
         rounded
         color="teal"
-        label="Вернуться и войти по ключу"
+        label="Войти"
         @click="isRegister = false" />
     </div>
   </div>
@@ -25,7 +25,7 @@
   import LoginForm from '~/components/user/LoginForm.vue'
   import RegisterForm from '~/components/user/RegisterForm.vue'
 
-  const isRegister = ref(false)
+  const isRegister = ref(true)
 </script>
 
 <style lang="scss" scoped></style>

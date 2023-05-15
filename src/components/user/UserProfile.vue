@@ -1,39 +1,22 @@
-<template>
-  <div :class="props.mini ? 'layout-mini' : 'layout-full'">
-    <div v-if="!userStore.hasAuth">
-      <AuthForm />
-    </div>
-    <div v-else>
-      <q-item style="padding-left: 0">
-        <q-item-section side :style="!props.mini && 'padding-right: 10px'">
-          <q-avatar size="40px" font-size="20px" color="grey-12" text-color="white" icon="person" />
-        </q-item-section>
-        <q-item-section v-if="!props.mini">
-          <q-item-label overline class="username">{{
-            userStore.username?.toUpperCase()
-          }}</q-item-label>
-        </q-item-section>
-      </q-item>
+<template lang="pug">
+div(:class="props.mini ? 'layout-mini' : 'layout-full'")
+  div(v-if="!userStore.hasAuth")
+    AuthForm
+  div(v-else)
+    // q-item(style="padding-left: 0" v-if="userStore.username && !props.mini")
+    //   q-item-section
+    //     q-item-label(overline class="username") {{ userStore.username?.toUpperCase() }}
+    div(class="ref-link" :class="props.mini" @click="copyRLink")
+      template(v-if="props.mini")
+        q-btn(flat).full-width.full-height.link-button.ref-link-mini
+          q-icon(name="link" color="teal" size="16px")
+      template(v-else)
+        div(class="ref-link-header")
+          | Партнерская ссылка 
+          q-icon(name="content_copy" color="teal" size="12px")
+        div(class="ref-link-body") {{ link }}
+    WalletsCarousel(v-if="!props.mini" :mini="props.mini")
 
-      <div class="ref-link" :class="props.mini && 'ref-link-mini-container'" @click="copyRLink">
-        <template v-if="props.mini">
-          <div class="ref-link-mini">
-            <q-icon name="link" color="teal" size="16px" />
-          </div>
-        </template>
-        <template v-else>
-          <div class="ref-link-header">
-            Партнерская ссылка <q-icon name="content_copy" color="teal" size="12px" />
-          </div>
-          <div class="ref-link-body">
-            {{ link }}
-          </div>
-        </template>
-      </div>
-
-      <WalletsCarousel v-if="!props.mini" :mini="props.mini" />
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -69,8 +52,8 @@
   .ref-link {
     border-bottom: 1px solid #ecb464;
     cursor: pointer;
-    height: 90px;
-    padding: 21px 0;
+    height: 50px;
+    
     &-mini {
       
       text-align: center;
@@ -102,8 +85,8 @@
     padding: 10px 10px 20px 10px;
   }
 
-  .layout-mini {
-    padding: 10px 5px 20px 5px;
+  .link-button {
+    padding: 0px !important;
   }
 
   .username {
