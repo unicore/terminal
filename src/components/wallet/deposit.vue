@@ -23,7 +23,7 @@ onMounted(async () => {
   generateAddress()
 })
 
-  const generateAddress = () => {
+  const generateAddress = async () => {
     
     const params = {
       username: userStore.username,
