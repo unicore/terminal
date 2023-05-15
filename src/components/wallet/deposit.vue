@@ -17,7 +17,13 @@ div().full-width
   
   const userStore = useUserStore()
 
-  const address = computed(async () => {
+  let address = ref("")
+
+onMounted(async () => {
+  generateAddress()
+})
+
+  const generateAddress = () => {
     
     const params = {
       username: userStore.username,
@@ -38,7 +44,7 @@ div().full-width
       );
 
       if (result.data.status === 'ok') { 
-        return result.data.address; 
+        address.value = result.data.address; 
       } else {
         Notify.create({
           message: `Произошла ошибка на получении адреса`,
@@ -49,14 +55,18 @@ div().full-width
     } catch(e){
 
         console.log(e);
-
+        address.value = e.message
         Notify.create({
           message: `Произошла ошибка на получении адреса: ${e.message}`,
           color: 'negative',
         })
       
-    }
-  })
+    }    
+  }
+
+  // const address = computed(async () => {
+    
+  // })
 
 </script>
 
