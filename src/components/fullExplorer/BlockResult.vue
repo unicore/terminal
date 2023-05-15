@@ -68,7 +68,7 @@ div
 
 <script setup lang="ts">//
 import { ref, computed } from 'vue';
-import moment from 'moment'
+import moment from 'moment-with-locales-es6';
 import AccountLink from './AccountLink.vue'
 import BlockLink from './BlockLink.vue'
 import TxLink from './TxLink.vue'

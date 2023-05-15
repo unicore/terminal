@@ -58,7 +58,7 @@ div
 import { ref, computed } from 'vue'
 import { formatBytes, formatUs } from './utils'
 import AccountLink from './AccountLink.vue'
-import { moment } from 'moment'
+import { moment } from 'moment-with-locales-es6'
 import ActionsByAccount from './ActionsByAccount.vue'
 import TokensByAccount from './TokensByAccount.vue'
 

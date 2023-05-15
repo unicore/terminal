@@ -22,7 +22,7 @@ div
 <script setup lang="ts">
 
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import moment from 'moment'
+import moment from 'moment-with-locales-es6';
 import DataCell from './DataCell.vue'
 import ActionCell from './ActionCell.vue'
 import TxLink from './TxLink.vue'

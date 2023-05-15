@@ -23,7 +23,7 @@ div(style="border: 1px solid grey;")
 
 <script setup>//
 import { ref, computed, watch, reactive, toRefs, nextTick } from 'vue'
-import moment from 'moment'
+import moment from 'moment-with-locales-es6';
 import DataCell from './DataCell.vue'
 import ActionCell from './ActionCell.vue'
 import TxLink from './TxLink.vue'
