@@ -37,6 +37,7 @@ export const useHostStore = defineStore('host', {
       balances: {},
       allUserBalances: {},
       history: {},
+      withdraws: {},
     } as HostState),
   actions: {
     async loadBalances(username, hostname){
@@ -115,7 +116,7 @@ export const useHostStore = defineStore('host', {
               host.meta = JSON.parse(host.meta)
 
             } catch(e){}
-            
+
             let [cPool] = await lazyFetch(
               rootChain.readApi, 
               config.tableCodeConfig.core,
@@ -198,6 +199,30 @@ export const useHostStore = defineStore('host', {
         console.error("error: ", e)
       }
     },
+    async loadWithdraws() {
+      
+      const rootChain = await chains.getRootChain()
+  
+      try {
+
+        let withdraws = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.withdrawer,
+          config.tableCodeConfig.withdrawer,
+          'withdraws',
+        )
+
+        // history.reverse()
+        
+        this.withdraws = withdraws.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+        // console.log("on get history", this.history)
+      
+
+        
+      } catch (e) {
+        console.error("error: ", e)
+      }
+    },
     async loadTreeOfPartners() {
       
       const rootChain = await chains.getRootChain()
@@ -229,6 +254,6 @@ export const useHostStore = defineStore('host', {
       return (username: string) => {
         return state.hosts[username]
     }},
-
+    getWithdraws: (state) => state.withdraws,
   },
 })

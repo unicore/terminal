@@ -23,7 +23,7 @@ div
           q-btn(dense flat icon="close" v-close-popup)
             q-tooltip Close
 
-        withdraw(:symbol="symbol")
+        withdraw(:wallet="wallet" @withdrawFinish="withdrawFinish")
       
       div(v-if="showDeposit")
         q-bar
@@ -77,6 +77,10 @@ div
     showWithdraw.value = true
   }
 
+  const withdrawFinish = () => {
+    dialog.value = false
+    console.log("withdrawFinish")
+  }
 
   const showDepositDialog = () => {
     dialog.value = true

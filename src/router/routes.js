@@ -4,11 +4,14 @@ import market from '../components/core/NFTmarket.vue'
 import myNFT from '../components/core/myNFT/index.vue'
 import myTeam from '../pages/core/partnerPage.vue'
 
+import withdrawer from '../components/core/withdrawer.vue'
+
 import explorer from '../components/fullExplorer/index.vue'
 import infoAbout from '../components/core/infoAbout.vue'
 import support from '../components/core/support.vue'
 import create from '../components/core/create.vue'
 import hostPage from '../pages/core/hostPage.vue'
+
 
 export const routes = [
   {
@@ -62,6 +65,12 @@ export const routes = [
         component: create,
         name: "create",
       },
+      {
+        path: '/withdrawer',
+        component: withdrawer,
+        name: "create",
+      },
+
 
     ]
   }
