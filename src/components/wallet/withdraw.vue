@@ -60,7 +60,7 @@ const withdraw = async () => {
                 from: userStore.username,
                 to: config.tableCodeConfig.withdrawer,
                 quantity: quantity,
-                memo: address
+                memo: address.value
               },
             },
           ],
