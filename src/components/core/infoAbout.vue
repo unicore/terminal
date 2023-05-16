@@ -2,9 +2,9 @@
 div
   div(v-if="loading").q-pa-md
     loader
-  div(v-else).row.justify-center
-    div(v-if="blockMap").col-md-8.xs-12.q-pt-lg
-      NotionRenderer(:blockMap="blockMap" )
+  div(v-else)
+    div(v-if="blockMap").row.justify-center
+      NotionRenderer(:blockMap="blockMap" ).col-md-6.col-xs-12.q-pa-sm
 </template>
 <script setup lang="ts">
 
@@ -180,12 +180,6 @@ onMounted(async () => {
   margin: 0 auto;
   max-width: 708px;
   width: 100%;
-}
-
-@media only screen and (max-width: 730px) {
-  .notion-page {
-    padding: 0 2vw;
-  }
 }
 
 .notion-page-offset {
