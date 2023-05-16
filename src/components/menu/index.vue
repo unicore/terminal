@@ -121,12 +121,12 @@
       pageName: "Обозреватель",
       icon: 'fa-solid fa-cube'
     },
-    {
-      path: 'info',
-      name: "info",
-      pageName: "Справка",
-      icon: 'fa-solid fa-info'
-    },
+    // {
+    //   path: 'info',
+    //   name: "info",
+    //   pageName: "Справка",
+    //   icon: 'fa-solid fa-info'
+    // },
     ]
 
   })

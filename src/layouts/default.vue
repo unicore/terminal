@@ -11,7 +11,10 @@ q-layout(view="hHh LpR fFf")
         q-btn(v-if="router.currentRoute.value.name == 'index'" stretch flat class="btn-title" @click="goToIndex")
           img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
           
-          
+      q-btn(color="teal" stretch size="lg" flat @click="router.push({name: 'info'})") 
+        // i.fa-solid.fa-info
+        p(style="padding-right: 10px;") как это работает
+        
       // q-btn(color="teal" v-if="loggedIn" stretch size="lg" flat @click="router.push({name: 'create'})") 
         // p(style="font-size: 12px; font-weight: 600; padding-right: 10px;") создать NFT
         // i.fa.fa-plus
