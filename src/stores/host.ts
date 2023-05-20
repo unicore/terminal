@@ -49,7 +49,7 @@ export const useHostStore = defineStore('host', {
           rootChain.readApi, 
           config.tableCodeConfig.core,
           hostname,
-          'balance4',
+          'balance',
         )
         
         balances = balances.filter(b => b.owner == username)
@@ -77,7 +77,7 @@ export const useHostStore = defineStore('host', {
               rootChain.readApi, 
               config.tableCodeConfig.core,
               host.username,
-              'balance4',
+              'balance',
             )
             
             balances = balances.filter(b => b.owner == username)
@@ -143,13 +143,13 @@ export const useHostStore = defineStore('host', {
             
             host.spiral = spiral
             host.profitStep = parseFloat(spiral.overlap / 100 - 100).toFixed(0)
-            console.log("params on fetch rate: ", config.tableCodeConfig.core,
-               host.username,
-              'rate',
-              host.current_pool_num - 1,
-              host.current_pool_num - 1,
-              null,
-              1)
+            // console.log("params on fetch rate: ", config.tableCodeConfig.core,
+            //    host.username,
+            //   'rate',
+            //   host.current_pool_num - 1,
+            //   host.current_pool_num - 1,
+            //   null,
+            //   1)
 
             let [currentRate] = await lazyFetch(
               rootChain.readApi, 
@@ -163,7 +163,7 @@ export const useHostStore = defineStore('host', {
             )
 
             host.currentRate = currentRate
-            console.log("host.currentRate: ", host.currentRate)
+            // console.log("host.currentRate: ", host.currentRate)
           }
           
           this.hosts = hosts.reduce((a, n) => ({ ...a, [n.username]: n }), {})

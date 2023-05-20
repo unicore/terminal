@@ -3,8 +3,7 @@ div
   q-card(bordered flat :dark="isDark").nft-balance
     q-card-section
       p # {{balance.id}}
-      // p {{balance}}
-
+    
     q-card-section
       div
         span раунд покупки: 
@@ -13,20 +12,19 @@ div
       // div
       //   span статус: 
       //   q-badge.q-pa-sm {{balance.win}}
-      div(v-if="!isWin")
+      div
         span билеты: 
         span.q-pa-sm {{balance.quants_for_sale / 1000000}}
-
-      div(v-if="!isWin")
+      div
         span доля: 
-        span.q-pa-sm {{parseFloat(balance.quants_for_sale / host.currentPool.total_quants).toFixed(2) * 100}}%
+        span.q-pa-sm {{parseFloat(balance.if_convert) / host.total_shares * 100}}%
 
-      div(v-if="isWin")
-        span к возврату: 
+      div
+        span доступно: 
         span.q-pa-sm {{balance.available}}
         
-      div(v-if="isWin")
-        span компенсация: 
+      div
+        span прибыль: 
         span.q-pa-sm +{{balance.root_percent / 10000}}%
 
     q-card-actions(align="right")  
@@ -34,7 +32,7 @@ div
 
       // q-btn( color="teal" @click="withdrawbal" @loading="loading" v-if="!isWin") получить фракцию
         
-      q-btn(v-if="!needRefresh && isWin" flat color="red"  @click="withdrawbal") вернуть билет
+      q-btn(v-if="!needRefresh && isWin && isAvailable" flat color="teal"  @click="withdrawbal") получить прибыль
 
 
 </template>
@@ -75,7 +73,7 @@ const isDark = computed(() => {
 })
 
 const needRefresh = computed(() => {
-  return props.balance.last_recalculated_win_pool_id < props.host.current_pool_id
+  return props.balance.last_recalculated_pool_id < props.host.current_pool_id
 })
 
 let needLoadAllBalances = computed(() => {
@@ -84,6 +82,10 @@ let needLoadAllBalances = computed(() => {
 
 let isWin = computed(() => {
   return props.host.currentPool.color == props.color
+})
+
+let isAvailable = computed(() => {
+  return parseFloat(props.balance.available) > 0
 })
 
 // onMounted(async () => {

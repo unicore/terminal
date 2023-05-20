@@ -19,7 +19,7 @@ div
   q-separator
   div(:style="{ paddingLeft: `${partner.level}em` }" v-show="showPartners")
     partner-item(v-for="subpartner in partner.partners" :key="subpartner.username" :partner="subpartner" v-if="partner.partners && partner.partners.length > 0")
-</template>
+</template>//
 
 <script setup lang="ts">
 import { ref } from 'vue'

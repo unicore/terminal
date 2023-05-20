@@ -2,9 +2,6 @@
 div.full-width
   div
     q-input(filled label-color="white" type="number" controls-position="right" v-model="amount" :precision="8" :step="0.0001" :min="0.0001" label="Введите сумму в USDT:") 
-      // template(v-bind:slot="append")
-        // span {{wallet.symbol}}
-    
     q-input(filled label-color="white" label="Введите адрес USDT TRC20:"  v-model="address")
     
   q-btn(color="teal" :loading="loading" type="success" @click="withdraw").full-width Вывести
@@ -76,6 +73,7 @@ const withdraw = async () => {
         color: 'positive',
       })
       loading.value = false
+
       emit('withdrawFinish')      
       
     } catch (e: any) {

@@ -10,7 +10,7 @@ q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})").
   //   q-badge цена фракции: {{host.currentPool.quant_cost}}
   //   q-badge осталось фракций: {{host.currentPool.total_quants / 1000000}}
   
-  q-card-actions(align="right")
+  q-card-actions(align="left")
     q-btn(flat v-if="!$route.params.hostname") Подробнее
     // buyWindow(v-if="props.host" :hostname="props.host.username")
 

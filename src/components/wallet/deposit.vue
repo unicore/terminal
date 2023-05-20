@@ -1,6 +1,5 @@
 <template lang="pug">
 div().full-width
-  // p(style="font-size: 14px;") 
   q-input(filled label-color="white" label="Отправьте USDT в сети TRON на адрес:" v-model="address" readonly )
   q-btn(type="success" color="teal" style="padding: 0px !important;").full-width
     i.fa.fa-copy
@@ -63,10 +62,6 @@ onMounted(async () => {
       
     }    
   }
-
-  // const address = computed(async () => {
-    
-  // })
 
 </script>
 

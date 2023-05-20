@@ -48,7 +48,7 @@ q-layout(view="hHh LpR fFf")
   q-page-container
     q-page(class="page")
       router-view(v-slot="{ Component }")
-        component(:is="Component")
+        component(:is="Component" style="padding-bottom: 100px;")
 </template>
 
 

@@ -70,9 +70,7 @@ const options = {
   ]}
 
 onMounted(async () => {
-  // console.log("on load balances", userStore.username, props.hostname)
   await hostStore.loadBalances(userStore.username, props.host.username)
-  // loading.value = false
 })
 
 let whiteIsWin = computed(() => {

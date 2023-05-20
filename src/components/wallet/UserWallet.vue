@@ -79,7 +79,6 @@ div
 
   const withdrawFinish = () => {
     dialog.value = false
-    console.log("withdrawFinish")
   }
 
   const showDepositDialog = () => {

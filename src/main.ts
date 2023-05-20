@@ -15,8 +15,8 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
 library.add(fas, far, fab)
+
 dom.watch()
-// const app = createApp(App)
 
 const app = createApp(App)
     .component("font-awesome-icon", FontAwesomeIcon)

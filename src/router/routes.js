@@ -1,17 +1,12 @@
 import Home from '../layouts/default.vue';
-import lk from '../pages/lk/index.vue'
 import market from '../components/core/NFTmarket.vue'
 import myNFT from '../components/core/myNFT/index.vue'
 import myTeam from '../pages/core/partnerPage.vue'
-
 import withdrawer from '../components/core/withdrawer.vue'
-
 import explorer from '../components/fullExplorer/index.vue'
-import infoAbout from '../components/core/infoAbout.vue'
-import support from '../components/core/support.vue'
-import create from '../components/core/create.vue'
+import info from '../pages/info.vue'
+import create from '../pages/create.vue'
 import hostPage from '../pages/core/hostPage.vue'
-
 
 export const routes = [
   {
@@ -52,14 +47,9 @@ export const routes = [
       },
       {
         path: '/info',
-        component: infoAbout,
+        component: info,
         name: "info",
       },
-      // {
-      //   path: '/support',
-      //   component: support,
-      //   name: "support",
-      // },
       {
         path: '/create',
         component: create,

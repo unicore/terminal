@@ -65,9 +65,9 @@
         account.name = username
 
         await userStore.login(account)
-        // await router.push({ name: 'index' })
+        
         Notify.create({
-          message: 'Добро пожаловать обратно',
+          message: 'Добро пожаловать',
           type: 'positive',
         })
         loading.value = false
@@ -75,6 +75,7 @@
       }
     } catch (e) {
       console.log("e.message: ", e)
+      
       Notify.create({
         message: 'Ключ не верный или не принадлежит ни одному аккаунту',
         type: 'negative',
