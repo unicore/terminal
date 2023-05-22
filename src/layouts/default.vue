@@ -1,7 +1,7 @@
 <template lang="pug">
 q-layout(view="hHh LpR fFf")
   
-  q-header( class="bg-white text-black text-left")
+  q-header(reveal class="bg-white text-black text-left")
     q-toolbar
       
       q-toolbar-title
