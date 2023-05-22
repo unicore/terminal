@@ -39,17 +39,17 @@ q-layout(view="hHh LpR fFf")
 
 
   q-drawer(v-if="loggedIn && isMobile" v-model="rightDrawerOpen" behavior="mobile" side="right" persistent :mini-width="60" :width="300" class="drawer")
-    div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
-      q-btn(dense flat round @click="toggleRightDrawer")
-        q-icon(name="close" color="teal" size="20px")
+    // div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
+    //   q-btn(dense flat round @click="toggleRightDrawer")
+    //     q-icon(name="close" color="teal" size="20px")
     UserProfile(:mini="false")
     Menu(:mini="false")
     MenuFooter(:mini="false")
 
   q-drawer(v-if="!loggedIn" v-model="rightDrawerOpen" overlay side="right" class="drawer" bordered :width="300" persistent)
-    div(v-if="isMobile" class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
-      q-btn(dense flat round @click="login")
-        q-icon(name="close" color="teal" size="20px")
+    // div(v-if="isMobile" class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
+    //   q-btn(dense flat round @click="login")
+    //     q-icon(name="close" color="teal" size="20px")
     UserProfile
     MenuFooter(:mini="isMini")
 
