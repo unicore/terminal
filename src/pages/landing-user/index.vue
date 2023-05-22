@@ -4,7 +4,7 @@ div
   div#super.section.q-pa-lg
     div.row.full-height
       div.col-md-6.col-xs-12
-        q-card(flat).q-pa-lg
+        q-card(flat)
           h1.text-green Войди 
             span.text-black в свой 
             span.text-green бизнес-клуб
