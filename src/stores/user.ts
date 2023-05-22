@@ -20,6 +20,7 @@ export const useUserStore = defineStore('user', {
       authData: null,
       userBalances: null,
       referrer: '',
+      registerNow: false,
     } as UserState),
   actions: {
     async setReferrer(ref: string) {
@@ -33,6 +34,9 @@ export const useUserStore = defineStore('user', {
       } catch (e) {
         console.error(ref, 'there is no referer')
       }
+    },
+    async setRegisterNow(value){
+      this.registerNow = value
     },
     async getUserBalances() {
       if (!this.authData?.name) {

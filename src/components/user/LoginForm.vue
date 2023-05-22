@@ -11,16 +11,15 @@
       autocapitalize="off"
       autocomplete="off"
       spellcheck="false" />
-
-    <div class="row justify-end">
-      <q-btn
-        type="submit"
-        label="Войти"
-        class="q-mt-md full-width"
-        color="teal"
-        :loading="loading"
-        :disable="!privateKey" />
-    </div>
+  
+    <q-btn
+      type="submit"
+      label="Войти"
+      class="full-width"
+      color="teal"
+      :loading="loading"
+      :disable="!privateKey" />
+  
   </form>
 </template>
 
@@ -65,7 +64,7 @@
         account.name = username
 
         await userStore.login(account)
-        
+        await router.push({ name: 'market' })
         Notify.create({
           message: 'Добро пожаловать',
           type: 'positive',
@@ -75,7 +74,6 @@
       }
     } catch (e) {
       console.log("e.message: ", e)
-      
       Notify.create({
         message: 'Ключ не верный или не принадлежит ни одному аккаунту',
         type: 'negative',

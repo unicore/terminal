@@ -3,14 +3,14 @@
     <h6 class="text-h6 q-mb-md">Регистрация</h6>
     <q-input
       v-model.trim="email"
-      filled
+      outlined
       type="email"
-      label="Email"
+      label="Введите email"
       :readonly="inLoading"
       color="teal"
       @keypress.enter="setEmail" />
     <q-btn
-      class="full-width"
+      class="full-width q-mt-md"
       color="teal"
       label="Продолжить"
       :disable="!emailIsValid"
@@ -52,7 +52,7 @@
   <div v-if="step==4">
     <q-input
       v-model.trim="mnemonicToCheck"
-      filled
+      outlined
       type="textarea"
       label="Введите ваш секретный ключ"
       class="q-pb-md"
@@ -155,6 +155,7 @@
       if (status === 'ok') {
         await userStore.login(account)
         // await router.push({ name: 'lk-estate' })
+        await router.push({ name: 'market' })
         Notify.create({
           message: 'Успешная регистрация',
           type: 'positive',

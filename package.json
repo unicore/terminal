@@ -24,6 +24,7 @@
     "@tiptap/vue-3": "^2.0.0-beta.96",
     "@unocss/preset-uno": "^0.39.0",
     "@unocss/reset": "^0.39.0",
+    "animejs": "^3.2.1",
     "assert-browserify": "^2.0.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
@@ -60,6 +61,7 @@
     "vue-notion": "3.0.0-beta.1",
     "vue-router": "^4.0.13",
     "vue-window-size": "^1.1.2",
+    "vue-writer": "^1.2.0",
     "vue3-horizontal-list": "^0.0.3",
     "vue3-openlayers": "^0.1.70"
   },

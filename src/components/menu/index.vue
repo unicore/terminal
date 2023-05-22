@@ -98,8 +98,8 @@
   const routesInMenu = computed(() => {
     return [
     {
-      path: '/',
-      name: "index",
+      path: '/market',
+      name: "market",
       pageName: "Рынок NFT",
       icon: 'fa-solid fa-store'
     },
