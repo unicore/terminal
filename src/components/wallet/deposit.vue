@@ -1,7 +1,7 @@
 <template lang="pug">
 div().full-width
-  q-input(filled label-color="white" label="Отправьте USDT в сети TRON на адрес:" v-model="address" readonly )
-  q-btn(type="success" color="teal" style="padding: 0px !important;").full-width
+  q-input(filled label-color="white" label="Отправьте USDT в сети TRC20 на адрес:" v-model="address" readonly )
+  q-btn(type="success" color="teal" style="padding: 0px !important;" @click="copy").full-width
     i.fa.fa-copy
 
 </template>//
@@ -9,18 +9,31 @@ div().full-width
 <script setup lang="ts">
   import axios from 'axios'
   import { computed, ref, onMounted } from 'vue'
+  import { copyToClipboard, Notify } from 'quasar'
   import { useUserStore } from '~/stores/user'
   import chains from '~/chainsMain'
   import config from '~/config'
-  import { Notify } from 'quasar'
   
   const userStore = useUserStore()
 
   let address = ref("")
 
-onMounted(async () => {
-  generateAddress()
-})
+  onMounted(async () => {
+    generateAddress()
+  })
+
+  const copy = async () => {
+    copyToClipboard(address.value)
+      .then(() => {
+        Notify.create({
+          message: 'Адрес скопирован',
+          type: 'positive',
+        })
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
 
   const generateAddress = async () => {
     

@@ -5,20 +5,20 @@ q-layout(view="hHh LpR fFf")
     q-toolbar
       
       q-toolbar-title
-        template(v-if="loggedIn")
-          q-btn(v-if="router.currentRoute.value.name != 'market'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
-            i.fa-solid.fa-circle-chevron-left
+        // template(v-if="loggedIn")
+          // q-btn(v-if="router.currentRoute.value.name != 'market'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
+          //   i.fa-solid.fa-circle-chevron-left
           
-          q-btn(stretch flat class="btn-title" @click="goToMarket")
-            img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
+          // q-btn(stretch flat class="btn-title" @click="goToMarket")
+          //   img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
         
-        template(v-if="!loggedIn")
-          q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
-            i.fa-solid.fa-circle-chevron-left
-          
-          q-btn(v-if="router.currentRoute.value.name == 'index'" stretch flat class="btn-title" @click="goToIndex")
-            img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
+        // template(v-if="!loggedIn")
+        // q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
+        //   i.fa-solid.fa-circle-chevron-left
         
+        q-btn( stretch flat class="btn-title" @click="goToIndex")
+          img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
+          // v-if="router.currentRoute.value.name == 'index'"
       // q-btn(color="teal" stretch size="lg" flat @click="router.push({name: 'info'})") 
         // i.fa-solid.fa-info
         // p(style="padding-right: 10px;") о платформе
