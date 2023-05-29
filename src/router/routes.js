@@ -1,20 +1,19 @@
 import Home from '../layouts/default.vue';
 import Blank from '../layouts/blank.vue';
-import market from '../components/core/NFTmarket.vue'
+import pools from '../components/core/NFTmarket.vue'
 import myNFT from '../components/core/myNFT/index.vue'
 import myTeam from '../pages/core/partnerPage.vue'
 import withdrawer from '../components/core/withdrawer.vue'
 import explorer from '../components/fullExplorer/index.vue'
-import landing from '../pages/landing-user/index.vue'
+import landing from '../pages/landing-user/platform.vue'
 import create from '../pages/create.vue'
 import hostPage from '../pages/core/hostPage.vue'
+import subscribe from '../components/subscribe/index.vue'
+import welcome from '../pages/landing-user/welcome.vue'
+import products from '../pages/products/products.vue'
+import myProducts from '../pages/products/myProducts.vue'
 
 export const routes = [
-  {
-    path: '/welcome',
-    name: "landing",    
-    component: landing,
-  },
   {
     path: '/',
     component: Home,
@@ -25,9 +24,24 @@ export const routes = [
         component: landing
       },
       {
+        path: '/welcome',
+        name: "welcome",    
+        component: welcome,
+      },
+      {
         path: "market",
         name: "market",
-        component: market
+        component: products
+      },
+      {
+        path: "my-licences",
+        name: "my-licences",
+        component: myProducts
+      },
+      {
+        path: "pools",
+        name: "pools",
+        component: pools
       },
       {
         path: "nft/:hostname?",

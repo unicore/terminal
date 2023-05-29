@@ -100,13 +100,25 @@
     {
       path: '/market',
       name: "market",
-      pageName: "Рынок NFT",
+      pageName: "Маркетплейс",
+      icon: "fa-solid fa-barcode"
+    },
+    {
+      path: '/my-licences',
+      name: "my-licences",
+      pageName: "Мои сертификаты",
+      icon: 'fa-solid fa-id-badge'
+    },
+    {
+      path: '/pools',
+      name: "pools",
+      pageName: "Пулы ликвидности",
       icon: 'fa-solid fa-store'
     },
     {
       path: 'my-nft',
       name: "my-nft",
-      pageName: "Мои NFT",
+      pageName: "Мои токены пулов",
       icon: 'fa-solid fa-ticket'
     },
     {

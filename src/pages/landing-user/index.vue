@@ -526,7 +526,7 @@ div
     div.row.full-height
       div.col-md-4.col-xs-12.q-pt-sm
         p.text-bold VOSHOD
-        p.q-pt-xs экосистема закрытых бизнес-клубов
+        p.q-pt-xs платформа токенизации бизнеса
         p.q-pt-xs welcome@voshod.io
         q-btn(flat size="lg" @click="goToTelegram")
           i.fa-brands.fa-telegram

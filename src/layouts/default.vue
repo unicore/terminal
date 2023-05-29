@@ -32,31 +32,40 @@ q-layout(view="hHh LpR fFf")
       q-btn(color="teal" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer")
         i.fa.fa-user
 
-  q-drawer(v-if="loggedIn && !isMobile" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer")
-    UserProfile(:mini="isMini")
-    Menu(:mini="isMini")
-    MenuFooter(:mini="isMini")
+  div
+    q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer")
+      UserProfile(:mini="isMini")
+      Menu(:mini="isMini")
+      MenuFooter(:mini="isMini")
 
 
-  q-drawer(v-if="loggedIn && isMobile" v-model="rightDrawerOpen" behavior="mobile" side="right" persistent :mini-width="60" :width="300" class="drawer")
-    // div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
-    //   q-btn(dense flat round @click="toggleRightDrawer")
-    //     q-icon(name="close" color="teal" size="20px")
-    UserProfile(:mini="false")
-    Menu(:mini="false")
-    MenuFooter(:mini="false")
+    q-drawer(v-if="loggedIn && isMobile && isSubscribed" v-model="rightDrawerOpen" behavior="mobile" side="right" persistent :mini-width="60" :width="300" class="drawer")
+      // div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
+      //   q-btn(dense flat round @click="toggleRightDrawer")
+      //     q-icon(name="close" color="teal" size="20px")
+      UserProfile(:mini="false")
+      Menu(:mini="false")
+      MenuFooter(:mini="false")
 
-  q-drawer(v-if="!loggedIn" v-model="rightDrawerOpen" overlay side="right" class="drawer" bordered :width="300" persistent)
-    // div(v-if="isMobile" class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
-    //   q-btn(dense flat round @click="login")
-    //     q-icon(name="close" color="teal" size="20px")
-    UserProfile
-    MenuFooter(:mini="isMini")
+    q-drawer(v-if="!loggedIn && isSubscribed" v-model="rightDrawerOpen" overlay side="right" class="drawer" bordered :width="300" persistent)
+      // div(v-if="isMobile" class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
+      //   q-btn(dense flat round @click="login")
+      //     q-icon(name="close" color="teal" size="20px")
+      UserProfile
+      MenuFooter(:mini="isMini")
 
-  q-page-container
-    q-page(class="page")
-      router-view(v-slot="{ Component }")
-        component(:is="Component" style="padding-bottom: 100px;")
+    
+    q-page-container
+      // p {{subLoaded}}
+      // p userStatus: {{userStatus}}
+      q-page(v-if="subLoaded" class="page")
+        subscribe(v-if="!isSubscribed")
+        
+        
+        router-view(v-else v-slot="{ Component }")
+          component(:is="Component" style="padding-bottom: 100px;")
+      div(v-else).q-mt-lg
+        loader
 </template>
 
 
@@ -69,10 +78,13 @@ q-layout(view="hHh LpR fFf")
   import MenuIcon from '~/assets/menu.svg?url'
   import HeaderLogo from '~/assets/logo.svg?url'
   import { useUserStore } from '~/stores/user'
+  import { useHostStore } from '~/stores/host'
   import { useWalletStore } from '~/stores/wallet'
   import UserProfile from '~/components/user/UserProfile.vue'
   import Menu from '~/components/menu/index.vue'
   import MenuFooter from '~/components/menu/MenuFooter.vue'
+  import loader from '~/components/common/loader.vue'
+  import subscribe from '~/components/subscribe/index.vue'
 
   const $q = useQuasar()
   defineExpose({
@@ -82,12 +94,16 @@ q-layout(view="hHh LpR fFf")
   const router = useRouter()
   const userStore = useUserStore()
   const walletStore = useWalletStore()
+
+  const hostStore = useHostStore()
+  
   const route = useRoute()
   const { width } = useWindowSize()
 
   const leftDrawerOpen = ref<boolean>(false)
   const leftDrawerOverOpen = ref<boolean>(false)
   const rightDrawerOpen = ref<boolean>(false)
+  const subScribeIsLoaded = ref<boolean>(false)
 
   const toggleLeftDrawer = () => {
     leftDrawerOpen.value = !leftDrawerOpen.value
@@ -99,6 +115,15 @@ q-layout(view="hHh LpR fFf")
 
   const isIndexLayout = computed(() => {
     return !!route.meta?.indexLayout
+  })
+
+  const userStatus = computed(() => {
+    return hostStore.getUserStatus
+  })
+
+
+  const isSubscribed = computed(() => {
+    return !config.subscribe.enabled || hostStore.getUserStatus
   })
 
   const isMobile = computed(() => {
@@ -117,6 +142,10 @@ q-layout(view="hHh LpR fFf")
     return userStore.hasAuth
   })
 
+  const subLoaded = computed(() => {
+    return hostStore.subLoaded
+  })
+
   watch(registerNow, (newValue) => {
     // if (newValue != registerNow.value){
       rightDrawerOpen.value = newValue
@@ -127,6 +156,7 @@ q-layout(view="hHh LpR fFf")
   watch(route, () => {
     leftDrawerOpen.value = false
     rightDrawerOpen.value = false
+    hostStore.checkSubscription(config.subscribe.coreHost, userStore.username)
   })
 
   const goToIndex = () => {
@@ -158,6 +188,7 @@ q-layout(view="hHh LpR fFf")
       await userStore.setReferrer(ref)
     }
     await Promise.all([walletStore.loadWallets(), userStore.getUserBalances()])
+    await hostStore.checkSubscription(config.subscribe.coreHost, userStore.username)
   })
 </script>
 

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-q-btn(color="teal" size="lg" @click="dialog=true") Купить билет
+q-btn(color="teal" size="lg" @click="dialog=true") Купить токен
 
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
     q-card(style="min-width: 350px; max-width: 450px;")
@@ -12,12 +12,12 @@ q-btn(color="teal" size="lg" @click="dialog=true") Купить билет
 
       q-card(v-if="host")
         q-card-section
-          div.text-h6 Покупка билета за USDT
+          div.text-h6 Покупка токена за USDT
         q-card-section
-          div.text-subtitle2 Стоимость билета: {{ quantCost }}
-          div.text-subtitle2 Осталось билетов: {{ remainQuants }}
+          div.text-subtitle2 Стоимость токена: {{ quantCost }}
+          div.text-subtitle2 Осталось токенов: {{ remainQuants }}
         q-card-section
-          q-input(outlined v-model.number="quantAmount" label="Введите количество билетов" type="number" step="1")
+          q-input(outlined v-model.number="quantAmount" label="Введите количество токенов" type="number" step="1")
         
         q-card-section
           q-input(outlined v-model.number="rootAmount" label="Введите сумму в USDT" type="number" step="1")

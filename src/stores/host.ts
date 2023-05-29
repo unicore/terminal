@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import chains from '~/chainsMain'
 import config from "~/config"
 import {lazyFetch} from '~/utils/fetcher'
+import moment from 'moment-with-locales-es6';
 
 // import 
 interface Hosts {
@@ -38,9 +39,15 @@ export const useHostStore = defineStore('host', {
       allUserBalances: {},
       history: {},
       withdraws: {},
+      conditions: {},
+      products: {},
+      userProducts: {},
+      isUserSubscribed: false,
+      subLoaded: false,
     } as HostState),
   actions: {
-    async loadBalances(username, hostname){
+    async loadBalances(username, hostname) {
+
       const rootChain = await chains.getRootChain()
      
       try {
@@ -175,6 +182,95 @@ export const useHostStore = defineStore('host', {
         console.error("error: ", e)
       }
     },
+
+    async loadProducts(hostname) {
+      
+      const rootChain = await chains.getRootChain()
+  
+      try {
+
+        let products = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'products',
+        )
+
+        // history.reverse()
+        
+        this.products = products.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+        
+        
+      } catch (e) {
+        console.error("error: ", e)
+      }
+    },
+    
+    async loadConditions(hostname) {
+      
+      const rootChain = await chains.getRootChain()
+  
+      try {
+
+        let conditions = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'conditions',
+        )
+
+        // history.reverse()
+        
+        this.conditions = conditions.reduce((a, n) => ({ ...a, [n.key_string]: n.value }), {})
+        
+
+      } catch (e) {
+        console.error("error: ", e)
+      }
+    },
+    async checkSubscription(hostname, username){
+
+      await this.loadConditions(hostname)
+      
+      if (this.conditions.coreproduct){
+        await this.loadProducts(hostname) 
+        await this.loadMyProducts(hostname, username)
+      }
+
+      this.subLoaded = true
+    },
+
+
+    async loadMyProducts(hostname, username) {
+      console.log("username: ", username, hostname)
+      const rootChain = await chains.getRootChain()
+  
+      try {
+
+        let userProducts = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'myproducts',
+          username,
+          username,
+          null, 
+          2,
+          'i64'
+        )
+
+        // history.reverse()
+        
+        this.userProducts = userProducts.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+        console.log("on get history", this.userProducts)
+      
+
+        
+      } catch (e) {
+        console.error("error: ", e)
+      }
+    },
+
     async loadHistory(hostname) {
       
       const rootChain = await chains.getRootChain()
@@ -255,5 +351,19 @@ export const useHostStore = defineStore('host', {
         return state.hosts[username]
     }},
     getWithdraws: (state) => state.withdraws,
+    getUserStatus: (state) => {
+      //TODO check for expiration
+      let userProduct = state.userProducts[state.conditions['coreproduct']]
+      
+      if (userProduct){
+        let now = moment.utc()
+        let expired_at = moment.utc(userProduct.expired_at)
+
+        const diffInSeconds = expired_at.diff(now, 'seconds');
+
+        return diffInSeconds > 0
+      } else return false
+      
+    }
   },
 })

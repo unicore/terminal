@@ -8,15 +8,19 @@ div
 import { onUnmounted, onMounted, computed, ref } from 'vue';
 import { useBlockchainStore } from '~/stores/blockchain'
 import { useUserStore } from '~/stores/user'
+import { useHostStore } from '~/stores/host'
 import { Notify } from 'quasar'
 const bcStore = useBlockchainStore()
 const userStore = useUserStore()
+const hostStore = useHostStore()
 let intervalId = ref(null);
 import config from '~/config'
 
 
 onMounted(async () => {
-  try{
+  try {
+
+
     removeLoader()
     intervalId.value = setInterval(() => {
       bcStore.loadInfo()

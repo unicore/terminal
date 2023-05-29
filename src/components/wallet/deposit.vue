@@ -1,8 +1,10 @@
 <template lang="pug">
 div().full-width
-  q-input(filled label-color="white" label="Отправьте USDT в сети TRC20 на адрес:" v-model="address" readonly )
-  q-btn(type="success" color="teal" style="padding: 0px !important;" @click="copy").full-width
+  
+  q-input(dark filled label-color="white" color="white" label="Отправьте USDT в сети TRC20 на адрес:" v-model="address" readonly )
+  q-btn(type="success" style="padding: 0px !important;" @click="copy").full-width
     i.fa.fa-copy
+    span.q-ml-md скопировать
 
 </template>//
 
@@ -29,6 +31,7 @@ div().full-width
           message: 'Адрес скопирован',
           type: 'positive',
         })
+
       })
       .catch((e) => {
         console.log(e)

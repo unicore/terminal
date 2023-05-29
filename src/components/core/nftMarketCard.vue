@@ -5,10 +5,10 @@ q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})").
     div.text-h5 {{host.title}}
     div.text-h6 DAO {{host.username.toUpperCase()}}
     div {{host.purpose}}
-  // q-card-section
-  //   q-badge шаг цены: +5%
-  //   q-badge цена фракции: {{host.currentPool.quant_cost}}
-  //   q-badge осталось фракций: {{host.currentPool.total_quants / 1000000}}
+    // q-card-section
+    //   q-badge шаг цены: +5%
+    //   q-badge цена фракции: {{host.currentPool.quant_cost}}
+    //   q-badge осталось фракций: {{host.currentPool.total_quants / 1000000}}
   
   q-card-actions(align="left")
     q-btn(flat v-if="!$route.params.hostname") Подробнее

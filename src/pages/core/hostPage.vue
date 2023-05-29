@@ -48,7 +48,7 @@ div(v-if="currentHost").q-pa-md
               q-card-section
                 span цена покупки: 
                 q-badge.q-pa-sm {{currentHost.currentRate?.quant_buy_rate}}
-                p.text-grey NFT-билета
+                p.text-grey токена
               
           div.col-md-6.col-xs-12
             q-card(flat )
@@ -61,7 +61,7 @@ div(v-if="currentHost").q-pa-md
               q-card-section
                 span цена продажи: 
                 q-badge.q-pa-sm {{currentHost.currentRate?.quant_sell_rate}}
-                p.text-grey NFT-билета
+                p.text-grey токена
               
               // q-card-section
               //   span обеспечение: 
