@@ -1,14 +1,15 @@
 <template lang="pug">
 div
+  
   q-card(flat).q-pa-md
     p # {{product.id}}
-    q-input( label = "название" v-model="product.title")
-    q-input( label = "описание" type="textarea" v-model="product.description")
-    q-input( label = "цена" type="number" v-model="total")
-    q-input( label = "партнёрский процент" type="number" v-model="ref_percent")
-    q-input( label = "финальная цена" type="number" v-model="total")
+    q-input( label = "название" v-model="editProduct.title")
+    q-input( label = "описание" type="textarea" v-model="editProduct.description")
+    q-input( label = "цена" type="number" v-model="editProduct.price")
+    q-input( label = "партнёрский процент" type="number" v-model="editProduct.referral_percent")
+    p.q-pa-md цена: {{total}}
     
-    q-btn(@click="save" flat color="teal") сохранить
+    q-btn(flat color="teal" @click="editProd") сохранить
     
     div(style="margin-top: 100px;").q-mt-lg
       p Потоки:
@@ -59,6 +60,7 @@ const props = defineProps({
     },
   })
 
+const loading = ref(false)
 const dialog = ref(false)
 
 const start_at = ref(null)
@@ -77,21 +79,96 @@ const flows = computed(() => {
   return Object.values(hostStore.flows).filter(f => f.product_id == props.product.id).reverse()
 })
 
-const total = ref(0)
 const ref_percent = ref(0)
+
+const editProduct = ref({})
 
 const addFlow = () => {
   dialog.value = true
 }
 
-const save = async () => {
+const host = computed(() => {
+  return hostStore.getCurrentHost(config.coreHost)
+})
 
-}
+const total = computed(() => {
+  if(host.value && Object.values(editProduct).length > 0 && editProduct.value.referral_percent) {
+    let amount = parseFloat(editProduct.value.price) + parseFloat(editProduct.value.price) * parseFloat(editProduct.value.referral_percent) / 100
+    
+    return amount + " " + host.value.symbol
+  } else return "не определена"
+  
+})
 
 const editProd = async () => {
   
-  // editprod(eosio::name host, eosio::name type, uint64_t referral_percent, uint64_t product_id, std::string title, std::string description, std::string encrypted_data, std::string public_key, asset price, uint64_t duration) {
+  loading.value = true
+ 
+  try {
 
+    const rootChain = chains.getRootChain()
+    const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
+    
+    // editprod(eosio::name host, eosio::name type, uint64_t referral_percent, uint64_t product_id, std::string title, std::string description, std::string encrypted_data, std::string public_key, asset price, uint64_t duration) {
+
+    let data = { 
+          host: config.coreHost,
+          type: props.product.type,
+          referral_percent: editProduct.value.referral_percent * 10000,
+          title: editProduct.value.title,
+          description: editProduct.value.description,
+          encrypted_data: editProduct.value.encrypted_data,
+          public_key: editProduct.value.public_key,
+          token_contract: host.value.root_token_contract,
+          price: parseFloat(editProduct.value.price).toFixed(host.value.precision) + " " + host.value.symbol,
+          duration: 0
+        }
+
+    console.log("data: ", data) 
+
+    let actions = [
+      {
+        account: config.tableCodeConfig.core,
+        name: 'createprod',
+        authorization: [
+          {
+            actor: userStore.username as string,
+            permission: 'active',
+          },
+        ],
+        data: data
+      }
+    ]
+
+
+    await api.transact(
+      {
+        actions: actions
+      },
+      {
+        blocksBehind: 3,
+        expireSeconds: 30,
+      }
+    )
+
+    Notify.create({
+      message: 'Продукт сохранён',
+      color: 'positive',
+    })
+
+
+    loading.value = false
+
+    hostStore.loadProducts(config.coreHost)
+    
+
+  } catch (e: any) {
+    
+    Notify.create({
+      message: 'Произошла ошибка: ' + e.message,
+      color: 'negative',
+    })
+  }
 
 
 }
@@ -165,8 +242,11 @@ const createFlow = async () => {
 }
 
 onMounted(async () => {
-  total.value = parseFloat(props.product.total).toFixed(4)
-  ref_percent.value = props.product.referral_percent / 1000000 * 100
+  hostStore.loadHosts()
+  
+  editProduct.value = props.product
+  editProduct.value.price = parseFloat(editProduct.value.total).toFixed(4)
+  editProduct.value.referral_percent = editProduct.value.referral_percent / 1000000 * 100
   
 
 })

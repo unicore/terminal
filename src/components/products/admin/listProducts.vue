@@ -102,7 +102,7 @@ const createProduct = async () => {
     const rootChain = chains.getRootChain()
     const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
    
-    let price = parseFloat(newProduct.value.price).toFixed(4) + " " + host.value.symbol
+    let price = parseFloat(newProduct.value.price).toFixed(host.value.precision) + " " + host.value.symbol
     
     let data = { 
           host: config.coreHost,
@@ -113,7 +113,7 @@ const createProduct = async () => {
           encrypted_data: newProduct.value.encrypted_data,
           public_key: newProduct.value.public_key,
           token_contract: host.value.root_token_contract,
-          price: price,
+          price: parseFloat(newProduct.value.price).toFixed(host.value.precision) + " " + host.value.symbol,
           duration: 0
         }
 
