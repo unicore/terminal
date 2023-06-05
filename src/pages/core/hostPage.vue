@@ -11,9 +11,11 @@ div(v-if="currentHost").q-pa-md
             div.text-h5 {{currentHost.title}}
             div.text-h6 DAO {{currentHost.username.toUpperCase()}}
             div {{currentHost.purpose}}
+          
           // div(v-if="!showBalances" style="padding-top: 50px;")
           //   div
           //     history
+
           img(:src="currentHost?.meta.host_image")
       
       div(style="font-size: 16px;").col-md-8.col-xs-12
@@ -45,10 +47,10 @@ div(v-if="currentHost").q-pa-md
                 p.text-grey на каждом одноцветном раунде
               q-separator
               
-              q-card-section
-                span цена покупки: 
-                q-badge.q-pa-sm {{currentHost.currentRate?.quant_buy_rate}}
-                p.text-grey токена
+              // q-card-section
+              //   span цена покупки: 
+              //   q-badge.q-pa-sm {{currentHost.currentRate?.quant_buy_rate}}
+              //   p.text-grey токена
               
           div.col-md-6.col-xs-12
             q-card(flat )
@@ -58,10 +60,10 @@ div(v-if="currentHost").q-pa-md
                 p.text-grey до следующего раунда
               q-separator
 
-              q-card-section
-                span цена продажи: 
-                q-badge.q-pa-sm {{currentHost.currentRate?.quant_sell_rate}}
-                p.text-grey токена
+              // q-card-section
+              //   span цена продажи: 
+              //   q-badge.q-pa-sm {{currentHost.currentRate?.quant_sell_rate}}
+              //   p.text-grey токена
               
               // q-card-section
               //   span обеспечение: 
@@ -71,7 +73,7 @@ div(v-if="currentHost").q-pa-md
             // q-card-actions(align="right")
             
           div(style="padding-top: 30px; margin-bottom: 100px;").float-right
-            q-btn(color="teal" size="lg" flat @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})") Мои билеты
+            q-btn(color="teal" size="lg" flat @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})") Мои токены
             buyWindow(:hostname="currentHost.username")
   
       

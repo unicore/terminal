@@ -24,19 +24,7 @@
         {{ t(item.pageName) }}
       </q-tooltip>
     </q-item>
-    <q-item @click="logout" class="cursor-pointer menu-item" active-class="menu-item-active" v-ripple clickable>
-      <q-item-section class="menu-item-section">
-        <div class="menu-item-icon">
-          <q-icon name="logout"></q-icon>
-        </div>
-        <div v-if="!props.mini" class="menu-item-text">
-          Выход
-        </div>
-      </q-item-section>
-      <q-tooltip v-if="props.mini" anchor="center right" self="center left" :offset="[10, 10]">
-        Выйти из приложения
-      </q-tooltip>
-    </q-item>
+    
   </q-list>
 </template>
 
@@ -49,9 +37,7 @@
   import HistoryIcon from '~/assets/history.svg?component'
   import OrderIcon from '~/assets/order.svg?component'
   import UnionIcon from '~/assets/union.svg?component'
-  
   import config from '~/config'
-
   import { useUserStore } from '~/stores/user'
 
   const props = defineProps<{
@@ -97,8 +83,9 @@
     return false
   }
 
+  
   const routesInMenu = computed(() => {
-    return config.userMenu
+    return config.adminMenu
   })
 
 </script>
@@ -117,7 +104,7 @@
   .menu-item {
     text-align: left !important;
     justify-content: flex-start;
-    padding: 10px 0 10px 13px !important;
+    padding: 10px 10px 10px 0px !important;
     min-width: 0;
     font-style: normal;
     font-weight: 400;

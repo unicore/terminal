@@ -1,9 +1,10 @@
 <template lang="pug">
 div
   div(v-if="!loading")
-    h1.q-pl-md.q-mr-md Дерево партнеров
-    q-list(v-if="partnersTree.length > 0")
-      partnerItem(v-for="(partner, index) in partnersTree" :key="index" :partner="partner")
+    div(v-if="partnersTree.length > 0")
+      h1.q-pl-md.q-mr-md Дерево партнеров
+      q-list
+        partnerItem(v-for="(partner, index) in partnersTree" :key="index" :partner="partner")
     p(v-else).q-pa-md У вас нет партнеров. Используйте ссылку в меню для приглашения.
   div(v-else).q-pa-md
     loader

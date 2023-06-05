@@ -5,10 +5,15 @@ q-layout(view="hHh LpR fFf")
     q-toolbar
       
       q-toolbar-title
+        q-btn(color="teal" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleLeftDrawer" :dense="isMobile")
+          i.fa.fa-user
+
         // template(v-if="loggedIn")
-          // q-btn(v-if="router.currentRoute.value.name != 'market'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
-          //   i.fa-solid.fa-circle-chevron-left
-          
+        q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal" :dense="isMobile")
+          i.fa-solid.fa-circle-chevron-left
+        
+        
+  
           // q-btn(stretch flat class="btn-title" @click="goToMarket")
           //   img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
         
@@ -16,7 +21,7 @@ q-layout(view="hHh LpR fFf")
         // q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
         //   i.fa-solid.fa-circle-chevron-left
         
-        q-btn( stretch flat class="btn-title" @click="goToIndex")
+        q-btn(v-if="!loggedIn" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
           img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
           // v-if="router.currentRoute.value.name == 'index'"
       // q-btn(color="teal" stretch size="lg" flat @click="router.push({name: 'info'})") 
@@ -26,46 +31,46 @@ q-layout(view="hHh LpR fFf")
       // q-btn(color="teal" v-if="loggedIn" stretch size="lg" flat @click="router.push({name: 'create'})") 
         // p(style="font-size: 12px; font-weight: 600; padding-right: 10px;") создать NFT
         // i.fa.fa-plus
-      q-btn(color="teal" class="btn-menu" v-if="!loggedIn" stretch size="lg" flat @click="login") 
+      q-btn(color="teal" class="btn-menu" v-if="!loggedIn" stretch size="lg" flat @click="login" :dense="isMobile") 
         i.fa-solid.fa-right-to-bracket
     
-      q-btn(color="teal" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer")
+      q-btn(color="teal" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer" :dense="isMobile")
         i.fa.fa-user
 
-  div
-    q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer")
-      UserProfile(:mini="isMini")
-      Menu(:mini="isMini")
-      MenuFooter(:mini="isMini")
+
+  q-drawer(:mini="true"  v-model="leftDrawerOpen"  show-if-above side="left" persistent :mini-width="60" :width="300" class="drawer-left")
+    // UserProfile(:mini="isMini")
+    adminMenu(:mini="true")
+    // MenuFooter(:mini="isMini")
 
 
-    q-drawer(v-if="loggedIn && isMobile && isSubscribed" v-model="rightDrawerOpen" behavior="mobile" side="right" persistent :mini-width="60" :width="300" class="drawer")
-      // div(class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
-      //   q-btn(dense flat round @click="toggleRightDrawer")
-      //     q-icon(name="close" color="teal" size="20px")
-      UserProfile(:mini="false")
-      Menu(:mini="false")
-      MenuFooter(:mini="false")
+  q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer-right")
+    UserProfile(:mini="isMini")
+    Menu(:mini="isMini")
+    MenuFooter(:mini="isMini")
 
-    q-drawer(v-if="!loggedIn && isSubscribed" v-model="rightDrawerOpen" overlay side="right" class="drawer" bordered :width="300" persistent)
-      // div(v-if="isMobile" class="flex justify-end q-pr-sm q-pt-sm" style="margin-bottom: -40px; z-index: 1; position: relative")
-      //   q-btn(dense flat round @click="login")
-      //     q-icon(name="close" color="teal" size="20px")
-      UserProfile
-      MenuFooter(:mini="isMini")
 
-    
-    q-page-container
-      // p {{subLoaded}}
-      // p userStatus: {{userStatus}}
-      q-page(v-if="subLoaded" class="page")
-        subscribe(v-if="!isSubscribed")
-        
-        
-        router-view(v-else v-slot="{ Component }")
-          component(:is="Component" style="padding-bottom: 100px;")
-      div(v-else).q-mt-lg
-        loader
+  q-drawer(v-if="loggedIn && isMobile && isSubscribed" v-model="rightDrawerOpen" behavior="mobile" side="right" persistent :mini-width="60" :width="300" class="drawer-right")
+    UserProfile(:mini="false")
+    Menu(:mini="false")
+    MenuFooter(:mini="false")
+
+  q-drawer(v-if="!loggedIn && isSubscribed" v-model="rightDrawerOpen" overlay side="right" class="drawer-right" bordered :width="300" persistent)
+    UserProfile
+    MenuFooter(:mini="isMini")
+
+  
+  q-page-container
+    // p {{subLoaded}}
+    // p userStatus: {{userStatus}}
+    q-page(v-if="subLoaded" class="page")
+      subscribe(v-if="!isSubscribed")
+      
+      
+      router-view(v-else v-slot="{ Component }")
+        component(:is="Component" style="padding-bottom: 100px;")
+    div(v-else).q-mt-lg
+      loader
 </template>
 
 
@@ -82,6 +87,7 @@ q-layout(view="hHh LpR fFf")
   import { useWalletStore } from '~/stores/wallet'
   import UserProfile from '~/components/user/UserProfile.vue'
   import Menu from '~/components/menu/index.vue'
+  import adminMenu from '~/components/menu/admin.vue'
   import MenuFooter from '~/components/menu/MenuFooter.vue'
   import loader from '~/components/common/loader.vue'
   import subscribe from '~/components/subscribe/index.vue'
@@ -156,7 +162,7 @@ q-layout(view="hHh LpR fFf")
   watch(route, () => {
     leftDrawerOpen.value = false
     rightDrawerOpen.value = false
-    hostStore.checkSubscription(config.subscribe.coreHost, userStore.username)
+    hostStore.checkSubscription(config.coreHost, userStore.username)
   })
 
   const goToIndex = () => {
@@ -188,7 +194,7 @@ q-layout(view="hHh LpR fFf")
       await userStore.setReferrer(ref)
     }
     await Promise.all([walletStore.loadWallets(), userStore.getUserBalances()])
-    await hostStore.checkSubscription(config.subscribe.coreHost, userStore.username)
+    await hostStore.checkSubscription(config.coreHost, userStore.username)
   })
 </script>
 
@@ -228,7 +234,12 @@ q-layout(view="hHh LpR fFf")
   }
 
  
-  .drawer {
+  .drawer-right {
     border-left: 1px solid #00800038 !important;
   }
+
+  .drawer-left {
+    border-right: 1px solid #00800038 !important;
+  }
+
 </style>

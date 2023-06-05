@@ -28,19 +28,23 @@ const userProducts = computed(() => {
   let products = hostStore.products
   let userProducts = hostStore.userProducts
   
-  // Object.values(userProducts).map(el => {
-  //   let product = products[el.product_id]
-  //   el.title = product.title
-  //   el.description = product.description
-  //   el.price = product.price
-  //   el.token_contract = product.token_contract
+  Object.values(userProducts).map(el => {
 
-  // })
-  return Object.values({...userProducts, ...products})
+    let product = products[el.product_id]
+    el.title = product.title
+    el.description = product.description
+    el.price = product.price
+    el.token_contract = product.token_contract
+    el.total = product.total
+  })
+  return Object.values(userProducts)
 })
 
 onMounted(async () => {
-
+    if (userStore.hasAuth){
+      await hostStore.loadProducts(config.coreHost) 
+      await hostStore.loadMyProducts(config.coreHost, userStore.username)     
+    }
 })
 
 

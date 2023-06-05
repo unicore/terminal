@@ -44,6 +44,7 @@ export const useHostStore = defineStore('host', {
       userProducts: {},
       isUserSubscribed: false,
       subLoaded: false,
+      flows: {}
     } as HostState),
   actions: {
     async loadBalances(username, hostname) {
@@ -182,7 +183,19 @@ export const useHostStore = defineStore('host', {
         console.error("error: ", e)
       }
     },
-
+    async loadFlows(hostname){
+      const rootChain = await chains.getRootChain()
+  
+      let flows = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'flows',
+        )
+      console.log("o load flows", flows)
+      this.flows = flows.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+        
+    },
     async loadProducts(hostname) {
       
       const rootChain = await chains.getRootChain()
@@ -228,6 +241,7 @@ export const useHostStore = defineStore('host', {
         console.error("error: ", e)
       }
     },
+
     async checkSubscription(hostname, username){
 
       await this.loadConditions(hostname)
@@ -270,6 +284,8 @@ export const useHostStore = defineStore('host', {
         console.error("error: ", e)
       }
     },
+
+
 
     async loadHistory(hostname) {
       

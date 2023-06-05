@@ -1,8 +1,9 @@
 <template lang="pug">
-q-card(dark)
-  q-badge(floating) {{product.price}}
+
+q-card(dark).bg-secondary
+  q-badge(floating size="lg") {{product.total}}
   
-  div.q-pa-xs
+  div.q-pa-md
     p(style="font-size: 18px;") {{product.title}}
     p {{product.description}}
   
@@ -46,7 +47,10 @@ const buyProduct = async () => {
 
       const rootChain = chains.getRootChain()
       const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
-      let actions = [
+
+      await api.transact(
+        {
+          actions: [
             {
               account: props.product.token_contract,
               name: 'transfer',
@@ -60,7 +64,7 @@ const buyProduct = async () => {
                 from: userStore.username,
                 to: config.tableCodeConfig.core,
                 quantity: props.product.total,
-                memo: `800-${config.coreHost}`
+                memo: `100-${config.coreHost}`
               },
             },
             {
@@ -79,13 +83,7 @@ const buyProduct = async () => {
                 quantity: 1
               },
             },
-          ]
-
-      console.log("ACTIONS: ", actions)
-
-      await api.transact(
-        {
-          actions: actions
+          ],
         },
         {
           blocksBehind: 3,
@@ -98,11 +96,10 @@ const buyProduct = async () => {
         color: 'positive',
       })
 
-
       loading.value = false
-
       
-      router.push({name: "market"})
+      // router.push({name: "welcome"})
+
     } catch (e: any) {
       
       Notify.create({

@@ -132,9 +132,14 @@ const refreshbal = async () => {
           expireSeconds: 30,
         }
       )
+      
       hostStore.loadBalances(userStore.username, props.balance.host)
-      if (needLoadAllBalances){
+
+
+      if (needLoadAllBalances) {
+
         hostStore.loadAllUserBalances(userStore.username)
+
       } else {
         
       }

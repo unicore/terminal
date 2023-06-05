@@ -17,7 +17,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
-  if (to.meta.requiresAuth && !userStore.hasAuth) {
+  
+  // Проверка на требование авторизации пользователя
+  if (to.meta.userProtected && !userStore.hasAuth) {
     Notify.create({
       message: `У вас нет доступа на страницу ${to.path}`,
       type: 'warning',
@@ -25,7 +27,20 @@ router.beforeEach((to, from, next) => {
     next('/');
     return;
   }
+  
+  // Проверка на требование прав доступа администратора
+  if (to.meta.adminProtected && !userStore.isAdmin) {
+    Notify.create({
+      message: `У вас нет прав доступа на страницу ${to.path}`,
+      type: 'warning',
+    });
+    next('/');
+    return;
+  }
+  
+  // Если проверки пройдены, продолжаем навигацию
   next();
 });
+
 
 export default router;

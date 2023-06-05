@@ -1,8 +1,6 @@
 <template lang="pug">
 div
-  // div.row
-    // p Для получения статуса "ПАРТНЁР" купите подписку. 
-  // p userProducts: {{userProducts}}
+
   div(v-if="coreProduct").row
     div.col-md-4.col-xs-12.q-pa-md
       div.header
@@ -17,12 +15,9 @@ div
       
         div(v-if="symbol")
           q-input(filled label-color="white" label="Средства будут зачислены через несколько минут:" dark readonly v-model="userStore.userBalancesSafe[symbol]")
-          q-btn().full-width
+          q-btn(@click="refresh").full-width
             i.fa.fa-refresh
             span.q-ml-md обновить
-
-    
-
 
 
     div.col-md-4.col-xs-12.q-pa-md
@@ -38,6 +33,8 @@ div
 import { computed, ref, onMounted, watch} from 'vue'
 import { useUserStore } from '~/stores/user'
 import { useHostStore } from '~/stores/host'
+import {useWalletStore} from '~/stores/wallet'
+
 import { useRouter } from 'vue-router'
 import userBalance from '~/components/core/oneUserBalance.vue'
 import UserWallet from '~/components/wallet/UserWallet.vue'
@@ -49,6 +46,8 @@ const router = useRouter()
 
 const hostStore = useHostStore()
 const userStore = useUserStore()
+
+
 import config from '~/config'
 const conditions = computed(() => {return hostStore.conditions})
 
@@ -64,6 +63,10 @@ const wallet = computed(() => {
   }
 })
 
+const refresh = () => {
+  userStore.getUserBalances()
+}
+
 const buyFinish = () => {
   init()
 }
@@ -71,7 +74,7 @@ const buyFinish = () => {
 const init = async () => {
   if (config.subscribe.enabled){
       if (loggedIn) {
-        await hostStore.checkSubscription(config.subscribe.coreHost, userStore.username)
+        await hostStore.checkSubscription(config.coreHost, userStore.username)
         // emit('statusChecked', userIsSubscriber)  
       } else {
         // emit('statusChecked', false)

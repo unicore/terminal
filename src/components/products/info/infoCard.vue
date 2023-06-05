@@ -1,14 +1,23 @@
 <template lang="pug">
-q-card(dark)
-  q-badge(floating) {{product.price}}
+
+q-card(dark).bg-secondary
+  q-badge(floating size="lg") {{product.total}}
   
-  div.q-pa-xs
+  div.q-pa-md
     p(style="font-size: 18px;") {{product.title}}
     p {{product.description}}
-  
-  q-btn(@click="buyProduct").full-width
-    i.fa-solid.fa-cart-shopping
-    span.q-ml-md купить
+
+  q-card-actions.q-mt-lg
+
+    q-btn(v-if="showBuy" @click="buyProduct")
+      i.fa-solid.fa-cart-shopping
+      span.q-ml-md купить
+
+    q-btn(v-if="showMore" @click="moreAboutProduct")
+      i.fa-solid.fa-cart-shopping
+      span.q-ml-md подробнее
+
+    
 
 </template>
 
@@ -26,6 +35,14 @@ import chains from '~/chainsMain'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
+const showBuy = computed(() => {
+  return router.currentRoute.value.params.hostname && router.currentRoute.value.params.id
+})
+
+const showMore = computed(() => {
+  return !router.currentRoute.value.params.id
+})
+
 const hostStore = useHostStore()
 const userStore = useUserStore()
 
@@ -38,6 +55,10 @@ const props = defineProps({
     }
   })
 
+const moreAboutProduct = async() => {
+  router.push({name: "market", params: {hostname: props.product.host, id: props.product.id}})
+}
+
 const buyProduct = async () => {
 
     loading.value = true
@@ -46,7 +67,10 @@ const buyProduct = async () => {
 
       const rootChain = chains.getRootChain()
       const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
-      let actions = [
+
+      await api.transact(
+        {
+          actions: [
             {
               account: props.product.token_contract,
               name: 'transfer',
@@ -60,7 +84,7 @@ const buyProduct = async () => {
                 from: userStore.username,
                 to: config.tableCodeConfig.core,
                 quantity: props.product.total,
-                memo: `800-${config.coreHost}`
+                memo: `100-${config.coreHost}`
               },
             },
             {
@@ -79,13 +103,7 @@ const buyProduct = async () => {
                 quantity: 1
               },
             },
-          ]
-
-      console.log("ACTIONS: ", actions)
-
-      await api.transact(
-        {
-          actions: actions
+          ],
         },
         {
           blocksBehind: 3,
@@ -98,11 +116,10 @@ const buyProduct = async () => {
         color: 'positive',
       })
 
-
       loading.value = false
-
       
-      router.push({name: "market"})
+      // router.push({name: "welcome"})
+
     } catch (e: any) {
       
       Notify.create({
