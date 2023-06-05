@@ -1,7 +1,8 @@
 <template lang="pug">
 div.row
-  div(v-for="host of hosts" v-bind:key="host.username").col-md-4.col-sm-6.col-xs-12.q-pa-md
-    nftMarketCard(:host="host")
+  div(v-for="host of hosts" v-bind:key="host.username").col-md-4.col-sm-6.col-xs-12
+    div.q-pa-md
+      nftMarketCard(:host="host")
 
 </template>
 

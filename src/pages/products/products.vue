@@ -5,7 +5,7 @@ div.q-pa-md
   div(v-else)
     div(v-if="products.length").row
       div(v-for="product of products" v-bind:key="product.id").col-md-4.col-xs-12
-        productCard(:product="product" )
+        productCard(:product="product" ).q-pa-xs
       
 </template>
 

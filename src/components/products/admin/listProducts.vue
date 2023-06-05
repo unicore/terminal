@@ -4,8 +4,8 @@ div.q-pa-md
     div
       q-btn(color="green" @click="addProduct") + добавить продукт
     
-    div( v-for="product of products" v-bind:key="product.id").q-pa-xs
-      shortProductCard(:product="product")
+    div( v-for="product of products" v-bind:key="product.id")
+      shortProductCard(:product="product").q-pa-xs
 
   div(v-if="isFullCard && currentProduct")
 

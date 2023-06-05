@@ -213,7 +213,7 @@ const buyProduct = async () => {
       
       console.log("actions: ", actions)
 
-      await api.transact(
+      const data = await api.transact(
         {
           actions
         },
@@ -222,6 +222,17 @@ const buyProduct = async () => {
           expireSeconds: 30,
         }
       )
+
+      const cons = data.processed.action_traces[0].inline_traces[1].console;
+      const regex = /BALANCE_ID: (\w+);?/gi;
+      const group = regex.exec(cons);
+      const balanceId = group[1];
+
+
+      //UPDATE balance for mark as a product with id and flow
+      
+
+      console.log("balanceId: ", balanceId)
 
       Notify.create({
         message: 'Продукт куплен',

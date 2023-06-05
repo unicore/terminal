@@ -47,6 +47,29 @@ export const useHostStore = defineStore('host', {
       flows: {}
     } as HostState),
   actions: {
+
+    async loadAllBalances(hostname) {
+
+      const rootChain = await chains.getRootChain()
+     
+      try {
+
+        let balances = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'balance',
+        )
+        
+        this.balances = balances.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+
+      } catch(e){
+
+        console.log("error on load userbalances: ", e.message)
+
+      }
+
+    },
     async loadBalances(username, hostname) {
 
       const rootChain = await chains.getRootChain()
@@ -183,7 +206,8 @@ export const useHostStore = defineStore('host', {
         console.error("error: ", e)
       }
     },
-    async loadFlows(hostname){
+
+    async loadFlows(hostname) {
       const rootChain = await chains.getRootChain()
   
       let flows = await lazyFetch(
@@ -285,6 +309,28 @@ export const useHostStore = defineStore('host', {
       }
     },
 
+
+    async loadAllUserProducts(hostname) {
+      const rootChain = await chains.getRootChain()
+  
+      try {
+
+        let userProducts = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'myproducts',
+        )
+
+        // history.reverse()
+        
+        this.userProducts = userProducts.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+     
+        
+      } catch (e) {
+        console.error("error: ", e)
+      }
+    },
 
 
     async loadHistory(hostname) {
