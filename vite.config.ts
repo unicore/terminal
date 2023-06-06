@@ -32,8 +32,8 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          SITE_TITLE: config.siteTitle || 'AMM | autonomous money machine',
-          SITE_DESCRIPTION: config.siteDescription || 'покупай и продавай NFT, зарабатывая на разнице цен',
+          SITE_TITLE: config.siteTitle || 'VOSHOD.IO | платформа токенизации бизнеса',
+          SITE_DESCRIPTION: config.siteDescription || 'Управляй развитием бизнеса в закрытых клубах и получай доход согласно интеллектуальному вкладу',
           SITE_IMAGE: config.siteImage || 'https://ia.media-imdb.com/images/rock.jpg',
         },
       },

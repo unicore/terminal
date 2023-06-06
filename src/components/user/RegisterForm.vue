@@ -58,6 +58,12 @@
       class="q-pb-md"
        />
     <q-btn
+      class="full-width"
+      color="teal"
+      label="Создать аккаунт"
+      :disable="mnemonicToCheck !== generatedAccount?.mnemonic"
+      @click="completeRegister" />
+    <q-btn
       color="teal"
       flat
       size="sm"
@@ -65,13 +71,9 @@
       class="full-width"
       label="Вернуться"
       @click="step = 3" />
-    <q-btn
-      class="full-width"
-      color="teal"
-      label="Создать аккаунт"
-      :disable="mnemonicToCheck !== generatedAccount?.mnemonic"
-      @click="completeRegister" />
+    
   </div>
+
   <div v-if="step==5">
     <div class="flex flex-center q-pa-md">
       <q-circular-progress indeterminate size="50px" color="teal" />

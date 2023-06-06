@@ -8,7 +8,7 @@
       active-class="menu-item-active"
       clickable
       class="cursor-pointer menu-item"
-      @click="router.push({ name: item.name })">
+      @click="router.push({ name: item.name, params: item.params })">
       <q-item-section class="menu-item-section">
         <div class="menu-item-icon">
           <i :class="item.icon" ></i>

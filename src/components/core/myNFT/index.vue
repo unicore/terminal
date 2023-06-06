@@ -14,7 +14,7 @@ div
       div(style="border-top: .1px solid teal; padding-bottom: 100px;")
   
     div(v-if="!loading && userHosts.length == 0")
-      div.q-pa-md.text-center у вас нет NFT-фракций
+      div.q-pa-md.text-center у вас нет токенов
     
 </template>
 

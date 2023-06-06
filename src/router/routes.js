@@ -3,6 +3,7 @@ import config from '../config'; // Импортируйте конфигурац
 const routeConfig = config.routeConfig;
 
 export const componentsMap = {
+  index: () => import('../pages/index.vue'),
   Home: () => import('../layouts/default.vue'),
   Blank: () => import('../layouts/blank.vue'),
   pools: () => import('../components/core/NFTmarket.vue'),
@@ -22,24 +23,29 @@ export const componentsMap = {
   // Добавьте остальные компоненты из componentsMap
 };
 
-export const routes = routeConfig.map(route => {
+const createRoute = (route) => {
   const component = componentsMap[route.component];
   if (!component) {
     throw new Error(`Компонент "${route.component}" не подключен.`);
   }
-  const children = route.children ? route.children.map(child => ({
-    ...child,
-    component: componentsMap[child.component]
-  })) : [];
+  const children = route.children ? route.children.map(child => createRoute(child)) : [];
 
   return {
     ...route,
     component: component,
     children: children
   };
-});
+};
 
+export const routes = routeConfig.reduce((result, route) => {
+  if (componentsMap.hasOwnProperty(route.component)) {
+    result.push(createRoute(route));
+  }
+  return result;
+}, []);
 
+console.log("ROUTES: ", routes);
+console.log("ROUTES: ", routes)
 
 
 

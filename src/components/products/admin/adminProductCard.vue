@@ -7,7 +7,7 @@ div
     q-input( label = "описание" type="textarea" v-model="editProduct.description")
     q-input( label = "цена" type="number" v-model="editProduct.price")
     q-input( label = "партнёрский процент" type="number" v-model="editProduct.referral_percent")
-    p.q-pa-md цена: {{total}}
+    p.q-pa-md финальная цена: {{total}}
     
     q-btn(flat color="teal" @click="editProd") сохранить
     
@@ -179,7 +179,7 @@ const editProd = async () => {
 
     let actions = [
       {
-        account: config.tableCodeConfig.core,
+        account: config.tableCodeConfig.secret,
         name: 'createprod',
         authorization: [
           {
@@ -259,7 +259,7 @@ const createFlow = async () => {
 
     let actions = [
       {
-        account: config.tableCodeConfig.core,
+        account: config.tableCodeConfig.secret,
         name: 'addflow',
         authorization: [
           {

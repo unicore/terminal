@@ -1,13 +1,10 @@
 <template lang="pug">
 q-card(dark v-if="balance && flow")
   div.q-pa-md
+
     p NFT-билет на поток # {{flow.id}}
-    p Скидка: {{discount}}%
-    // p {{balance}}
-    p {{flow.closed_at}}
+    p Кэшбэк за скорость решения: {{discount}}%
     p Завершение продаж: {{salesFinishAfter}}
-    p {{isSalesFinish}}
-    // p user products {{hostStore.userProducts}}
   q-btn( color="orange" @click="refreshbal" :loading="loading") обновить
 
 </template>
@@ -53,6 +50,8 @@ const host = computed(() => hosts.value[props.balance.host])
 
 const myProduct = computed(() => Object.values(hostStore.userProducts).find(el => el.product_id == props.flow.product_id))
 const discount = ref(0)
+
+const discount_amount = ref(0)
 
 const salesFinishAfter = computed(() => {
 
@@ -125,7 +124,7 @@ const refreshbal = async () => {
           }
         )
         
-        load()
+        await load()
 
         loading.value = false;
 
@@ -137,7 +136,13 @@ const refreshbal = async () => {
     } else {
 
       //обновляем, выводим, сжигаем и покупаем (4 действия в одной транзакции)
-        
+       
+        let meta_for_secret = JSON.stringify({
+          purchase_amount: props.balance.purchase_amount,
+          discount: discount.value,
+          discount_amount: discount_amount.value
+        })
+
         await api.transact(
           {
             actions: [
@@ -191,8 +196,26 @@ const refreshbal = async () => {
                 },
             },
 
+            //give permissions
             {
-              account: config.tableCodeConfig.core,
+                account: config.tableCodeConfig.core,
+                name: 'addpermiss',
+                authorization: [
+                  {
+                    actor: userStore.username as string,
+                    permission: 'active',
+                  },
+                ],
+                data: {
+                  owner: userStore.username as string,
+                  host: props.balance.host,
+                  to: config.tableCodeConfig.secret,
+                  memo: `for buy info-products as secrets`
+                },
+            },
+
+            {
+              account: config.tableCodeConfig.secret,
               name: 'buysecret',
               authorization: [
                 {
@@ -203,7 +226,8 @@ const refreshbal = async () => {
               data: {
                 buyer: userStore.username,
                 host: props.balance.host,
-                flow_id: props.flow.id
+                flow_id: props.flow.id,
+                meta: meta_for_secret
               },
             },
             ],
@@ -214,7 +238,7 @@ const refreshbal = async () => {
           }
         )
         
-        load()
+        await load()
 
         loading.value = false;
        
@@ -241,25 +265,29 @@ const refreshbal = async () => {
   
 };
 
-watch(host, (newValue) => {
+// watch(host, (newValue) => {
 
-  if (newValue){
-    if (props.balance.pool_num != host.value.current_pool_num && host.value.current_pool_num > 2) {
+//   if (newValue) {
 
-      let base = parseFloat(props.balance.purchase_amount) - parseFloat(props.balance.purchase_amount) * host.value.spiral.loss_percent / 1000000
-      let d = parseFloat(props.balance.available) / base * 100 - 100
-      discount.value = '-' + d.toFixed(2)
 
-    }
-
-  }
-})
+//   }
+// })
 
 
 
 onMounted(async () => {
-  hostStore.loadHosts()
+  await hostStore.loadHosts()
 
+  if (props.balance.pool_num != host.value.current_pool_num && host.value.current_pool_num > 2) {
+    
+    let base = parseFloat(props.balance.purchase_amount) - parseFloat(props.balance.purchase_amount) * host.value.spiral.loss_percent / 1000000
+    let d = parseFloat(props.balance.available) / base * 100 - 100
+    
+    discount_amount.value = parseFloat(props.balance.available) - base
+
+    discount.value = '-' + d.toFixed(2)
+
+  }
 })
 
 

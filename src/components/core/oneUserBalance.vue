@@ -2,7 +2,7 @@
 div
   q-card(bordered flat :dark="isDark").nft-balance
     q-card-section
-      p # {{balance.id}}
+      p баланс # {{balance.id}}
     
     q-card-section
       div
@@ -12,12 +12,12 @@ div
       // div
       //   span статус: 
       //   q-badge.q-pa-sm {{balance.win}}
-      div
-        span билеты: 
-        span.q-pa-sm {{balance.quants_for_sale / 1000000}}
-      div
-        span доля: 
-        span.q-pa-sm {{parseFloat(balance.if_convert) / host.total_shares * 100}}%
+      // div
+      //   span билеты: 
+      //   span.q-pa-sm {{balance.quants_for_sale / 1000000}}
+      // div
+      //   span доля: 
+      //   span.q-pa-sm {{parseFloat(balance.if_convert) / host.total_shares * 100}}%
 
       div
         span доступно: 
@@ -32,7 +32,7 @@ div
 
       // q-btn( color="teal" @click="withdrawbal" @loading="loading" v-if="!isWin") получить фракцию
         
-      q-btn(v-if="!needRefresh && isWin && isAvailable" flat color="teal"  @click="withdrawbal") получить прибыль
+      q-btn(v-if="!needRefresh && isWin && isAvailable" flat color="teal"  @click="withdrawbal") продать
 
 
 </template>

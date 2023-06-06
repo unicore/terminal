@@ -121,7 +121,7 @@ const createProduct = async () => {
 
     let actions = [
       {
-        account: config.tableCodeConfig.core,
+        account: config.tableCodeConfig.secret,
         name: 'createprod',
         authorization: [
           {
@@ -149,13 +149,13 @@ const createProduct = async () => {
       color: 'positive',
     })
 
-
+    dialog.value = false
     loading.value = false
     hostStore.loadProducts(config.coreHost)
     
 
   } catch (e: any) {
-    
+    dialog.value = false
     Notify.create({
       message: 'Произошла ошибка: ' + e.message,
       color: 'negative',

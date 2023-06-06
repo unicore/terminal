@@ -1,7 +1,7 @@
 <template lang="pug">
-div
-  subscribe(v-if="isSubscribe" :product="product")
-  info(v-if="isInfo" :product="product")
+div 
+  // subscribe(v-if="isSubscribe" :product="product")
+  info( :product="product")
 </template>
 
 <script setup lang="ts">//

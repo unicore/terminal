@@ -88,7 +88,7 @@ const buyProduct = async () => {
               },
             },
             {
-              account: config.tableCodeConfig.core,
+              account: config.tableCodeConfig.secret,
               name: 'buyproduct',
               authorization: [
                 {

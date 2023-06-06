@@ -1,25 +1,33 @@
 <template lang="pug">
 div
-  
   q-table(
     flat
+    square
+
     :rows="clients"
     :columns="columns"
     row-key="username"
     :pagination={rowsPerPage: 0}
-  )
+  ).text-center
+
+    template(v-slot:body-cell-type="props")
+      q-td(:props="props")
+        q-badge(outline color="orange" v-if="props.row.type == 'lottery'") в лотерее
+        q-badge(outline color="teal"  v-if="props.row.type == 'product'") купил продукт
+          
+        
 
   
     template(v-slot:body-cell-actions="props")
-      div.full-height
-        q-btn(v-if="props.row.encrypted_data.length == 0" color="primary" label="Выдать ключ" @click="issueKey(props)")
-        q-badge(v-if="props.row.encrypted_data.length > 0") ключ выдан
-    
+      q-td(:props="props")
+        q-btn(v-if="props.row.encrypted_data.length == 0 && props.row.type == 'product'" color="primary" label="Выдать ключ" @click="issueKey(props)")
+        q-badge(color="teal" outline v-if="props.row.encrypted_data.length > 0  && props.row.type == 'product'") ключ выдан
+        q-badge(color="orange" outline v-if="props.row.type == 'lottery'") ожидаем финала
 </template>
 
 <script setup lang="ts">
 
-import { computed, ref, onMounted, watch} from 'vue'
+import { computed, onUnmounted, ref, onMounted, watch} from 'vue'
 import { useUserStore } from '~/stores/user'
 import { useHostStore } from '~/stores/host'
 import { useRouter } from 'vue-router'
@@ -39,7 +47,20 @@ const userStore = useUserStore()
 const productStore = useProductsStore()
 
 const balances = computed(() => {
-  return Object.values(hostStore.getBalances)
+
+  let bals = Object.values(hostStore.getBalances).filter(el => {
+
+    try {
+      el.meta = JSON.parse(el.meta);
+      return el.meta && el.meta.hasOwnProperty('product_id')
+    } catch (error) {
+      return false
+     }
+
+  });
+
+  return bals
+
 })
 
 const userProducts = computed(() => {
@@ -66,11 +87,11 @@ const columns = ref([
         field: 'flow_id'
       },
       {
-        name: 'status',
+        name: 'type',
         required: true,
-        label: 'Статус',
+        label: 'Состояние',
         align: 'left',
-        field: 'status'
+        field: 'type'
       },
       {
         name: 'purchase_amount',
@@ -103,30 +124,63 @@ const columns = ref([
     ])
 
 
+
+const hosts = computed(() => hostStore.getHosts)
+const host = computed(() => hosts.value[config.coreHost])
+
+
 let clients = computed(() => {
-  const newBalances = balances.value.map(({purchase_amount, owner}) => 
+  if (!host.value)
+    return
+
+  const newBalances = balances.value.map(({purchase_amount, available, owner, meta, pool_num}) => 
     {
+     
+      let discount_amount, discount_percent
+      console.log("pool_num: ", pool_num)
+      if (pool_num != host.value.current_pool_num && host.value.current_pool_num > 2) {
+        console.log("purchase_amount: ", purchase_amount, host.value.spiral.loss_percent)
+        let base = parseFloat(purchase_amount) - parseFloat(purchase_amount) * host.value.spiral.loss_percent / 1000000
+        console.log("base: ", base)
+        
+        let d = parseFloat(available) / base * 100 - 100
+        
+        discount_amount = parseFloat(available) - base
+        discount_percent = '-' + d.toFixed(2)
+
+      } else {
+        discount_amount = 0
+        discount_percent = 0
+      }
+
        return {
-        status: "lottery",
+        type: "lottery",
         purchase_amount, 
         username: owner,
-        product_id: 1,
-        flow_id: 1,
+        product_id: meta.product_id,
+        flow_id: meta.flow_id,
         user_product_id: 0,
-        encrypted_data: ""
+        encrypted_data: "",
+        cashback: `${parseFloat(discount_amount).toFixed(host.value.precision)} ${host.value.symbol}  (${discount_percent}%)`
       }
     });
 
-  const newUserProducts = userProducts.value.map(({purchase_amount, username, product_id, flow_id, id, encrypted_data}) => {
+  const newUserProducts = userProducts.value.map(({total, username, product_id, flow_id, id, encrypted_data, meta}) => {
+    try {
+      meta = JSON.parse(meta)
+    } catch(e){
 
+    }
+    console.log("metaproduct: ", meta)
     return {
-      status: "product",
-      purchase_amount: "2.0000 FLOWER", 
+      type: "product",
+      purchase_amount: total, 
       username,
       flow_id,
       product_id,
       user_product_id: id,
-      encrypted_data
+      encrypted_data,
+      cashback: parseFloat(meta.discount_amount || 0).toFixed(host.value.precision) + ' ' + host.value.symbol + ` (${meta.discount || 0}%)` 
     }
   });
 
@@ -184,8 +238,8 @@ const issueKey = async (props) => {
 
     let actions = [
       {
-        account: config.tableCodeConfig.core,
-        name: 'deriveprod',
+        account: config.tableCodeConfig.secret,
+        name: 'derivesecret',
         authorization: [
           {
             actor: userStore.username as string,
@@ -215,8 +269,7 @@ const issueKey = async (props) => {
 
     loading.value = false
 
-    hostStore.loadProducts(config.coreHost)
-    
+    hostStore.loadAllUserProducts(config.coreHost as string)    
 
   } catch (e: any) {
     loading.value = false
@@ -226,8 +279,6 @@ const issueKey = async (props) => {
     })
   }
 
-  //deriveprod(eosio::name host, uint64_t user_product_id, std::string encrypted_data, std::string public_key) {
-  //
   
   // console.log()
   //TODO decrypt link
@@ -236,15 +287,27 @@ const issueKey = async (props) => {
   //decrypt link on owner
 }
 
+const init = async () => {
 
-onMounted(async () => {
-
-
+  hostStore.loadHosts()
   hostStore.loadAllBalances(config.coreHost as string)
   hostStore.loadAllUserProducts(config.coreHost as string)
 
   hostStore.loadFlows(config.coreHost as string)
+}
+
+const interval = ref(null)
+
+onUnmounted(async() => {
+  if (interval.value) 
+    clearInterval(interval.value)
+})
+
+onMounted(async () => {
+
+  init()
   
+  interval.value = setInterval(() => init, 30000)
 
 })
 

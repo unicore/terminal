@@ -42,7 +42,7 @@ div(v-if="currentHost").q-pa-md
           div.col-md-6.col-xs-12
             q-card(flat )
               q-card-section
-                span шаг роста цены NFT-билета: 
+                span шаг роста цены токена: 
                 q-badge.q-pa-sm +{{host.profitStep}}%
                 p.text-grey на каждом одноцветном раунде
               q-separator
@@ -55,7 +55,7 @@ div(v-if="currentHost").q-pa-md
           div.col-md-6.col-xs-12
             q-card(flat )
               q-card-section
-                span осталось NFT-билетов: 
+                span продать токенов: 
                 q-badge.q-pa-sm {{currentHost.currentPool.remain_quants / 1000000}}
                 p.text-grey до следующего раунда
               q-separator

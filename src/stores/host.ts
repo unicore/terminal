@@ -40,8 +40,10 @@ export const useHostStore = defineStore('host', {
       history: {},
       withdraws: {},
       conditions: {},
+      permissions: {},
       products: {},
       userProducts: {},
+      rates: {},
       isUserSubscribed: false,
       subLoaded: false,
       flows: {}
@@ -71,11 +73,12 @@ export const useHostStore = defineStore('host', {
 
     },
     async loadBalances(username, hostname) {
+      console.log('on load balances0', username, hostname)
 
       const rootChain = await chains.getRootChain()
      
       try {
-
+        console.log('on load balances0')
         let balances = await lazyFetch(
           rootChain.readApi, 
           config.tableCodeConfig.core,
@@ -83,6 +86,8 @@ export const useHostStore = defineStore('host', {
           'balance',
         )
         
+        console.log('on load balances', balances)
+
         balances = balances.filter(b => b.owner == username)
         
         this.balances = balances.reduce((a, n) => ({ ...a, [n.id]: n }), {})
@@ -158,6 +163,7 @@ export const useHostStore = defineStore('host', {
               null,
               1
             )
+
             host.currentPool = cPool
 
 
@@ -174,14 +180,7 @@ export const useHostStore = defineStore('host', {
             
             host.spiral = spiral
             host.profitStep = parseFloat(spiral.overlap / 100 - 100).toFixed(0)
-            // console.log("params on fetch rate: ", config.tableCodeConfig.core,
-            //    host.username,
-            //   'rate',
-            //   host.current_pool_num - 1,
-            //   host.current_pool_num - 1,
-            //   null,
-            //   1)
-
+ 
             let [currentRate] = await lazyFetch(
               rootChain.readApi, 
               config.tableCodeConfig.core,
@@ -194,7 +193,6 @@ export const useHostStore = defineStore('host', {
             )
 
             host.currentRate = currentRate
-            // console.log("host.currentRate: ", host.currentRate)
           }
           
           this.hosts = hosts.reduce((a, n) => ({ ...a, [n.username]: n }), {})
@@ -207,12 +205,27 @@ export const useHostStore = defineStore('host', {
       }
     },
 
+
+    async loadRates(hostname) {
+      const rootChain = await chains.getRootChain()
+  
+      let rates = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'rate',
+        )
+      console.log("o load rates", rates)
+      this.rates = rates.reduce((a, n) => ({ ...a, [n.pool_id]: n }), {})
+        
+    },
+
     async loadFlows(hostname) {
       const rootChain = await chains.getRootChain()
   
       let flows = await lazyFetch(
           rootChain.readApi, 
-          config.tableCodeConfig.core,
+          config.tableCodeConfig.secret,
           hostname,
           'flows',
         )
@@ -228,13 +241,13 @@ export const useHostStore = defineStore('host', {
 
         let products = await lazyFetch(
           rootChain.readApi, 
-          config.tableCodeConfig.core,
+          config.tableCodeConfig.secret,
           hostname,
           'products',
         )
 
         // history.reverse()
-        
+        console.log("products: ", products)
         this.products = products.reduce((a, n) => ({ ...a, [n.id]: n }), {})
         
         
@@ -243,6 +256,29 @@ export const useHostStore = defineStore('host', {
       }
     },
     
+    async loadPermissions(hostname) {
+      
+      const rootChain = await chains.getRootChain()
+  
+      try {
+
+        let conditions = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'permissions',
+        )
+
+        // history.reverse()
+        
+        this.permissions = permissions.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+        
+
+      } catch (e) {
+        console.error("error: ", e)
+      }
+    },
+
     async loadConditions(hostname) {
       
       const rootChain = await chains.getRootChain()
@@ -287,7 +323,7 @@ export const useHostStore = defineStore('host', {
 
         let userProducts = await lazyFetch(
           rootChain.readApi, 
-          config.tableCodeConfig.core,
+          config.tableCodeConfig.secret,
           hostname,
           'myproducts',
           username,
@@ -317,7 +353,7 @@ export const useHostStore = defineStore('host', {
 
         let userProducts = await lazyFetch(
           rootChain.readApi, 
-          config.tableCodeConfig.core,
+          config.tableCodeConfig.secret,
           hostname,
           'myproducts',
         )

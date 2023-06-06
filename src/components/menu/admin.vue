@@ -104,7 +104,7 @@
   .menu-item {
     text-align: left !important;
     justify-content: flex-start;
-    padding: 10px 10px 10px 0px !important;
+    padding: 10px 0 10px 13px !important;
     min-width: 0;
     font-style: normal;
     font-weight: 400;
@@ -144,7 +144,7 @@
         background: #52a49d;
       }
       .menu-item-icon {
-        background: #096872;
+        background: red;
         color: #ecb464 !important;
       }
     }

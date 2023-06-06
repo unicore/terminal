@@ -3,6 +3,7 @@ import { AccountData } from 'unicore/ts/src/auth'
 
 import chains from '~/chainsMain'
 import { useWalletStore } from './wallet'
+import config from "~/config"
 
 interface UserBalances {
   [symbol: string]: string
@@ -72,6 +73,9 @@ export const useUserStore = defineStore('user', {
   },
   getters: {
     username: (state) => state.authData?.name,
+    isAdmin() {
+      return this.username === config.admin
+    },
     hasAuth() {
       return !!this.username
     },
