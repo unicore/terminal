@@ -1,27 +1,29 @@
 <template lang="pug">
 div
   
-  q-card(flat).q-pa-md
-    p # {{product.id}}
-    q-input( label = "название" v-model="editProduct.title")
-    q-input( label = "описание" type="textarea" v-model="editProduct.description")
+  q-card(bordered flat).bg-grey-2.q-pa-md
+    
+    q-input( label = "название продукта" v-model="editProduct.title")
+    q-input( label = "описание продукта" type="textarea" v-model="editProduct.description")
     q-input( label = "цена" type="number" v-model="editProduct.price")
-    q-input( label = "партнёрский процент" type="number" v-model="editProduct.referral_percent")
+    q-input( label = "кэшбэк партнёрам, %" type="number" v-model="editProduct.referral_percent")
+    q-input( label = "кэшбэк в ядро, %" type="number" v-model="editProduct.core_cashback_percent")
     p.q-pa-md финальная цена: {{total}}
     
-    q-btn(flat color="teal" @click="editProd") сохранить
+    q-btn( color="primary" @click="editProd") сохранить
     
-    div(style="margin-top: 100px;").q-mt-lg
-      p Потоки:
-      q-btn(@click="addFlow" color="green") + добавить поток 
-      div.row.q-mt-lg.q-pa-md.justify-center
-        div.col-md-8
-          q-card(dark v-for="(flow, index) of flows" v-bind:key="flow.id").q-pa-md.q-ma-md
-            p Поток № {{index + 1}}
-            
-            p Начало продаж: {{flow.start_at}} UTC
-            p Завершение продаж: {{flow.closed_at}} UTC
-            decryptedButton(:data="flow.encrypted_data")
+  div(style="margin-top: 100px;").q-mt-lg
+    div.full-width.text-center
+      h1 Потоки
+      q-btn(@click="addFlow" color="primary") + добавить поток 
+    div.row.q-mt-lg.q-pa-md.justify-center
+      div.col-md-8
+        q-card(dark v-for="(flow, index) of flows" v-bind:key="flow.id").q-pa-md.q-ma-md
+          p Поток № {{index + 1}}
+          
+          p Начало продаж: {{flow.start_at}} UTC
+          p Завершение продаж: {{flow.closed_at}} UTC
+          decryptedButton(:data="flow.encrypted_data")
           
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")  
     q-card(style="min-width: 350px; max-width: 100%;").bg-primary
@@ -136,7 +138,8 @@ const host = computed(() => {
 
 const total = computed(() => {
   if(host.value && Object.values(editProduct).length > 0 && editProduct.value.referral_percent) {
-    let amount = parseFloat(editProduct.value.price) + parseFloat(editProduct.value.price) * parseFloat(editProduct.value.referral_percent) / 100
+    let amount = parseFloat(editProduct.value.price) + parseFloat(editProduct.value.price) * parseFloat(editProduct.value.referral_percent) / 100 + parseFloat(editProduct.value.price) * parseFloat(editProduct.value.core_cashback_percent) / 100
+    
     
     return amount + " " + host.value.symbol
   } else return "не определена"
@@ -163,9 +166,10 @@ const editProd = async () => {
     const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
     
     let data = { 
+          product_id: props.product.id,
           host: config.coreHost,
-          type: props.product.type,
           referral_percent: editProduct.value.referral_percent * 10000,
+          core_cashback_percent: editProduct.value.core_cashback_percent * 10000,
           title: editProduct.value.title,
           description: editProduct.value.description,
           encrypted_data: editProduct.value.encrypted_data,
@@ -176,11 +180,12 @@ const editProd = async () => {
         }
 
     console.log("data: ", data) 
-
+    // [[eosio::action]] void editprod(eosio::name host, uint64_t referral_percent, uint64_t core_cashback_percent, uint64_t product_id, std::string title, std::string description, std::string encrypted_data, asset price);
+    
     let actions = [
       {
         account: config.tableCodeConfig.secret,
-        name: 'createprod',
+        name: 'editprod',
         authorization: [
           {
             actor: userStore.username as string,
@@ -309,8 +314,9 @@ onMounted(async () => {
   hostStore.loadHosts()
   
   editProduct.value = props.product
-  editProduct.value.price = parseFloat(editProduct.value.total).toFixed(4)
-  editProduct.value.referral_percent = editProduct.value.referral_percent / 1000000 * 100
+  editProduct.value.price = parseFloat(editProduct.value.price).toFixed(4)
+  editProduct.value.referral_percent = parseFloat(editProduct.value.referral_percent) / 10000
+  editProduct.value.core_cashback_percent = parseFloat(editProduct.value.core_cashback_percent) / 10000
   
 
 })

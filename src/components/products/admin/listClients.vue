@@ -1,5 +1,37 @@
 <template lang="pug">
 div
+  div.row
+    div.col-md-4.col-xs-12.q-pa-md
+      
+      q-card(dark)
+        div(v-if="host && host.precision").q-pa-md
+          p().text-grey Доступно: 
+            span.text-white {{ubalance.quantity || parseFloat(0).toFixed(host.precision) + ' ' + host.symbol }} 
+      
+        q-btn(@click="withdraw" color="primary") вывести
+
+    div.col-md-4.col-xs-12.q-pa-md
+      q-card(dark)
+        div.q-pa-md
+          p().text-grey Выручка: 
+            span.text-white {{totalSold}}
+          p().text-grey Прибыль: 
+            span.text-white {{totalHost}}
+          
+          p().text-grey Кэшбэк в сеть: 
+            span.text-white {{totalRef}}
+          
+          p().text-grey Кэшбэк в ядро: 
+            span.text-white {{totalCore}}
+      
+    div.col-md-4.col-xs-12.q-pa-md
+      q-card(dark)
+        div.q-pa-md
+          p().text-grey Всего покупателей
+            p.text-white {{totalBuyers}}
+        
+
+      
   q-table(
     flat
     square
@@ -63,6 +95,55 @@ const balances = computed(() => {
 
 })
 
+
+const totalBuyers = computed(() => {
+  let total = 0
+  Object.values(hostStore.products).map(el => total += parseFloat(el.total_solded_count))
+
+  return total
+})
+
+const totalSold = computed(() => {
+  if (host.value){
+    let total = 0
+    Object.values(hostStore.products).map(el => total += parseFloat(el.total_solded_amount))
+
+    return total.toFixed(host.value.precision) + ' ' + host.value.symbol
+  } else return 0
+})
+
+
+const totalHost = computed(() => {
+  if (host.value){
+    let total = 0
+    Object.values(hostStore.products).map(el => total += parseFloat(el.total_host_amount))
+
+    return total.toFixed(host.value.precision) + ' ' + host.value.symbol
+  } else return 0
+})
+
+
+const totalRef = computed(() => {
+  if (host.value){
+    let total = 0
+    Object.values(hostStore.products).map(el => total += parseFloat(el.total_refs_amount))
+
+    return total.toFixed(host.value.precision) + ' ' + host.value.symbol
+  } else return 0
+})
+
+
+const totalCore = computed(() => {
+  if (host.value){
+    let total = 0
+    Object.values(hostStore.products).map(el => total += parseFloat(el.total_core_amount))
+
+    return total.toFixed(host.value.precision) + ' ' + host.value.symbol
+  } else return 0
+})
+
+
+
 const userProducts = computed(() => {
   return Object.values(hostStore.userProducts)
 })
@@ -96,17 +177,17 @@ const columns = ref([
       {
         name: 'purchase_amount',
         required: true,
-        label: 'Сумма',
+        label: 'Оплачено',
         align: 'left',
         field: 'purchase_amount'
       },
-      {
-        name: 'cashback',
-        required: true,
-        label: 'Кэшбэк',
-        align: 'left',
-        field: 'cashback'
-      },
+      // {
+      //   name: 'cashback',
+      //   required: true,
+      //   label: 'Получено',
+      //   align: 'left',
+      //   field: 'cashback'
+      // },
       {
         name: 'username',
         required: true,
@@ -128,6 +209,20 @@ const columns = ref([
 const hosts = computed(() => hostStore.getHosts)
 const host = computed(() => hosts.value[config.coreHost])
 
+const ubalance = computed(() => {
+  if (productStore.ubalance[0] && host.value) {
+    
+    let obj = productStore.ubalance[0]
+    
+    if (obj){
+      return obj
+    }
+    else return parseFloat(0).toFixed(host.value.precision) + ' ' + host.value.symbol
+
+  } else return ""
+
+
+})
 
 let clients = computed(() => {
   if (!host.value)
@@ -137,11 +232,9 @@ let clients = computed(() => {
     {
      
       let discount_amount, discount_percent
-      console.log("pool_num: ", pool_num)
+      
       if (pool_num != host.value.current_pool_num && host.value.current_pool_num > 2) {
-        console.log("purchase_amount: ", purchase_amount, host.value.spiral.loss_percent)
         let base = parseFloat(purchase_amount) - parseFloat(purchase_amount) * host.value.spiral.loss_percent / 1000000
-        console.log("base: ", base)
         
         let d = parseFloat(available) / base * 100 - 100
         
@@ -161,7 +254,7 @@ let clients = computed(() => {
         flow_id: meta.flow_id,
         user_product_id: 0,
         encrypted_data: "",
-        cashback: `${parseFloat(discount_amount).toFixed(host.value.precision)} ${host.value.symbol}  (${discount_percent}%)`
+        // cashback: `${parseFloat(discount_amount).toFixed(host.value.precision)} ${host.value.symbol}  (${discount_percent}%)`
       }
     });
 
@@ -171,7 +264,7 @@ let clients = computed(() => {
     } catch(e){
 
     }
-    console.log("metaproduct: ", meta)
+
     return {
       type: "product",
       purchase_amount: total, 
@@ -179,8 +272,8 @@ let clients = computed(() => {
       flow_id,
       product_id,
       user_product_id: id,
-      encrypted_data,
-      cashback: parseFloat(meta.discount_amount || 0).toFixed(host.value.precision) + ' ' + host.value.symbol + ` (${meta.discount || 0}%)` 
+      encrypted_data
+      // cashback: parseFloat(meta.discount_amount || 0).toFixed(host.value.precision) + ' ' + host.value.symbol + ` (${meta.discount || 0}%)` 
     }
   });
 
@@ -210,6 +303,61 @@ const decrypt = async (msg) => {
 
 const flows = computed(() => hostStore.flows)
 
+const withdraw = async () => {
+  try {
+
+    const rootChain = chains.getRootChain()
+    const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
+    
+    let data = { 
+        host: config.coreHost,
+        balance_id: ubalance.value.id
+    }
+
+    let actions = [
+      {
+        account: config.tableCodeConfig.secret,
+        name: 'withdraw',
+        authorization: [
+          {
+            actor: userStore.username as string,
+            permission: 'active',
+          },
+        ],
+        data: data
+      }
+    ]
+
+
+    await api.transact(
+      {
+        actions: actions
+      },
+      {
+        blocksBehind: 3,
+        expireSeconds: 30,
+      }
+    )
+
+    Notify.create({
+      message: 'Транзакция принята',
+      color: 'positive',
+    })
+
+
+    loading.value = false
+    userStore.getUserBalances()
+    productStore.loadUbalance(config.coreHost as string)
+
+  } catch (e: any) {
+    loading.value = false
+    Notify.create({
+      message: 'Произошла ошибка: ' + e.message,
+      color: 'negative',
+    })
+  }
+
+}
 
 const issueKey = async (props) => {
   let user_product_id = props.row.user_product_id
@@ -288,11 +436,12 @@ const issueKey = async (props) => {
 }
 
 const init = async () => {
+  productStore.loadUbalance(config.coreHost as string)
 
   hostStore.loadHosts()
   hostStore.loadAllBalances(config.coreHost as string)
   hostStore.loadAllUserProducts(config.coreHost as string)
-
+  hostStore.loadProducts(config.coreHost as string)
   hostStore.loadFlows(config.coreHost as string)
 }
 

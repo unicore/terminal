@@ -38,7 +38,6 @@ Sentry.init({
   app,
   dsn: config.dsn,
   debug: false,
-  // console: true,
   integrations: [
     new Sentry.BrowserTracing({
       // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
@@ -61,8 +60,6 @@ Sentry.init({
 
 
 // Перехват и отправка ошибок
-
-
 function stringifyObject(obj: any): string {
   try {
     return JSON.stringify(obj);

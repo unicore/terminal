@@ -1,16 +1,8 @@
 <template lang="pug">
-div
-  q-list(bordered)
-    q-item( clickable @click="router.push({name: 'admin-products', params: {id: product.id}})")
-      q-item-section
-        q-item-label(caption)
-          h3 {{product.title}}
-      
-        q-item-label
-          p {{product.description}}
-        
-        
-  
+div.row
+  coreFlow.col-md-6.col-xs-12.q-pa-md
+  refFlow.col-md-6.col-xs-12.q-pa-md
+
 </template>
 
 <script setup lang="ts">
@@ -22,6 +14,10 @@ import { useRouter } from 'vue-router'
 import userBalance from '~/components/core/oneUserBalance.vue'
 import config from '~/config'
 import chains from '~/chainsMain'
+import dacsIncome from '../core/dacsIncome.vue'
+
+import coreFlow from './coreFlow.vue'
+import refFlow from './refFlow.vue'
 
 const router = useRouter()
 
@@ -29,17 +25,12 @@ const hostStore = useHostStore()
 const userStore = useUserStore()
 
 
-const props = defineProps({
-    product: {
-      type: Object,
-      required: true
-    },
-  })
-
-
 onMounted(async () => {
 
 })
 
+const withdrawAll = () => {
+
+}
 
 </script>

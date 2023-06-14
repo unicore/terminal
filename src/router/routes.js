@@ -9,7 +9,7 @@ export const componentsMap = {
   pools: () => import('../components/core/NFTmarket.vue'),
   myNFT: () => import('../components/core/myNFT/index.vue'),
   myTeam: () => import('../pages/core/partnerPage.vue'),
-  withdrawer: () => import('../components/core/withdrawer.vue'),
+  withdrawer: () => import('../components/dashboard/admin/withdrawer.vue'),
   explorer: () => import('../components/fullExplorer/index.vue'),
   landing: () => import('../pages/landing-user/platform.vue'),
   create: () => import('../pages/create.vue'),
@@ -20,6 +20,7 @@ export const componentsMap = {
   myProducts: () => import('../pages/products/myProducts.vue'),
   listInfoProducts: () => import('../components/products/admin/listProducts.vue'),
   listInfoClients: () => import('../components/products/admin/listClients.vue'),
+  adminDashboard: () => import('../components/dashboard/admin.vue'),
   // Добавьте остальные компоненты из componentsMap
 };
 

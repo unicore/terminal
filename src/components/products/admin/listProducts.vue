@@ -25,7 +25,9 @@ div.q-pa-md
         div
           q-input(filled label-color="white" label="Название" v-model="newProduct.title")
           q-input(filled label-color="white" type="textarea" label="Описание" v-model="newProduct.description")
-          q-input(filled label-color="white" type="number" step="1" max="100" label="Партнёрская наценка" v-model="newProduct.referral_percent")
+          q-input(filled label-color="white" type="number" step="1" max="100" label="Кэбэк партнёрам, %" v-model="newProduct.referral_percent")
+          q-input(filled label-color="white" type="number" step="1" max="100" label="Кэшбэк в ядро, %" v-model="newProduct.core_cashback_percent")
+          
           q-input(filled label-color="white" type="number" label="Себестоимость" v-model="newProduct.price")
           p.q-pa-md цена: {{total}}
           q-btn(@click="createProduct").full-width создать продукт
@@ -52,6 +54,7 @@ const newProduct = ref({
   title: "",
   description: "",
   referral_percent: 0,
+  core_cashback_percent: 0,
   type: 'info',
   encrypted_data: "",
   public_key: "",
@@ -72,8 +75,8 @@ const currentProduct = computed(() => products.value.find(p => p.id == isFullCar
 
 const total = computed(() => {
   if(host.value) {
-    let amount = parseFloat(newProduct.value.price) + parseFloat(newProduct.value.price) * parseFloat(newProduct.value.referral_percent) / 100
-    console.log("amount", amount, newProduct.value.price, newProduct.value.price * newProduct.value.referral_percent / 100)
+    let amount = parseFloat(newProduct.value.price) + parseFloat(newProduct.value.price) * parseFloat(newProduct.value.referral_percent) / 100 + parseFloat(newProduct.value.price) * parseFloat(newProduct.value.core_cashback_percent) / 100
+    
     return amount + " " + host.value.symbol
   } else return ""
   
@@ -108,6 +111,7 @@ const createProduct = async () => {
           host: config.coreHost,
           type: newProduct.value.type,
           referral_percent: newProduct.value.referral_percent * 10000,
+          core_cashback_percent: newProduct.value.core_cashback_percent * 10000,
           title: newProduct.value.title,
           description: newProduct.value.description,
           encrypted_data: newProduct.value.encrypted_data,
@@ -116,8 +120,6 @@ const createProduct = async () => {
           price: parseFloat(newProduct.value.price).toFixed(host.value.precision) + " " + host.value.symbol,
           duration: 0
         }
-
-    console.log("data: ", data) 
 
     let actions = [
       {

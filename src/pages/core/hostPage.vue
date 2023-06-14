@@ -55,7 +55,7 @@ div(v-if="currentHost").q-pa-md
           div.col-md-6.col-xs-12
             q-card(flat )
               q-card-section
-                span продать токенов: 
+                span осталось токенов: 
                 q-badge.q-pa-sm {{currentHost.currentPool.remain_quants / 1000000}}
                 p.text-grey до следующего раунда
               q-separator

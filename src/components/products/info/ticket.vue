@@ -2,7 +2,7 @@
 q-card(dark v-if="flow")
   div.q-pa-md
     
-    p NFT-билет на поток # {{flow.id}}
+    // p NFT-билет на поток # {{flow.id}}
     p welcome {{welcome}}
     // p user products {{hostStore.userProducts}}
   

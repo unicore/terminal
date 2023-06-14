@@ -8,13 +8,16 @@ div
       div
         span раунд покупки: 
         span.q-pa-sm {{balance.pool_num}}
+      div
+        span сумма покупки: 
+        span.q-pa-sm {{balance.purchase_amount}}
       
       // div
       //   span статус: 
       //   q-badge.q-pa-sm {{balance.win}}
-      // div
-      //   span билеты: 
-      //   span.q-pa-sm {{balance.quants_for_sale / 1000000}}
+      div
+        span токены: 
+        span.q-pa-sm {{balance.quants_for_sale / 1000000}}
       // div
       //   span доля: 
       //   span.q-pa-sm {{parseFloat(balance.if_convert) / host.total_shares * 100}}%
@@ -22,8 +25,8 @@ div
       div
         span доступно: 
         span.q-pa-sm {{balance.available}}
-        
-      div
+      // p {{balance.root_percent}}
+      div(v-if="balance.root_percent > 0")
         span прибыль: 
         span.q-pa-sm +{{balance.root_percent / 10000}}%
 
@@ -32,8 +35,8 @@ div
 
       // q-btn( color="teal" @click="withdrawbal" @loading="loading" v-if="!isWin") получить фракцию
         
-      q-btn(v-if="!needRefresh && isWin && isAvailable" flat color="teal"  @click="withdrawbal") продать
-
+      q-btn(flat color="teal"  @click="withdrawbal") продать
+      // !needRefresh && isWin && isAvailable
 
 </template>
 

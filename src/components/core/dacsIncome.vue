@@ -1,16 +1,6 @@
 <template lang="pug">
 div
-  q-list(bordered)
-    q-item( clickable @click="router.push({name: 'admin-products', params: {id: product.id}})")
-      q-item-section
-        q-item-label(caption)
-          h3 {{product.title}}
-      
-        q-item-label
-          p {{product.description}}
-        
-        
-  
+  p dacs
 </template>
 
 <script setup lang="ts">
@@ -27,15 +17,6 @@ const router = useRouter()
 
 const hostStore = useHostStore()
 const userStore = useUserStore()
-
-
-const props = defineProps({
-    product: {
-      type: Object,
-      required: true
-    },
-  })
-
 
 onMounted(async () => {
 

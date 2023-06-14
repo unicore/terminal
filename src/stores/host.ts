@@ -44,6 +44,7 @@ export const useHostStore = defineStore('host', {
       products: {},
       userProducts: {},
       rates: {},
+      incomes: {},
       isUserSubscribed: false,
       subLoaded: false,
       flows: {}
@@ -68,6 +69,27 @@ export const useHostStore = defineStore('host', {
       } catch(e){
 
         console.log("error on load userbalances: ", e.message)
+
+      }
+
+    },
+
+    async loadDacsIncome(hostname) {
+      const rootChain = await chains.getRootChain()
+     
+      try {
+        let incomes = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          hostname,
+          'dacsincome',
+        )
+        
+        this.incomes = incomes.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+
+      } catch(e){
+
+        console.error(e.message)
 
       }
 

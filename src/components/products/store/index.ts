@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import chains from '~/chainsMain'
 import { encrypt, decrypt } from 'eos-encrypt';
 
+import config from "~/config"
+import {lazyFetch} from '~/utils/fetcher'
+
 interface Products {
   [id: number]: any
 }
@@ -14,8 +17,29 @@ export const useProductsStore = defineStore('product', {
   state: () =>
     ({
       products: {},
+      ubalance: {},
     } as ProductsState),
   actions: {
+    async loadUbalance(hostname) {
+      const rootChain = await chains.getRootChain()
+     
+      try {
+        let ubalance = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.secret,
+          hostname,
+          'ubalance',
+        )
+        
+        this.ubalance = ubalance.reduce((a, n) => ({ ...a, [n.id]: n }), {})
+
+      } catch(e){
+
+        console.error(e.message)
+
+      }
+
+    },
     async encryptMessage(wif, to, message) {
       return new Promise(async (resolve, reject) => {
          

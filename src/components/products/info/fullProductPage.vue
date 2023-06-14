@@ -7,7 +7,7 @@ div
   
   div(v-if="isAuthed")
     div(v-if="flow && !loading")
-      div(v-if="!balance && !hasProduct" style="align-items: baseline;").row
+      div(v-if="!hasProduct" style="align-items: baseline;").row
         
         div.col-md-4.col-xs-12.q-pa-md
           div.header
@@ -46,18 +46,10 @@ div
 
       div(v-else).row.justify-center
         div.col-md-6.col-xs-12.q-pa-md
-          // если билет в состоянии баланса спирали
-          div(v-if="!hasProduct && balance && balance.host")
-            
-            oneTicketBalance(v-if="flow" :balance="balance" :flow="flow" :product="product")
-          div(v-else)
-            ticket(:flow="flow")
+          ticket(:flow="flow")
 
-            //если билет выведен из спирали
-            
-            // div(v-for="balance of balances" v-bind:key="balance.id")
           
-    div(v-if="!flow && !balance && !hasProduct || loading")
+    div(v-if="!flow && !hasProduct || loading")
       loader
             
           
@@ -187,7 +179,6 @@ async function refresh(){
 async function load() {
   loading.value = true
   await hostStore.loadHosts()
-  await hostStore.loadBalances(userStore.username, hostname.value)
   await hostStore.loadFlows(hostname.value)
 
   if (userStore.hasAuth)
@@ -216,8 +207,10 @@ async function init() {
 const rates = computed(() => {
   return hostStore.rates
 })
+
 const hosts = computed(() => hostStore.getHosts)
 const host = computed(() => hosts.value[config.coreHost])
+
 
 
 const buyProduct = async () => {
@@ -229,68 +222,44 @@ const buyProduct = async () => {
       const rootChain = chains.getRootChain();
       const api = rootChain.getEosPassInstance(userStore.authData?.wif as string);
 
-      await hostStore.loadRates(config.coreHost);
-      
-      let currentPoolRemain = parseFloat(host.value.currentPool.remain);
       let total = parseFloat(product.value.total);
       let actions = [];
 
-      if (currentPoolRemain < total) {
-         actions.push({
-            account: product.value.token_contract,
-            name: 'transfer',
-            authorization: [
-              {
-                actor: userStore.username as string,
-                permission: 'active',
-              },
-            ],
-            data: {
-              from: userStore.username,
-              to: config.tableCodeConfig.core,
-              quantity: currentPoolRemain.toFixed(4)  + ' ' + host.value.symbol,
-              memo: `100-${config.coreHost}`,
+       actions.push({
+          account: product.value.token_contract,
+          name: 'transfer',
+          authorization: [
+            {
+              actor: userStore.username as string,
+              permission: 'active',
             },
+          ],
+          data: {
+            from: userStore.username,
+            to: config.tableCodeConfig.secret,
+            quantity: total.toFixed(4)  + ' ' + host.value.symbol,
+            memo: `buy-${config.coreHost}-${product.id}`,
           },
-          {
-            account: product.value.token_contract,
-            name: 'transfer',
-            authorization: [
-              {
-                actor: userStore.username as string,
-                permission: 'active',
-              },
-            ],
-            data: {
-              from: userStore.username,
-              to: config.tableCodeConfig.core,
-              quantity: (total - currentPoolRemain).toFixed(4)  + ' ' + host.value.symbol,
-              memo: `800-${config.coreHost}`,
+        },
+        {
+          account: config.tableCodeConfig.secret,
+          name: 'buysecret',
+          authorization: [
+            {
+              actor: userStore.username as string,
+              permission: 'active',
             },
-          }
-          );
-      } else {
+          ],
+          data: {
+            buyer: userStore.username,
+            host: host.value.username,
+            flow_id: flow.value.id,
+            meta: ""
+          },
+        }
+      );
+    
 
-          actions.push({
-            account: product.value.token_contract,
-            name: 'transfer',
-            authorization: [
-              {
-                actor: userStore.username as string,
-                permission: 'active',
-              },
-            ],
-            data: {
-              from: userStore.username,
-              to: config.tableCodeConfig.core,
-              quantity: total.toFixed(4)  + ' ' + host.value.symbol,
-              memo: `100-${config.coreHost}`,
-            },
-          })
-
-      }
-      console.log("actions", actions)
-       
       const data = await api.transact(
         {
           actions: actions
@@ -302,67 +271,12 @@ const buyProduct = async () => {
       )
 
 
-      const actionTraces = data.processed.action_traces;
-
-      for (let i = 0; i < actionTraces.length; i++) {
-        const actionTrace = actionTraces[i];
-        const inlineTraces = actionTrace.inline_traces;
-
-        for (let j = 0; j < inlineTraces.length; j++) {
-          const inlineTrace = inlineTraces[j];
-          const cons = inlineTrace.console;
-          const regex = /BALANCE_ID: (\w+);?/gi;
-          const group = regex.exec(cons);
-          
-
-        if (group && group[1]) {
-          const balanceId = group[1];
-
-          let meta = JSON.stringify({
-            product_id: product.value.id,
-            flow_id: flow.value.id
-          });
-
-          const data2 = await api.transact(
-            {
-              actions: [
-                {
-                  account: config.tableCodeConfig.core,
-                  name: 'setbalmeta',
-                  authorization: [
-                    {
-                      actor: userStore.username as string,
-                      permission: 'active',
-                    },
-                  ],
-                  data: {
-                    username: userStore.username,
-                    host: config.coreHost,
-                    balance_id: balanceId,
-                    meta
-                  },
-                },
-              ]
-            },
-            {
-              blocksBehind: 3,
-              expireSeconds: 30,
-            }
-          );
-
-          // Дополнительные действия или обработка после вызова setbalmeta
-        }
-      }
-    }
-
       Notify.create({
         message: 'Продукт куплен',
         color: 'positive',
       })
 
       await load()      
-
-      // router.push({name: "welcome"})
 
     } catch (e: any) {
       console.error(e);
