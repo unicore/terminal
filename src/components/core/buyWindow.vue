@@ -1,34 +1,43 @@
 <template lang="pug">
 
-q-btn(color="teal" size="lg" @click="dialog=true") Купить токен
+q-btn(color="teal" size="lg" @click="dialog=true") Внести {{host.symbol}}
 
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
     q-card(style="min-width: 350px; max-width: 450px;")
       div
         q-bar
+          p совершить взнос
           q-space
           q-btn(dense flat icon="close" v-close-popup)
             q-tooltip Закрыть
 
       q-card(v-if="host")
         q-card-section
-          div.text-h6 Покупка токена за USDT
-        q-card-section
-          div.text-subtitle2 Стоимость токена: {{ quantCost }}
-          div.text-subtitle2 Осталось токенов: {{ remainQuants }}
-        q-card-section
-          q-input(outlined v-model.number="quantAmount" label="Введите количество токенов" type="number" step="1")
-        
-        q-card-section
-          q-input(outlined v-model.number="rootAmount" label="Введите сумму в USDT" type="number" step="1")
-        
+          div.text-h6 Введите сумму в {{host.symbol}}
         // q-card-section
-        //   q-input(outlined v-model="message"  type="textarea" rows="3" label="Введите сообщение (опционально)")
+          // div.text-subtitle2 Стоимость токена: {{ quantCost }}
+          // div.text-subtitle2 Осталось токенов: {{ remainQuants }}
+          // div.text-subtitle2 Доступно для внесения: {{ remain }}
+        // q-card-section
+        //   q-input(outlined v-model.number="quantAmount" label="Введите количество токенов" type="number" step="1")
+        
+        q-card-section  
+          // span Введите сумму для внесения в целевую программу. 
+          
+          q-input(outlined v-model.number="rootAmount" label="Введите сумму" type="number" step="1")
+            template(v-slot:append)
+              q-badge() {{host.symbol}}
+          div.row.justify-between
+            q-btn(size="xs" flat @click="setMin") min: {{quantCost}}
+            q-btn(size="xs" flat @click="setMax") max: {{remain}}
+        // q-card-section
+        //   q-input(outlined v-model="message"  type="textarea" rows="1" label="Оставьте сообщение")
+            
           // textarea(rows="5" v-model="message" )
 
         q-card-section(align="right")
           q-btn(flat label="Отмена" color="primary" v-close-popup)
-          q-btn(label="Купить" color="primary" @click="buy") 
+          q-btn(label="Внести" color="primary" @click="buy") 
 
 </template>
 
@@ -58,6 +67,13 @@ let host = computed(() => {
 const rootAmount = ref(0);
 let quantAmount = ref(0);
 
+const setMax = () => {
+  rootAmount.value = parseFloat(remain.value)
+}
+
+const setMin = () => {
+  rootAmount.value = parseFloat(quantCost.value)
+}
 
 onMounted(async () => {
   // await hostStore.loadHosts()
@@ -77,6 +93,12 @@ const remainQuants = computed(() => {
   return remain;
 });
 
+
+const remain = computed(() => {
+  const remain = host.value.currentPool.remain
+  return remain;
+});
+
 watch(rootAmount, (newVal) => {
   const cost = parseFloat(host.value.currentPool.quant_cost);
   quantAmount.value = newVal / cost;
@@ -89,9 +111,7 @@ watch(quantAmount, (newVal) => {
 
 
 watch(host, (newVal) => {
-  if (newVal == false){
     quantAmount.value = 1
-  }
 })
 
 const purchasedQuants = computed({

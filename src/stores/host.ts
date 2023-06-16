@@ -47,7 +47,8 @@ export const useHostStore = defineStore('host', {
       incomes: {},
       isUserSubscribed: false,
       subLoaded: false,
-      flows: {}
+      flows: {},
+      sysPercents: {}
     } as HostState),
   actions: {
 
@@ -69,6 +70,29 @@ export const useHostStore = defineStore('host', {
       } catch(e){
 
         console.log("error on load userbalances: ", e.message)
+
+      }
+
+    },
+
+    async loadGpercents() {
+
+      const rootChain = await chains.getRootChain()
+     
+      try {
+
+        let sysPercents = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          config.tableCodeConfig.core,
+          'gpercents',
+        )
+        
+        this.sysPercents = sysPercents.reduce((a, n) => ({ ...a, [n.key]: n.value / 10000}), {})
+        console.log("sysPercents: ", this.sysPercents)
+      } catch(e){
+
+        console.log("error on load sysPercents: ", e.message)
 
       }
 
@@ -415,7 +439,7 @@ export const useHostStore = defineStore('host', {
         console.error("error: ", e)
       }
     },
-    async loadWithdraws() {
+    async loadWithdraws(host) {
       
       const rootChain = await chains.getRootChain()
   
@@ -424,7 +448,7 @@ export const useHostStore = defineStore('host', {
         let withdraws = await lazyFetch(
           rootChain.readApi, 
           config.tableCodeConfig.withdrawer,
-          config.tableCodeConfig.withdrawer,
+          host,
           'withdraws',
         )
 
@@ -451,7 +475,6 @@ export const useHostStore = defineStore('host', {
           config.tableCodeConfig.part,
           'partners2'
         )
-        console.log("tree load", tree)
         
         return tree
         

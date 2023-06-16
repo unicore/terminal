@@ -1,11 +1,16 @@
 <template lang="pug">
-q-list( clickable)
-  q-card(dark)
-    div.q-pa-md
-      p.text-grey Настройка уровней
-      q-input(dark v-for="(level, index) of levels" v-bind:key = "index" v-model="levels[index]" :label="'Уровень ' + parseInt(index + 1) + ', %'")
-
-    q-btn( color="green" @click="" :loading="loading") установить
+div
+  q-list( clickable)
+    q-card(bordered)
+      div.q-pa-md
+        p(v-if="incomes.length == 0").text-grey Бизнес-доход отсутствует
+        p(v-if="incomes.length > 0").text-grey Бизнес-доход:
+        q-item(bordered v-ripple v-for="inc of incomes" v-bind:key="inc.id")
+          q-item-section
+            p {{inc.amount}} | {{inc.contract}}
+            p {{inc.memo}}
+            hr
+      q-btn(:disable="incomes.length == 0" color="secondary" @click="withdrawAll" :loading="loading").full-width получить
       
 </template>
 
@@ -18,7 +23,6 @@ import { useRouter } from 'vue-router'
 import userBalance from '~/components/core/oneUserBalance.vue'
 import config from '~/config'
 import chains from '~/chainsMain'
-import dacsIncome from '../core/dacsIncome.vue'
 import {Notify} from 'quasar'
 
 const router = useRouter()
@@ -26,15 +30,15 @@ const loading = ref(false)
 const hostStore = useHostStore()
 const userStore = useUserStore()
 
-const levels = [50, 25, 12.5, 6.25, 6.25]
+const incomes = computed(() => Object.values(hostStore.incomes))
 
 onMounted(async () => {
-
+  hostStore.loadDacsIncome(config.coreHost)
 })
 
 const withdrawAll = async () => {
   loading.value = true
-  for (const inc in incomes.value){
+    let inc = incomes.value[0]
     console.log(inc)
     
     try {
@@ -80,10 +84,6 @@ const withdrawAll = async () => {
       })
     }
 
-
-
-
-  }
 
    Notify.create({
       message: 'Токены получены',

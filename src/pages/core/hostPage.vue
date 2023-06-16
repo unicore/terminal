@@ -11,10 +11,10 @@ div(v-if="currentHost").q-pa-md
             div.text-h5 {{currentHost.title}}
             div.text-h6 DAO {{currentHost.username.toUpperCase()}}
             div {{currentHost.purpose}}
-          
-          // div(v-if="!showBalances" style="padding-top: 50px;")
-          //   div
-          //     history
+        
+        // div(v-if="!showBalances" style="padding-top: 50px;")
+        //   div
+        //     history
 
           img(:src="currentHost?.meta.host_image")
       
@@ -30,37 +30,47 @@ div(v-if="currentHost").q-pa-md
           //
           q-linear-progress( size="40px" v-if="currentHost.currentPool.color=='black'" :value="progress / 100" color="black" track-color="white" style="border: 1px solid teal;" rounded).full-width
             div.absolute-full.flex.flex-center
-              q-badge(color="primary" text-color="white" :label="'распродан на ' + (progress) + '%'")
+              q-badge(color="primary" text-color="white" :label="'заполнен взносами на ' + (progress) + '%'")
           q-linear-progress(size="40px" v-if="currentHost.currentPool.color=='white'"   :value="progress / 100" color="white" track-color="black" style="border: 1px solid teal;" rounded).full-width.bg-black
             div.absolute-full.flex.flex-center
-              q-badge(color="white" text-color="primary" :label="'распродан на ' + (progress) + '%'")
+              q-badge(color="white" text-color="primary" :label="'заполнен взносами на ' + (progress) + '%'")
 
           div(style="font-size: 10px;").full-width.text-center
             p(v-if="waitingMode") режим ожидания покупателей
-            p(v-else) завершение продаж {{untilRestart}}
+            p(v-else) завершение цикла обмена {{untilRestart}}
         div.row.justify-center.q-mt-lg
           div.col-md-6.col-xs-12
             q-card(flat )
               q-card-section
-                span шаг роста цены токена: 
+                span Доходность: 
                 q-badge.q-pa-sm +{{host.profitStep}}%
                 p.text-grey на каждом одноцветном раунде
               q-separator
               
               // q-card-section
-              //   span цена покупки: 
-              //   q-badge.q-pa-sm {{currentHost.currentRate?.quant_buy_rate}}
-              //   p.text-grey токена
+              //   span риск: 
+              //   q-badge.q-pa-sm -{{currentHost.spiral?.loss_percent / 10000}}%
+              //   p.text-grey на первом противоцветном раунде
               
+                
           div.col-md-6.col-xs-12
             q-card(flat )
               q-card-section
-                span осталось токенов: 
-                q-badge.q-pa-sm {{currentHost.currentPool.remain_quants / 1000000}}
-                p.text-grey до следующего раунда
+                span Благотворительность: 
+                q-badge.q-pa-sm -{{currentHost.spiral?.loss_percent / 10000}}%
+                p.text-grey на первом противоцветном раунде
               q-separator
+              // q-card-section
+              //   span осталось: 
+              //   q-badge.q-pa-sm {{currentHost.currentPool.remain_quants / 1000000}}
+              //   p.text-grey токенов
+              // q-separator
 
               // q-card-section
+                // span цена: 
+                //   q-badge.q-pa-sm {{currentHost.currentRate?.quant_buy_rate}}
+                //   p.text-grey токена
+                
               //   span цена продажи: 
               //   q-badge.q-pa-sm {{currentHost.currentRate?.quant_sell_rate}}
               //   p.text-grey токена

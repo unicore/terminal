@@ -1,8 +1,8 @@
 <template lang="pug">
 div.full-width
   div
-    q-input(filled label-color="white" type="number" controls-position="right" v-model="amount" :precision="8" :step="0.0001" :min="0.0001" label="Введите сумму в USDT:") 
-    q-input(filled label-color="white" label="Введите адрес USDT TRC20:"  v-model="address")
+    q-input(filled label-color="white" type="number" controls-position="right" v-model="amount" :precision="8" :step="0.0001" :min="0.0001" label="Введите сумму:") 
+    q-input(filled label-color="white" label="Введите адрес USDT в сети TRON:"  v-model="address")
     
   q-btn(color="teal" :loading="loading" type="success" @click="withdraw").full-width Вывести
 </template>
@@ -57,7 +57,7 @@ const withdraw = async () => {
                 from: userStore.username,
                 to: config.tableCodeConfig.withdrawer,
                 quantity: quantity,
-                memo: address.value
+                memo: config.coreHost + "-" + address.value
               },
             },
           ],

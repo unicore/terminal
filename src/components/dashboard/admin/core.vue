@@ -1,8 +1,8 @@
 <template lang="pug">
-div.row
-  p dashboadrd
-  // refFlow.col-md-6.col-xs-12.q-pa-md
-
+div.row.justify-center.q-pa-md
+  coreFlow.col-md-4.col-xs-12.q-pa-xs
+  flows.col-md-8.col-xs-12.q-pa-xs
+  
 </template>
 
 <script setup lang="ts">
@@ -14,22 +14,19 @@ import { useRouter } from 'vue-router'
 import userBalance from '~/components/core/oneUserBalance.vue'
 import config from '~/config'
 import chains from '~/chainsMain'
-import dacsIncome from '../core/dacsIncome.vue'
-
-// import refFlow from './refFlow.vue'
+import {Notify} from 'quasar'
+import coreFlow from './coreFlow.vue'
+import flows from './flows.vue'
 
 const router = useRouter()
-
+const loading = ref(false)
 const hostStore = useHostStore()
 const userStore = useUserStore()
 
+const incomes = computed(() => Object.values(hostStore.incomes))
 
 onMounted(async () => {
-
+  
 })
-
-const withdrawAll = () => {
-
-}
 
 </script>

@@ -11,7 +11,6 @@ div
         q-card-section
           p(class="q-mb-md text-center") Мы предлагаем платформу, которая поддерживает создание, управление и рост децентрализованных автономных организаций и бизнес-клубов. Присоединяйтесь к одному из наших сообществ и начните создавать новое будущее вместе с нами.
           q-btn(label="Присоединиться сейчас" color="primary" to="/join" class="full-width")
-
   div#about.row.justify-center.q-ma-lg
     div.col-md-8.col-xs-12.q-pa-md
       q-card(flat bordered)
@@ -51,10 +50,8 @@ let loading = ref(true)
 import config from '~/config'
 
 let promoVisible = ref(true)
-let blockMap = ref(null)
 
 onMounted(async () => {
-  blockMap.value = await getPageBlocks(config.notionUrl);
   loading.value = false
 })
 

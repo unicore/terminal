@@ -21,6 +21,8 @@ export const componentsMap = {
   listInfoProducts: () => import('../components/products/admin/listProducts.vue'),
   listInfoClients: () => import('../components/products/admin/listClients.vue'),
   adminDashboard: () => import('../components/dashboard/admin.vue'),
+  adminCore: () => import('../components/dashboard/admin/core.vue'),
+  adminPartners: () => import('../components/dashboard/admin/partners.vue'),
   // Добавьте остальные компоненты из componentsMap
 };
 
@@ -44,10 +46,6 @@ export const routes = routeConfig.reduce((result, route) => {
   }
   return result;
 }, []);
-
-console.log("ROUTES: ", routes);
-console.log("ROUTES: ", routes)
-
 
 
 // import Home from '../layouts/default.vue';
