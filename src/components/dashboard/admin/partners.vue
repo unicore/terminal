@@ -1,13 +1,14 @@
 <template lang="pug">
 div.row.justify-center.q-pa-md
   q-list( clickable).col-md-6.col-xs-12
-    q-card(bordered)
+    q-card(bordered flat)
       div.q-pa-md
-        p.text-grey Настройка уровней
+        p Настройка уровней
         q-input(type="number"  v-for="(level, index) of levels" v-bind:key = "index" v-model="levels[index]" :label="'Уровень ' + parseInt(index + 1) + ', %'")
           template(v-slot:append)
             q-btn(dense color="red" @click="del(index)") -
-        q-btn(flat color="green" @click="add").full-width +
+        div.full-width.text-center
+          q-btn( color="green" @click="add") +
         span сумма: {{summ}}% 
         
         span(v-if="diff > 0").q-pl-md распределить: {{diff}}%
@@ -54,7 +55,7 @@ watch(host, (newValue) => {
   levels.value = host.value.levels.map(el => el / 10000)
 })
 onMounted(async () => {
-  hostStore.loadHosts()
+  hostStore.loadHost(config.coreHost)
 })
 
 function removeElementAtIndex(arr, index) {
@@ -120,7 +121,7 @@ const setLevels = async () => {
 
       loading.value = false
 
-      hostStore.loadHosts()
+      hostStore.loadHost(config.coreHost)
      
     } catch (e: any) {
       loading.value = false

@@ -276,7 +276,7 @@ const refreshbal = async () => {
 
 
 onMounted(async () => {
-  await hostStore.loadHosts()
+  await hostStore.loadHost(props.balance.host)
 
   if (props.balance.pool_num != host.value.current_pool_num && host.value.current_pool_num > 2) {
     

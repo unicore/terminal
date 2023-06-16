@@ -24,7 +24,7 @@ public:
     static void add_balance(eosio::name payer, eosio::asset quantity, eosio::name contract);
     static void sub_balance(eosio::name username, eosio::asset quantity, eosio::name contract);
 
-    [[eosio::action]] void createprod(name host, uint64_t referral_percent, uint64_t core_cashback_percent, std::string title, std::string description, std::string encrypted_data, eosio::name token_contract, asset price);
+    [[eosio::action]] void createprod(name host, uint64_t referral_percent, uint64_t core_cashback_percent, std::string title, std::string description, std::string encrypted_data, eosio::name token_contract, asset price, std::string meta);
     [[eosio::action]] void editprod(eosio::name host, uint64_t referral_percent, uint64_t core_cashback_percent, uint64_t product_id, std::string title, std::string description, std::string encrypted_data, asset price);
     [[eosio::action]] void derivesecret(eosio::name host, uint64_t user_product_id, std::string encrypted_data);
 

@@ -438,7 +438,7 @@ const issueKey = async (props) => {
 const init = async () => {
   productStore.loadUbalance(config.coreHost as string)
 
-  hostStore.loadHosts()
+  hostStore.loadHost(config.coreHost as string)
   hostStore.loadAllBalances(config.coreHost as string)
   hostStore.loadAllUserProducts(config.coreHost as string)
   hostStore.loadProducts(config.coreHost as string)

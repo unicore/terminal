@@ -45,7 +45,7 @@
 
 
 
-[[eosio::action]] void secret::createprod(name host, uint64_t referral_percent, uint64_t core_cashback_percent, std::string title, std::string description, std::string encrypted_data, eosio::name token_contract, asset price) {
+[[eosio::action]] void secret::createprod(name host, uint64_t referral_percent, uint64_t core_cashback_percent, std::string title, std::string description, std::string encrypted_data, eosio::name token_contract, asset price, std::string meta) {
 
   require_auth(host);
 
@@ -65,7 +65,7 @@
     p.total = price  + price * referral_percent / HUNDR_PERCENT + price * core_cashback_percent / HUNDR_PERCENT;
     p.total_solded_amount = asset(0, price.symbol);
     p.total_solded_count = 0;
-
+    p.meta = meta;
 
     p.total_host_amount = asset(0, price.symbol);
     p.total_refs_amount = asset(0, price.symbol);
@@ -171,7 +171,7 @@
   action(
         permission_level{ _me, "active"_n },
         product -> token_contract, "transfer"_n,
-        std::make_tuple( _me, _unicore, core_amount, std::string("800-" + (name{host}.to_string()))) 
+        std::make_tuple( _me, _unicore, core_amount, std::string("100-" + (name{host}.to_string()) + "-" + (name{host}.to_string()))) 
     ).send();
 
 

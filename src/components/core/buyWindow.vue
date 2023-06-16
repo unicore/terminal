@@ -32,7 +32,7 @@ q-btn(color="teal" size="lg" @click="dialog=true") Внести {{host.symbol}}
             q-btn(size="xs" flat @click="setMax") max: {{remain}}
         // q-card-section
         //   q-input(outlined v-model="message"  type="textarea" rows="1" label="Оставьте сообщение")
-            
+
           // textarea(rows="5" v-model="message" )
 
         q-card-section(align="right")
@@ -76,7 +76,7 @@ const setMin = () => {
 }
 
 onMounted(async () => {
-  // await hostStore.loadHosts()
+  // await hostStore.loadHost(props.hostname)
   hostStore.getCurrentHost(props.hostname)
   quantAmount.value = 1
 })
@@ -162,7 +162,7 @@ const buy = async () => {
           expireSeconds: 30,
         }
       )
-      hostStore.loadHosts(userStore.username, props.hostname)
+      hostStore.loadHost(props.hostname)
       hostStore.loadBalances(userStore.username, props.hostname)
       hostStore.loadHistory(props.hostname)
 

@@ -28,21 +28,19 @@ div
 
         div.col-md-4.col-xs-12
           div.header
-            p 3. Купите NFT-билет
+            p 3. Купите продукт
           q-card(v-if="product" dark)
+            q-input(filled label-color="white" type="area"  dark readonly v-model="product.title")
             
-            div.q-pa-md
-              p(style="font-size: 18px;") {{product.title}}
-              p {{product.description}}
-              q-badge() {{product.total}}
-              
-            q-card-actions.q-mt-lg
-              hr
-              p(v-if="!amountIsEnought").full-width.text-center недостаточный баланс
-              q-btn(flat :disable="!amountIsEnought" @click="buyProduct").full-width
-                i.fa-solid.fa-cart-shopping
-                span.q-ml-md купить
-
+    
+            // p(v-if="!amountIsEnought" style="font-size: 10px;").text-red.full-width.text-center 
+            q-btn(flat :disable="!amountIsEnought" @click="buyProduct").full-width
+              div(v-if="!amountIsEnought")
+                i(color="red").fa-solid.fa-cart-shopping
+                span.q-ml-md.text-red недостаточный баланс
+              div(v-else)
+                i(color="teal").fa-solid.fa-cart-shopping
+                span.q-ml-md купить за {{product.total}}
 
       div(v-else).row.justify-center
         div.col-md-6.col-xs-12.q-pa-md
@@ -178,7 +176,7 @@ async function refresh(){
 
 async function load() {
   loading.value = true
-  await hostStore.loadHosts()
+  await hostStore.loadHost(hostname.value)
   await hostStore.loadFlows(hostname.value)
 
   if (userStore.hasAuth)

@@ -1,10 +1,12 @@
 <template lang="pug">
 
-q-card(dark).bg-secondary
+q-card(dark @click="moreAboutProduct").bg-secondary.nft-card
   q-badge(floating size="lg") {{product.total}}
-  
   div.q-pa-md
-    p(style="font-size: 18px;") {{product.title}}
+    p(style="font-size: 28px;") {{product.title}}
+  div.full-width.text-center
+    img(v-if="image" :src="image" style="max-width: 200px !important; margin: auto;")
+  div.q-pa-md
     p {{product.description}}
 
   q-card-actions.q-mt-lg
@@ -54,6 +56,14 @@ const props = defineProps({
       required: true,
     }
   })
+
+const image = computed(() => {
+  try {
+    return JSON.parse(props.product.meta).image
+  } catch(e){
+    return false
+  }
+})
 
 const moreAboutProduct = async() => {
   router.push({name: "market", params: {hostname: props.product.host, id: props.product.id}})
@@ -138,3 +148,18 @@ onMounted(async () => {
 
 
 </script>
+
+
+<style scoped lang="scss">
+ 
+  .nft-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+  }
+</style>

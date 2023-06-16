@@ -1,7 +1,8 @@
 <template lang="pug">
 div
   q-list( clickable)
-    q-card(bordered)
+    q-card(bordered flat)
+      q-btn(:disable="incomes.length == 0" color="secondary" @click="withdrawAll" :loading="loading").full-width получить
       div.q-pa-md
         p(v-if="incomes.length == 0").text-grey Бизнес-доход отсутствует
         p(v-if="incomes.length > 0").text-grey Бизнес-доход:
@@ -10,7 +11,7 @@ div
             p {{inc.amount}} | {{inc.contract}}
             p {{inc.memo}}
             hr
-      q-btn(:disable="incomes.length == 0" color="secondary" @click="withdrawAll" :loading="loading").full-width получить
+      
       
 </template>
 

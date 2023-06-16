@@ -1,8 +1,9 @@
 <template lang="pug">
-div(v-if="currentHost").q-pa-md
-  div(v-if= "loading").text-center.full-width
+div
+  div(v-if= "loading").text-center.full-width.q-mt-lg
     loader
-  div(v-else)
+    
+  div(v-if="currentHost && !loading").q-pa-md
     div(v-if="!showBalances").row.justify-center
       div.col-md-4.col-xs-12
         q-card().nft-card.bg-secondary.text-white.q-mb-lg
@@ -43,7 +44,7 @@ div(v-if="currentHost").q-pa-md
             q-card(flat )
               q-card-section
                 span Доходность: 
-                q-badge.q-pa-sm +{{host.profitStep}}%
+                q-badge.q-pa-sm +{{host?.profitStep}}%
                 p.text-grey на каждом одноцветном раунде
               q-separator
               
@@ -95,7 +96,7 @@ div(v-if="currentHost").q-pa-md
 
 <script setup lang="ts">//
 import { useHostStore } from '~/stores/host'
-import { watchEffect, ref, onMounted, watch, computed } from 'vue'
+import { watchEffect, ref, onMounted, watch, computed, onUnmounted} from 'vue'
 import { useRouter } from 'vue-router'
 import nftMarketCard from '~/components/core/nftMarketCard.vue'
 import buyWindow from '~/components/core/buyWindow.vue'
@@ -138,13 +139,26 @@ let showBalances = computed(() => {
   return router.currentRoute.value.name == 'nft-balances'
 })
 let loading = ref(true)
+const intervalId = ref(null)
 
 onMounted(async () => {
-  await hostStore.loadHosts()
-  await hostStore.loadBalances(userStore.username, hostname.value)
+  hostStore.loadHost(hostname.value)
+  hostStore.loadBalances(userStore.username, hostname.value)
   host.value = hostStore.getCurrentHost(hostname.value)
-  loading.value = false
+
+  intervalId.value = setInterval(() => {
+      hostStore.loadHost(hostname.value)
+  }, 10000)
+
 })
+
+
+onUnmounted(() => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+  }
+});
+
 
 let currentHost = computed(() => {
   return hostStore.getCurrentHost(hostname.value)
@@ -153,8 +167,10 @@ let currentHost = computed(() => {
 
 
 watch(currentHost, (newVal) => {
-  if (newVal)
+  if (newVal){
     progress.value = newVal.currentPool.filled_percent / 10000 //
+    loading.value = false
+  }
 })
 
 let untilRestart = computed( () => {

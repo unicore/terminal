@@ -3,7 +3,7 @@ q-card(dark v-if="flow")
   div.q-pa-md
     
     // p NFT-билет на поток # {{flow.id}}
-    p welcome {{welcome}}
+    p {{welcome}}
     // p user products {{hostStore.userProducts}}
   
   // p {{flow.encrypted_data}}
@@ -168,7 +168,7 @@ onUnmounted(async() => {
 })
 
 onMounted(async () => {
-  hostStore.loadHosts()
+  hostStore.loadHost(config.coreHost as string)
   if (myProduct.value.encrypted_data != ""){
     decrypt()
   } else {

@@ -3,52 +3,53 @@ div.q-pt-lg
   div(v-if="loading").q-pa-md
     loader
   div(v-else)
-    .q-pa-md
-      div(v-if="!showMore")
-        q-input(
-          v-model.trim="query"
-          filled
-          label-color="teal"
-          label="введите имя аккаунта / id транзакции / номер блока"
-          color="teal"
-          @keypress.enter="preSearch()"
-        ).q-pb-md
-          template(v-slot:prepend)
-            q-icon(name="search")
-        // h6 Обозреватель блоков {{rootChain.name}}
-        .row.q-col-gutter-sm
-          .col-md-3.col-xs-6(
-            v-for="status in chainMainStatus",
-            :key="status.title"
-          )
-            q-card(flat bordered).full-width
-              q-card-section
-                .text-h6 {{status.value}}
-                .text-subtitle2 {{status.title}}
-        // Search
-      div(v-else)
-      .bg-gre
-        div
-          AccountResult(
-            v-if="mode === 'account'"
-            :account-data="accountData"
-            :account-creator="accountCreator"
-            :key="`search-account-${n}`"
-          )
-          TxResult(
-            v-else-if="mode === 'tx'"
-            :data="txData"
-            :key="`search-tx-${n}`"
-          )
-          BlockResult(
-            v-else-if="mode === 'block'"
-            :data="blockData"
-            :key="`search-block-${n}`"
-          )
-          BlockchainActions(
-            v-else
-            :key="`blockchain-actions-${n}`"
-          )
+    div(v-if="dataLoaded")
+      .q-pa-md
+        div(v-if="!showMore")
+          q-input(
+            v-model.trim="query"
+            filled
+            label-color="teal"
+            label="введите имя аккаунта / id транзакции / номер блока"
+            color="teal"
+            @keypress.enter="preSearch()"
+          ).q-pb-md
+            template(v-slot:prepend)
+              q-icon(name="search")
+          // h6 Обозреватель блоков {{rootChain.name}}
+          .row.q-col-gutter-sm
+            .col-md-3.col-xs-6(
+              v-for="status in chainMainStatus",
+              :key="status.title"
+            )
+              q-card(flat bordered).full-width
+                q-card-section
+                  .text-h6 {{status.value}}
+                  .text-subtitle2 {{status.title}}
+          // Search
+        div(v-else)
+        .bg-gre
+          div
+            AccountResult(
+              v-if="mode === 'account'"
+              :account-data="accountData"
+              :account-creator="accountCreator"
+              :key="`search-account-${n}`"
+            )
+            TxResult(
+              v-else-if="mode === 'tx'"
+              :data="txData"
+              :key="`search-tx-${n}`"
+            )
+            BlockResult(
+              v-else-if="mode === 'block'"
+              :data="blockData"
+              :key="`search-block-${n}`"
+            )
+            BlockchainActions(
+              v-else
+              :key="`blockchain-actions-${n}`"
+            )
 </template>
 
 <script setup lang="ts">
@@ -91,6 +92,8 @@ const ramBought = computed(() => Number(eosStatus.value.total_ram_bytes_reserved
 const ramFree = computed(() => chainRamSize.value - ramBought.value);
 const showMore = computed(() => route.params.search)
 
+const dataLoaded = computed(() => Object.values(eosStatus.value).length > 0)
+
 const chainMainStatus = computed(() => [
   { title: 'Утвержденный блок', value: bcStore.getInfo.head_block_num },
   { title: 'Производитель', value: bcStore.getInfo.head_block_producer },
@@ -104,7 +107,7 @@ const chainMainStatus = computed(() => [
 
 
 onMounted(async () => {
-  await loadMemCpuInfo()
+  loadMemCpuInfo()
 
   if (route.params.search)
     search(route.params.search, route.params.force)

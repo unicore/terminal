@@ -1,31 +1,33 @@
 <template lang="pug">
-q-card(bordered).q-pa-md
-  
-  div.flex.justify-between.q-pa-xs
-    span Ваша прибыль, {{dacs_percent}} %
-    
-    span {{100 - dacs_percent}}%, Прибыль партнёров
-
-  q-slider(track-size="10px" :max="max_for_dacs_percent" color="teal" v-model="dacs_percent" ).q-pa-xs
+div
   q-btn(color="secondary" @click="save").full-width сохранить
-  div
-    q-table(
-      square
+  q-card(bordered flat).q-pa-md
+    
+    
+    div.flex.justify-between.q-pa-xs
+      span Ваша прибыль, {{dacs_percent}} %
       
-      flat
-      :rows="tableData"
-      :columns="columns"
-      dense
-      row-key="pool_id"
-      :pagination={rowsPerPage: 0}
-      :no-data-label="'нет данных'"
-    ).text-center.full-width     
-     
-      template(v-slot:body-cell-pool_id="props")
-        q-td(:props="props")
-          span {{props.row.pool_id + 1}}
-            
-  
+      span {{100 - dacs_percent}}%, Прибыль партнёров
+
+    q-slider(track-size="10px" :max="max_for_dacs_percent" color="teal" v-model="dacs_percent" ).q-pa-xs
+    div
+      q-table(
+        square
+        
+        flat
+        :rows="tableData"
+        :columns="columns"
+        dense
+        row-key="pool_id"
+        :pagination={rowsPerPage: 0}
+        :no-data-label="'нет данных'"
+      ).text-center.full-width     
+       
+        template(v-slot:body-cell-pool_id="props")
+          q-td(:props="props")
+            span {{props.row.pool_id + 1}}
+              
+    
   
 </template>
 
@@ -226,7 +228,7 @@ const max_for_dacs_percent = computed(() => {
 })
 
 onMounted(async () => {
-  await hostStore.loadHosts()
+  await hostStore.loadHost(config.coreHost)
   await hostStore.loadGpercents()
   await hostStore.loadRates(config.coreHost)
 })

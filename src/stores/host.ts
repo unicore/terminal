@@ -251,6 +251,82 @@ export const useHostStore = defineStore('host', {
       }
     },
 
+    async loadHost(hostname) {
+      
+      const rootChain = await chains.getRootChain()
+      
+      try {
+
+        let [host] = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          config.tableCodeConfig.core,
+          'hosts',
+          hostname,
+          hostname,
+          null,
+          1
+        )
+
+        if (host) {
+            try{
+
+              host.meta = JSON.parse(host.meta)
+
+            } catch(e){}
+
+            let [cPool] = await lazyFetch(
+              rootChain.readApi, 
+              config.tableCodeConfig.core,
+               host.username,
+              'pool',
+              host.current_pool_id,
+              host.current_pool_id,
+              null,
+              1
+            )
+
+            host.currentPool = cPool
+
+
+            let [spiral] = await lazyFetch(
+              rootChain.readApi, 
+              config.tableCodeConfig.core,
+               host.username,
+              'spiral',
+              0,
+              0,
+              null,
+              1
+            )
+            
+            host.spiral = spiral
+            host.profitStep = parseFloat(spiral.overlap / 100 - 100).toFixed(0)
+ 
+            let [currentRate] = await lazyFetch(
+              rootChain.readApi, 
+              config.tableCodeConfig.core,
+               host.username,
+              'rate',
+              host.current_pool_num - 1,
+              host.current_pool_num - 1,
+              null,
+              1
+            )
+
+            host.currentRate = currentRate
+          
+          
+          this.hosts = [host].reduce((a, n) => ({ ...a, [n.username]: n }), {})
+          
+        }
+
+        
+      } catch (e) {
+        console.error("error: ", e)
+      }
+    },
+
 
     async loadRates(hostname) {
       const rootChain = await chains.getRootChain()

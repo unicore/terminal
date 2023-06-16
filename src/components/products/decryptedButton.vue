@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  q-btn(color="green" v-if="!error" @click="move") войти 
+  q-btn(color="secondary" outline v-if="!error" @click="move") войти 
   p(v-else) не удалось расшифровать ссылку
 </template>
 

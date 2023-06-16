@@ -2,9 +2,11 @@
 div.q-pa-md
   
   div(v-if="userProducts").row
-    div(v-for="product of userProducts" v-bind:key="product.id").col-md-4.col-xs-12
+    div(v-if="userProducts.length > 0" v-for="product of userProducts" v-bind:key="product.id").col-md-4.col-xs-12
       productCard(:product="product" ).q-pa-xs
-    
+    div(v-else)
+      p У вас нет продуктов для просмотра
+      
 </template>
 
 <script setup lang="ts">

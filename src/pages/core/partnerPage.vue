@@ -48,7 +48,7 @@ function getPartners(username, depth = 0) {
 
 onMounted(async () => {
   try {
-    tree.value = await hostStore.loadTreeOfPartners();
+    tree.value = hostStore.loadTreeOfPartners();
     partnersTree.value = getPartners(userStore.username);
   } finally {
     loading.value = false;

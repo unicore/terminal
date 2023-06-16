@@ -1,32 +1,35 @@
 <template lang="pug">
 div
-  
-  q-card(bordered flat).bg-grey-2.q-pa-md
-    
-    q-input( label = "название продукта" v-model="editProduct.title")
-    q-input( label = "описание продукта" type="textarea" v-model="editProduct.description")
-    q-input( label = "цена" type="number" v-model="editProduct.price")
-    q-input( label = "кэшбэк партнёрам, %" type="number" v-model="editProduct.referral_percent")
-    q-input( label = "кэшбэк в ядро, %" type="number" v-model="editProduct.core_cashback_percent")
-    p.q-pa-md финальная цена: {{total}}
-    
-    q-btn( color="primary" @click="editProd") сохранить
-    
-  div(style="margin-top: 100px;").q-mt-lg
-    div.full-width.text-center
-      h1 Потоки
-      q-btn(@click="addFlow" color="primary") + добавить поток 
-    div.row.q-mt-lg.q-pa-md.justify-center
-      div.col-md-8
-        q-card(dark v-for="(flow, index) of flows" v-bind:key="flow.id").q-pa-md.q-ma-md
-          p Поток № {{index + 1}}
-          
-          p Начало продаж: {{flow.start_at}} UTC
-          p Завершение продаж: {{flow.closed_at}} UTC
-          decryptedButton(:data="flow.encrypted_data")
-          
+  div.row
+    div.col-6
+      q-card(bordered flat).bg-grey-2.q-pa-md
+        h3 Карточка продукта
+        q-input(dense label = "название продукта" v-model="editProduct.title")
+        q-input(dense label = "описание продукта" type="textarea" v-model="editProduct.description")
+        q-input(dense label = "цена" type="number" v-model="editProduct.price")
+        q-input(dense label = "кэшбэк партнёрам, %" type="number" v-model="editProduct.referral_percent")
+        q-input(dense label = "кэшбэк в ядро, %" type="number" v-model="editProduct.core_cashback_percent")
+        q-input(dense label="Ссылка на обложку"  type="text" v-model="editProduct.meta.image")
+        p.q-pa-md финальная цена: {{total}}
+        
+        q-btn( color="secondary" @click="editProd") сохранить
+    div.col-6     
+      div()
+        div.full-width.text-center
+          h1 Потоки
+          q-btn(@click="addFlow" color="secondary") + добавить поток 
+        div.row.q-mt-lg.q-pa-md.justify-center
+          div.col-md-12
+            q-card(bordered v-for="(flow, index) of flows" v-bind:key="flow.id").q-pa-md.q-ma-md
+              div
+                p Поток № {{index + 1}}
+                
+                p Начало продаж: {{flow.start_at}} UTC
+                p Завершение продаж: {{flow.closed_at}} UTC
+              decryptedButton(:data="flow.encrypted_data").q-mt-md
+              
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")  
-    q-card(style="min-width: 350px; max-width: 100%;").bg-primary
+    q-card(style="min-width: 350px; max-width: 100%;")
       div
         q-bar
           span Добавить поток
@@ -34,21 +37,24 @@ div
           q-btn(dense flat icon="close" v-close-popup)
             q-tooltip Close
         div.text-center
-          q-input(label-color="white" filled v-model="start_at" label="Начало продаж" v-if="startPickerState === 'input' && endPickerState === 'input'")
+          q-input(filled v-model="start_at" label="Начало продаж" v-if="startPickerState === 'input' && endPickerState === 'input'")
             template(v-slot:append)
-              q-icon(name="event" @click="startPickerState = 'date'")
-          q-date(dark v-model="startDate" mask="YYYY-MM-DD" v-if="startPickerState === 'date'" @update:model-value="startPickerState = 'time'").bg-primary
-          q-time( v-model="startTime" format24h v-if="startPickerState === 'time'" @update:model-value="updateStartAt").bg-primary
+              q-icon(name="event" @click="startPickerState = 'date'" color="secondary")
+          q-date(dark v-model="startDate" mask="YYYY-MM-DD" v-if="startPickerState === 'date'" @update:model-value="startPickerState = 'time'")
+          q-time( v-model="startTime" format24h v-if="startPickerState === 'time'" @update:model-value="updateStartAt")
 
-          q-input(label-color="white" filled v-model="closed_at" label="Завершение продаж и вход в чат" v-if="startPickerState === 'input' && endPickerState === 'input'")
+          q-input(filled v-model="closed_at" label="Завершение продаж и вход в чат" v-if="startPickerState === 'input' && endPickerState === 'input'")
             template(v-slot:append)
-              q-icon(name="event" @click="endPickerState = 'date'")
-          q-date( v-model="endDate" mask="YYYY-MM-DD" v-if="endPickerState === 'date'" @update:model-value="endPickerState = 'time'").bg-primary
-          q-time( v-model="endTime" format24h v-if="endPickerState === 'time'" @update:model-value="updateClosedAt").bg-primary
+              q-icon(name="event" @click="endPickerState = 'date'" color="secondary")
+          q-date( v-model="endDate" mask="YYYY-MM-DD" v-if="endPickerState === 'date'" @update:model-value="endPickerState = 'time'")
+          q-time( v-model="endTime" format24h v-if="endPickerState === 'time'" @update:model-value="updateClosedAt")
 
-          q-input(filled label-color="white" label="Ссылка на чат" v-model="link" v-if="startPickerState === 'input' && endPickerState === 'input'")
-          q-input(filled label-color="white" type="textarea" label="Приветственное сообщение" v-model="welcome" v-if="startPickerState === 'input' && endPickerState === 'input'")
-        q-btn(@click="createFlow").full-width создать поток
+          q-input(filled  label="Ссылка на чат" v-model="link" v-if="startPickerState === 'input' && endPickerState === 'input'")
+          q-input(filled type="textarea" label="Приветственное сообщение" v-model="welcome" v-if="startPickerState === 'input' && endPickerState === 'input'")
+        
+        div.row
+          q-btn(v-close-popup flat).col-6 отмена
+          q-btn(@click="createFlow" color="secondary").col-6 создать поток
 
     
 </template>
@@ -96,6 +102,12 @@ const endPickerState = ref('input');
 const start_at = computed(() => `${startDate.value}T${startTime.value}`)
 const closed_at = computed(() => `${endDate.value}T${endTime.value}`)
 
+watch(dialog, (newValue)=> {
+  if (newValue == false){
+    startPickerState.value = 'input';
+    endPickerState.value = 'input'
+  }
+})
 
 const updateStartAt = () => {
   start_at.value = `${startDate.value}T${startTime.value}`;
@@ -176,6 +188,7 @@ const editProd = async () => {
           public_key: editProduct.value.public_key,
           token_contract: host.value.root_token_contract,
           price: parseFloat(editProduct.value.price).toFixed(host.value.precision) + " " + host.value.symbol,
+          meta: JSON.stringify(editProduct.meta),
           duration: 0
         }
 
@@ -311,9 +324,14 @@ const createFlow = async () => {
 }
 
 onMounted(async () => {
-  hostStore.loadHosts()
+  hostStore.loadHost(props.product.host)
   
   editProduct.value = props.product
+  
+  try {
+    editProduct.value.meta = JSON.parse(editProduct.value.meta)  
+  } catch(e){}
+  
   editProduct.value.price = parseFloat(editProduct.value.price).toFixed(4)
   editProduct.value.referral_percent = parseFloat(editProduct.value.referral_percent) / 10000
   editProduct.value.core_cashback_percent = parseFloat(editProduct.value.core_cashback_percent) / 10000

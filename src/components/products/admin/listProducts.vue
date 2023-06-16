@@ -1,12 +1,26 @@
 <template lang="pug">
 div.q-pa-md
   div(v-if="!isFullCard")
-    div
-      q-btn(color="green" @click="addProduct") + добавить продукт
-    
-    div( v-for="product of products" v-bind:key="product.id")
-      shortProductCard(:product="product").q-pa-xs
+    q-table(
+      square
+      
+      flat
+      :rows="products"
+      :columns="columns"
+      row-key="pool_id"
+      :pagination={rowsPerPage: 0}
+      :no-data-label="'нет данных'"
 
+    ).text-center.full-width     
+      
+      template(v-slot:top)
+        q-btn(color="secondary" @click="addProduct") + добавить продукт
+          
+      template(v-slot:body-cell-actions="props")
+        q-td(:props="props")
+          q-btn(outline dense color="secondary" @click="router.push({name: 'admin-products', params: {id: props.row.id}})").q-ma-xs подробнее
+               
+    
   div(v-if="isFullCard && currentProduct")
 
     adminProductCard(:product="currentProduct")
@@ -14,23 +28,27 @@ div.q-pa-md
 
 
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")  
-    q-card(style="min-width: 350px; max-width: 100%;").bg-primary.text-white
+    q-card(style="min-width: 350px; max-width: 100%;")
       div
         q-bar
-          span Добавить продукт
+          span добавить продукт
           q-space
           q-btn(dense flat icon="close" v-close-popup)
             q-tooltip Close
 
         div
-          q-input(filled label-color="white" label="Название" v-model="newProduct.title")
-          q-input(filled label-color="white" type="textarea" label="Описание" v-model="newProduct.description")
-          q-input(filled label-color="white" type="number" step="1" max="100" label="Кэбэк партнёрам, %" v-model="newProduct.referral_percent")
-          q-input(filled label-color="white" type="number" step="1" max="100" label="Кэшбэк в ядро, %" v-model="newProduct.core_cashback_percent")
+          q-input(filled  label="Название" v-model="newProduct.title")
+          q-input(filled type="textarea" label="Описание" v-model="newProduct.description")
+          q-input(filled type="text" label="Ссылка на обложку" v-model="newProduct.meta.image")
           
-          q-input(filled label-color="white" type="number" label="Себестоимость" v-model="newProduct.price")
-          p.q-pa-md цена: {{total}}
-          q-btn(@click="createProduct").full-width создать продукт
+          q-input(filled  type="number" step="1" max="100" label="Кэбэк партнёрам, %" v-model="newProduct.referral_percent")
+          q-input(filled  type="number" step="1" max="100" label="Кэшбэк в ядро, %" v-model="newProduct.core_cashback_percent")
+          
+          q-input(filled  type="number" label="Себестоимость" v-model="newProduct.price")
+          span.q-pa-md Цена для клиента: {{total}}
+          div.full-width.row.q-mt-lg
+            q-btn(v-close-popup color="secondary" flat).col-6 отмена
+            q-btn(@click="createProduct" color="secondary").col-6 создать продукт
 
 
 </template>
@@ -59,6 +77,9 @@ const newProduct = ref({
   encrypted_data: "",
   public_key: "",
   price: 0,
+  meta: {
+    image: ""
+  }
 })
 
 const hostStore = useHostStore()
@@ -72,6 +93,11 @@ const isFullCard = computed(() => router.currentRoute.value.params.id)
 
 const currentProduct = computed(() => products.value.find(p => p.id == isFullCard.value))
 
+
+const columns = ref([
+      { name: 'title', label: 'Продукт', field: 'title', align: 'left' },
+      { name: 'actions', label: '', field: 'actions', align: 'right' },
+  ])
 
 const total = computed(() => {
   if(host.value) {
@@ -87,7 +113,7 @@ const host = computed(() => {
 })
 
 onMounted(async () => {
-  hostStore.loadHosts()
+  hostStore.loadHost(props.product.host)
   hostStore.loadProducts(config.coreHost)
   hostStore.loadFlows(config.coreHost)
 })
@@ -118,7 +144,8 @@ const createProduct = async () => {
           public_key: newProduct.value.public_key,
           token_contract: host.value.root_token_contract,
           price: parseFloat(newProduct.value.price).toFixed(host.value.precision) + " " + host.value.symbol,
-          duration: 0
+          duration: 0,
+          meta: JSON.stringify(newProduct.value.meta)
         }
 
     let actions = [
