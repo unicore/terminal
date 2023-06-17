@@ -197,20 +197,6 @@ const search = async (forcedValue?: string, forcedMode?: string) => {
   n.value++
 }
 
-// onMounted(async () => {
-//   await loadMemCpuInfo()
-//   on('explorer:search', search)
-//   loading.value = false
-// })
-
-// onBeforeUnmount(() => {
-//   off('explorer:search', search)
-// })
-
-
-// onUnmounted(() => {
-//   clearInterval(loadMemCpuTimer.value);
-// });
 
 async function loadMemCpuInfo() {
   const { rows: [data] } = await rootChain.readApi.getTableRows('eosio', 'eosio', 'global');

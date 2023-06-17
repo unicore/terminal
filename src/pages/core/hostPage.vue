@@ -2,7 +2,6 @@
 div
   div(v-if= "loading").text-center.full-width.q-mt-lg
     loader
-    
   div(v-if="currentHost && !loading").q-pa-md
     div(v-if="!showBalances").row.justify-center
       div.col-md-4.col-xs-12
@@ -37,14 +36,14 @@ div
               q-badge(color="white" text-color="primary" :label="'заполнен взносами на ' + (progress) + '%'")
 
           div(style="font-size: 10px;").full-width.text-center
-            p(v-if="waitingMode") режим ожидания покупателей
+            p(v-if="waitingMode") режим ожидания
             p(v-else) завершение цикла обмена {{untilRestart}}
         div.row.justify-center.q-mt-lg
           div.col-md-6.col-xs-12
             q-card(flat )
               q-card-section
                 span Доходность: 
-                q-badge.q-pa-sm +{{host?.profitStep}}%
+                q-badge.q-pa-sm +{{profitStep}}%
                 p.text-grey на каждом одноцветном раунде
               q-separator
               
@@ -120,14 +119,17 @@ const host = ref(null)
 // const showBalances = ref(false)
 let progress = ref(0);
 
+const profitStep = computed(() => {
+  return currentHost.value.profitStep
+})
 
 let currentTime = computed(() => {
   return bcStore.getInfo.head_block_time
 })
 
 let waitingMode = computed(() => {
-  if (host.value)
-    return host.value.currentPool.pool_num <= 2
+  if (currentHost.value)
+    return currentHost.value.currentPool.pool_num <= 2
   else return true
 })
 
@@ -144,8 +146,7 @@ const intervalId = ref(null)
 onMounted(async () => {
   hostStore.loadHost(hostname.value)
   hostStore.loadBalances(userStore.username, hostname.value)
-  host.value = hostStore.getCurrentHost(hostname.value)
-
+  
   intervalId.value = setInterval(() => {
       hostStore.loadHost(hostname.value)
   }, 10000)
@@ -174,7 +175,7 @@ watch(currentHost, (newVal) => {
 })
 
 let untilRestart = computed( () => {
-  if (host.value && currentTime) {
+  if (currentHost.value && currentTime) {
     var pool_expired_after_seconds = new Date(host.value.currentPool.pool_expired_at);
     var bcTime = new Date(currentTime.value)
     let expired_between = (pool_expired_after_seconds - bcTime) / 1000  

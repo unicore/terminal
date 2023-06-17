@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   div(v-if="!loading")
-    div(v-if="partnersTree.length > 0")
+    div(v-if="partnersTree && partnersTree.length > 0")
       h1.q-pl-md.q-mr-md Дерево партнеров
       q-list
         partnerItem(v-for="(partner, index) in partnersTree" :key="index" :partner="partner")
@@ -11,7 +11,7 @@ div
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useUserStore } from '~/stores/user'
 import { useHostStore } from '~/stores/host'
 import { useRouter } from 'vue-router';
@@ -23,7 +23,7 @@ const hostStore = useHostStore();
 const userStore = useUserStore();
 
 const loading = ref(true);
-let tree = ref([]);
+const tree = ref([]);
 
 const partnersTree = ref([]);
 
@@ -46,10 +46,13 @@ function getPartners(username, depth = 0) {
   return partners;
 }
 
+watch(tree, (newValue) => {
+  partnersTree.value = getPartners(userStore.username);
+})
+
 onMounted(async () => {
   try {
-    tree.value = hostStore.loadTreeOfPartners();
-    partnersTree.value = getPartners(userStore.username);
+    tree.value = await hostStore.loadTreeOfPartners();
   } finally {
     loading.value = false;
   }

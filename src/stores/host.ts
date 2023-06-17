@@ -119,12 +119,9 @@ export const useHostStore = defineStore('host', {
 
     },
     async loadBalances(username, hostname) {
-      console.log('on load balances0', username, hostname)
-
       const rootChain = await chains.getRootChain()
      
       try {
-        console.log('on load balances0')
         let balances = await lazyFetch(
           rootChain.readApi, 
           config.tableCodeConfig.core,
@@ -132,8 +129,6 @@ export const useHostStore = defineStore('host', {
           'balance',
         )
         
-        console.log('on load balances', balances)
-
         balances = balances.filter(b => b.owner == username)
         
         this.balances = balances.reduce((a, n) => ({ ...a, [n.id]: n }), {})
