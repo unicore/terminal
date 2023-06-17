@@ -176,7 +176,7 @@ watch(currentHost, (newVal) => {
 
 let untilRestart = computed( () => {
   if (currentHost.value && currentTime) {
-    var pool_expired_after_seconds = new Date(host.value.currentPool.pool_expired_at);
+    var pool_expired_after_seconds = new Date(currentHost.value.currentPool.pool_expired_at);
     var bcTime = new Date(currentTime.value)
     let expired_between = (pool_expired_after_seconds - bcTime) / 1000  
     let futureTime = moment().add(expired_between, 'seconds');
