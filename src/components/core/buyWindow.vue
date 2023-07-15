@@ -1,6 +1,6 @@
 <template lang="pug">
 
-q-btn(color="teal" size="lg" @click="dialog=true") Заложить {{host.symbol}}
+q-btn(color="teal" size="md" @click="dialog=true") Заложить {{host.symbol}}
   
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
     q-card(style="min-width: 350px; max-width: 450px;")

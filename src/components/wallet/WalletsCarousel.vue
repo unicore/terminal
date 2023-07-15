@@ -20,7 +20,7 @@
     <template v-else>
       <q-card
         bordered
-        style="border: 1px solid grey; height: 120px"
+        style="border: 1px solid grey; "
         v-for="symbol in walletStore.symbols"
         :key="symbol"
         class="shadow-1 rounded-borders q-mt-md"

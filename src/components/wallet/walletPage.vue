@@ -2,28 +2,37 @@
 div
   div.row.justify-center.q-pa-md
     div.col-md-4.col-sm-6.col-xs-12
-      div.full-width.text-center
+      div.row.justify-center
+        div.col-12
+          q-input(style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname")
+            template(v-slot:prepend)
+              q-btn(v-if="isEdit" @click="saveNickname" color="teal" flat  size="md")
+                i.fas.fa-check
+              
+              q-btn(v-if="!isEdit" @click="edit" color="teal" flat  size="md")
+                i.fas.fa-pen
+                
+            
+            template(v-slot:append)
+              
+              // q-btn(v-if="isEdit" @click="cancel" color="red" dense flat size="md").q-mr-xs
+              //   i.fas.fa-cancel
+              p(style="cursor: pointer;" @click="copy(userStore.username)").text-black.userheader @{{userStore.username}}
+              q-btn(icon="fa fa-copy" flat color="teal" size="sm" @click="copy(userStore.username)").q-ml-md
+              
         
-        p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
-          q-btn(icon="fa fa-copy" flat dense size="xs").q-ml-md
-        p.sign адрес кошелька
+          
+        
+            
+          // p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
+    
+        p.sign это адрес вашего кошелька
         
         
 
   div.row.justify-center.q-pa-md
     div.col-md-4.col-sm-6.col-xs-12
-      q-input( ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").full-width
-        template(v-slot:append)
-          
-          // q-btn(v-if="isEdit" @click="cancel" color="red" dense flat size="md").q-mr-xs
-          //   i.fas.fa-cancel
-
-          q-btn(v-if="isEdit" @click="saveNickname" color="teal" dense flat size="md")
-            i.fas.fa-check
-          
-          q-btn(v-if="!isEdit" @click="edit" color="teal" dense flat size="md")
-            i.fas.fa-pen
-
+      
       WalletsCarousel(:mini="false" :asCarousel="false").col-md-4.col-sm-6.col-xs-12
 </template>
 
@@ -127,7 +136,7 @@ const copy = async (address) => {
 
 <style>
   .userheader {
-    font-size: 24px;
+    font-size: 20px;
   }
   .sign {
     font-size: 10px;

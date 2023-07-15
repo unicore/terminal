@@ -4,8 +4,7 @@ div
     loader
   div(v-if="currentHost && !loading").q-pa-md
     div(v-if="!showBalances").row.justify-center
-      div.col-md-4.col-xs-12
-        // WalletsCarousel( :mini="false" )
+      div(style="font-size: 16px;").col-md-6.col-xs-12
         q-card().nft-card.bg-secondary.text-white.q-mb-lg
         
           q-card-section
@@ -14,9 +13,54 @@ div
             pre.q-mt-sm.purpose {{displayedPurpose}}
             
           q-btn(dense size="sm" @click="showMore = !showMore").full-width.text-center {{showMore ? 'Показать меньше' : 'Показать больше'}}
+        
+        div().full-width.q-pl-md.q-pr-md.q-pb-md.text-center
+
+          // span(style="font-size:24px;" v-if="currentHost.sale_is_enabled") Токенсейл {{currentHost.asset_on_sale_symbol}} 
+          // span(style="font-size: 24px;") М-стейкинг
+          // span пул 
+          
+          // q-badge(size="lg" outline v-if="currentHost.currentPool.color == 'white'" color="white").text-black.q-pa-sm №{{currentHost.current_pool_num}} белый
+          // q-badge(size="lg" v-if="currentHost.currentPool.color != 'white'" color="black").text-white.q-pa-sm №{{currentHost.current_pool_num}} чёрный
+                    
+      
+        div.full-width.bg-white.q-pl-md.q-pr-md
+          //
+          q-linear-progress( size="80px" v-if="currentHost.currentPool.color=='black'" :value="progress / 100" color="black" track-color="white" style="border: 1px solid grey;" rounded).full-width
+            div.absolute-full.flex.flex-center
+              
+              // q-badge(color="primary" text-color="white" :label="'заполнение ' + (progress) + '%'")
+              q-badge(style="font-size: 16px;" v-if="currentHost.currentPool.color != 'white'" color="black").text-white.q-pa-sm Чёрный пул №{{currentHost.current_pool_num}} ({{progress}}%)
+          
+
+          q-linear-progress(size="80px" v-if="currentHost.currentPool.color=='white'"   :value="progress / 100" color="white" track-color="black" style="border: 1px solid grey;" rounded).full-width.bg-black
+            div.absolute-full.flex.flex-center
+              q-badge(style="font-size: 16px;"  v-if="currentHost.currentPool.color == 'white'" color="white").text-black.q-pa-sm Белый пул №{{currentHost.current_pool_num}} ({{progress}}%)
+          
+              // q-badge(color="white" text-color="primary" :label="'заполнение ' + (progress) + '%'")
+
+          div(v-if="!currentHost.sale_is_enabled" style="font-size: 10px;").full-width.text-center.text-grey
+            
+            p(v-if="!waitingMode") завершение цикла {{untilRestart}}
+            p(v-if="waitingMode") режим ожидания
+
+
+          div(v-if="currentHost.sale_is_enabled" style="font-size: 10px;").full-width.text-center.text-grey
+            
+            p до заполнения: {{currentHost.currentPool.remain}}
+        
+        div(style="padding-top: 30px; margin-bottom: 50px;").row.justify-center
+
+          div.col-6.q-pa-xs
+            buyWindow(:hostname="currentHost.username").full-width
+          div.col-6.q-pa-xs
+            q-btn(color="teal" flat size="md"  @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})").full-width Мои балансы
+        
+      div.col-md-6.col-xs-12
+        // WalletsCarousel( :mini="false" )
            
 
-        div(style="margin-bottom: 50px;").row.justify-center.q-mt-lg
+        div().row.justify-center.q-pa-md
           div.col-md-12.col-xs-12
             q-card(flat )
               div.q-pa-sm
@@ -67,52 +111,8 @@ div
 
           img(:src="currentHost?.meta.host_image")
       
-      div(style="font-size: 16px;").col-md-8.col-xs-12
-        div().full-width.q-pl-md.q-pr-md.q-pb-md.text-center
-
-          // span(style="font-size:24px;" v-if="currentHost.sale_is_enabled") Токенсейл {{currentHost.asset_on_sale_symbol}} 
-          // span(style="font-size: 24px;") М-стейкинг
-          // span пул 
-          
-          // q-badge(size="lg" outline v-if="currentHost.currentPool.color == 'white'" color="white").text-black.q-pa-sm №{{currentHost.current_pool_num}} белый
-          // q-badge(size="lg" v-if="currentHost.currentPool.color != 'white'" color="black").text-white.q-pa-sm №{{currentHost.current_pool_num}} чёрный
-                    
       
-        div.full-width.bg-white.q-pl-md.q-pr-md
-          //
-          q-linear-progress( size="80px" v-if="currentHost.currentPool.color=='black'" :value="progress / 100" color="black" track-color="white" style="border: 1px solid grey;" rounded).full-width
-            div.absolute-full.flex.flex-center
-              
-              // q-badge(color="primary" text-color="white" :label="'заполнение ' + (progress) + '%'")
-              q-badge(style="font-size: 16px;" v-if="currentHost.currentPool.color != 'white'" color="black").text-white.q-pa-sm Чёрный пул №{{currentHost.current_pool_num}} ({{progress}}%)
-          
-
-          q-linear-progress(size="80px" v-if="currentHost.currentPool.color=='white'"   :value="progress / 100" color="white" track-color="black" style="border: 1px solid grey;" rounded).full-width.bg-black
-            div.absolute-full.flex.flex-center
-              q-badge(style="font-size: 16px;"  v-if="currentHost.currentPool.color == 'white'" color="white").text-black.q-pa-sm Белый пул №{{currentHost.current_pool_num}} ({{progress}}%)
-          
-              // q-badge(color="white" text-color="primary" :label="'заполнение ' + (progress) + '%'")
-
-          div(v-if="!currentHost.sale_is_enabled" style="font-size: 10px;").full-width.text-center.text-grey
-            
-            p(v-if="!waitingMode") завершение цикла {{untilRestart}}
-            p(v-if="waitingMode") режим ожидания
-
-
-          div(v-if="currentHost.sale_is_enabled" style="font-size: 10px;").full-width.text-center.text-grey
-            
-            p до заполнения: {{currentHost.currentPool.remain}}
-            
-
-
-
-      
-          // q-card-actions(align="right")
-        div.col-md-6.col-xs-12 
-          div(style="padding-top: 30px; margin-bottom: 100px;").text-center
-            buyWindow(:hostname="currentHost.username")
-            q-btn(color="teal" size="lg" flat @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})") Мои балансы
-            
+    
     
     div(v-if="showBalances")
       userBalances(:host="currentHost" :balances="balances")

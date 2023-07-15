@@ -2,8 +2,11 @@
 div
 
   div#super.section.q-pa-lg
-    div.row.full-height
-      div().col-md-6.col-xs-12
+    div.row.justify-center
+      div(v-if="!showRegistration").col-md-6.col-xs-12
+        div.full-width.text-center
+          img(:src="HeaderLogo" alt="Homeunity logo" style="height: 120px; margin: auto;")
+
         q-card(flat style="padding-bottom: 100px;")
           div.text-center
             p.header.text-green Экосистема 
@@ -15,26 +18,28 @@ div
           // q-separator
         
           div(style="padding-top: 50px;").full-width.text-center
-            // q-btn(flat size="lg" style="padding: 20px;" @click="register").bg-green.q-pa-lg.text-white регистрация
-            q-btn(flat @click="goToGithub").button_header
-              div.full-width
-                i.fa-brands.fa-telegram.q-mr-sm
-                span.text-grey открытый код
-          
-            q-btn(flat @click="goToGitbook").button_header
-              div.full-width
-                i.fa-brands.fa-github.q-mr-sm
-                span.text-grey белая книга
-              // q-btn(flat).text-grey-8
-              //   i.fa-brands.fa-youtube.q-mr-xs
-              //   span посмотреть видео
-      div.col-md-6.col-xs-12
+            div.row.justify-center
+              div
+                q-btn(flat size="lg" @click="showRegistration = true").bg-green.text-white регистрация
+            
+                q-btn(flat size="md" @click="goToGithub").button_header
+                
+                  div.full-width
+                    i.fa-brands.fa-telegram.q-mr-sm
+                    span.text-grey открытый код
+            
+                q-btn(flat size="md" @click="goToGitbook").button_header
+                  div.full-width
+                    i.fa-brands.fa-github.q-mr-sm
+                    span.text-grey белая книга
+                  // q-btn(flat).text-grey-8
+                  //   i.fa-brands.fa-youtube.q-mr-xs
+                  //   span посмотреть видео
+      div(v-if="showRegistration").col-md-6.col-xs-12
         div.row.justify-center
           div(style="padding-bottom: 50px;").col-md-6.col-xs-12
             authForm
-        // transition(name="fade")
-        //   img(:src="main")#main.rotate
-    
+        
 
 
 
@@ -66,7 +71,7 @@ import { useUserStore } from '~/stores/user'
 import AuthForm from '~/components/user/AuthForm.vue'
 const userStore = useUserStore()
 import config from '~/config'
-
+import HeaderLogo from '~/assets/logo.svg?url'
 
 let hello = ref([
   'имени братьев Мавроди'
@@ -88,6 +93,8 @@ let options = ref(
       scaleMobile: 1.00
   }
 )
+
+const showRegistration = ref(false)
 
 let register = () => {
   userStore.setRegisterNow(!userStore.registerNow)

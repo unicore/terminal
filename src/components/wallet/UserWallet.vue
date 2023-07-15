@@ -1,23 +1,17 @@
 <template lang="pug">
+div.row
+  q-card(flat).col
+    q-card-section
+      div.row.text-center
+        // div(style="max-width: 30px;")
+          // img(:src="walletIcon" alt="").full-width
+        p(style="font-size: 18px;").full-width.text-center {{ userStore.userBalancesSafe[symbol] }}
+      div.row.justify-around.q-mt-md
+        q-btn.col-6(dense size="sm" flat label="Пополнить" @click="showDepositDialog" v-if="wallet?.canDeposit" icon="fa-solid fa-arrow-turn-down")
+        q-btn.col-6(dense size="sm" flat label="Вывести" @click="showWithdrawDialog" v-if="wallet?.canWithdraw" icon="fa-solid fa-arrow-turn-up")
+        q-btn.col-6(dense size="sm" flat disable color="grey" label="Перевести" @click="showWithdrawDialog" v-if="wallet?.canTransfer" icon="fa-solid fa-arrow-right")
+        q-btn.col-6(dense size="sm" flat disable color="grey" label="Обменять" @click="showChangeDialog" v-if="wallet?.canChange" icon="fa-solid fa-arrow-right-arrow-left")
 
-div  
-.column.justify-between(:class="props.mini ? 'wallet-mini' : 'wallet'")
-  .col(v-if="!props.mini")
-    .wallet-header Кошелёк {{symbol}}
-    
-  .balance(v-if="!props.mini")
-    img.wallet-icon(:src="walletIcon", alt="")
-    | {{ userStore.userBalancesSafe[symbol] }}
-  .buttons.flex.stretch.row(:class="wallet?.canDeposit && wallet?.canTransfer && wallet?.canChange && wallet?.canWithdraw && 'three-items'")
-    .stretch.col-6
-      q-btn.full-width(flat, dense, size="10px", label="Пополнить"  @click="showDepositDialog" v-if="wallet?.canDeposit")
-    .stretch.col-6
-      q-btn.full-width(flat, dense, size="10px", label="Вывести" @click="showWithdrawDialog"  v-if="wallet?.canWithdraw")
-    .stretch.col-6
-      q-btn.full-width(flat, dense, size="10px", label="Перевести" @click="showWithdrawDialog" disable v-if="wallet?.canTransfer")
-    .stretch.col-6
-      q-btn.full-width(flat, dense, size="10px", label="Обменять" disable @click="showChangeDialog" v-if="wallet?.canChange")
-    
 
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
     q-card(style="min-width: 350px; max-width: 100%;").bg-primary.text-white
