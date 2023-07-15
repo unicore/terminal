@@ -86,15 +86,8 @@ div
   }
 
   const showWithdrawDialog = () => {
-    if (config.wallet.p2pMode){
-
-      router.push({name: 'p2p'})
-
-    }else {
-      dialog.value = true
-      showWithdraw.value = true
-    }
-    
+    dialog.value = true
+    showWithdraw.value = true
   }
 
   const withdrawFinish = () => {
@@ -102,14 +95,8 @@ div
   }
 
   const showDepositDialog = () => {
-    if (config.wallet.p2pMode){
-      router.push({name: 'p2p'})
-    } else {
-      dialog.value = true
-      showDeposit.value = true  
-    }
-
-    
+    dialog.value = true
+    showDeposit.value = true 
   }
 
   watch(dialog, () => {
