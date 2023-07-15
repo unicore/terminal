@@ -17,7 +17,7 @@ div
               
               // q-btn(v-if="isEdit" @click="cancel" color="red" dense flat size="md").q-mr-xs
               //   i.fas.fa-cancel
-              p(style="cursor: pointer;" @click="copy(userStore.username)").text-black.userheader @{{userStore.username}}
+              p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
               q-btn(icon="fa fa-copy" flat color="teal" size="sm" @click="copy(userStore.username)").q-ml-md
               
         

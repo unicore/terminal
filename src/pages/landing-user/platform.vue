@@ -5,13 +5,16 @@ div
     div.row.justify-center
       div(v-if="!showRegistration").col-md-6.col-xs-12
         div.full-width.text-center
+          // p(style="font-size: 60px;") MMM-
+          //   span 2024
           img(:src="HeaderLogo" alt="Homeunity logo" style="height: 120px; margin: auto;")
 
         q-card(flat style="padding-bottom: 100px;")
           div.text-center
-            p.header.text-green Экосистема 
-            p.header.text-black Финансовых 
-            p.header.text-green Продуктов 
+            p
+              span.header Экосистема 
+              span.header Финансовых 
+              span.header Продуктов 
             p(style="font-size: 18px;").q-mt-lg.q-ml-lg
               vueWriter(:array="hello" :typeSpeed="20" :eraseSpeed="20")
               
@@ -22,13 +25,13 @@ div
               div
                 q-btn(flat size="lg" @click="showRegistration = true").bg-green.text-white регистрация
             
-                q-btn(flat size="md" @click="goToGithub").button_header
+                q-btn(flat size="md" @click="goToGithub").q-mt-md.button_header
                 
                   div.full-width
                     i.fa-brands.fa-telegram.q-mr-sm
                     span.text-grey открытый код
             
-                q-btn(flat size="md" @click="goToGitbook").button_header
+                q-btn(flat size="md" @click="goToGitbook").q-mt-md.button_header
                   div.full-width
                     i.fa-brands.fa-github.q-mr-sm
                     span.text-grey белая книга
@@ -71,7 +74,7 @@ import { useUserStore } from '~/stores/user'
 import AuthForm from '~/components/user/AuthForm.vue'
 const userStore = useUserStore()
 import config from '~/config'
-import HeaderLogo from '~/assets/logo.svg?url'
+import HeaderLogo from '~/assets/mmm_logo2.svg?url'
 
 let hello = ref([
   'имени братьев Мавроди'
@@ -158,12 +161,12 @@ onMounted(async () => {
 }
 
 .header{ 
-  font-size: 60px;
+  font-size: 48px;
 }
 
 @media (max-width: 768px) {
   .header {
-    font-size: 38px !important;
+    font-size: 28px !important;
   }
 
   .section{

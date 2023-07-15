@@ -5,16 +5,8 @@ div
   div(v-if="currentHost && !loading").q-pa-md
     div(v-if="!showBalances").row.justify-center
       div(style="font-size: 16px;").col-md-6.col-xs-12
-        q-card().nft-card.bg-secondary.text-white.q-mb-lg
         
-          q-card-section
-            div.text-h5 {{currentHost.title}}
-            // div.text-h6 DAO {{currentHost.username.toUpperCase()}}
-            pre.q-mt-sm.purpose {{displayedPurpose}}
-            
-          q-btn(dense size="sm" @click="showMore = !showMore").full-width.text-center {{showMore ? 'Показать меньше' : 'Показать больше'}}
-        
-        div().full-width.q-pl-md.q-pr-md.q-pb-md.text-center
+        // div().full-width.q-pl-md.q-pr-md.q-pb-md.text-center
 
           // span(style="font-size:24px;" v-if="currentHost.sale_is_enabled") Токенсейл {{currentHost.asset_on_sale_symbol}} 
           // span(style="font-size: 24px;") М-стейкинг
@@ -24,7 +16,7 @@ div
           // q-badge(size="lg" v-if="currentHost.currentPool.color != 'white'" color="black").text-white.q-pa-sm №{{currentHost.current_pool_num}} чёрный
                     
       
-        div.full-width.bg-white.q-pl-md.q-pr-md
+        div.full-width.q-pl-md.q-pr-md
           //
           q-linear-progress( size="80px" v-if="currentHost.currentPool.color=='black'" :value="progress / 100" color="black" track-color="white" style="border: 1px solid grey;" rounded).full-width
             div.absolute-full.flex.flex-center
@@ -49,6 +41,7 @@ div
             
             p до заполнения: {{currentHost.currentPool.remain}}
         
+
         div(style="padding-top: 30px; margin-bottom: 50px;").row.justify-center
 
           div.col-6.q-pa-xs
@@ -56,8 +49,20 @@ div
           div.col-6.q-pa-xs
             q-btn(color="teal" flat size="md"  @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})").full-width Мои балансы
         
+        
+
       div.col-md-6.col-xs-12
         // WalletsCarousel( :mini="false" )
+        
+        q-card().nft-card.bg-secondary.text-white.q-mb-lg
+        
+          q-card-section
+            div.text-h5 {{currentHost.title}}
+            // div.text-h6 DAO {{currentHost.username.toUpperCase()}}
+            pre.q-mt-sm.purpose {{displayedPurpose}}
+            
+          q-btn(dense size="sm" @click="showMore = !showMore").full-width.text-center {{showMore ? 'Показать меньше' : 'Показать больше'}}
+        
            
 
         div().row.justify-center.q-pa-md

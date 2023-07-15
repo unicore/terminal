@@ -16,11 +16,28 @@ const userStore = useUserStore()
 const hostStore = useHostStore()
 let intervalId = ref(null);
 import config from '~/config'
-
+const $q = useQuasar()
+import { useQuasar } from 'quasar'
 
 onMounted(async () => {
+
+  try{
+
+
+    let tg = window.Telegram.WebApp;
+    let scheme = tg.colorScheme
+    if (scheme == "dark")
+      $q.dark.set(true)
+    
+  } catch(e){
+    console.log("e", e)
+  }
+
+
+
   try {
     
+
     removeLoader()
     intervalId.value = setInterval(() => {
       bcStore.loadInfo()
@@ -64,6 +81,8 @@ onUnmounted(() => {
   if (intervalId.value) {
     clearInterval(intervalId.value);
   }
+
+
 });
 
 
