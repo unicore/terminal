@@ -39,7 +39,7 @@ const partnersTree = ref([]);
 const MAX_DEPTH = 7;
 
 // const link = computed(() => `${location.protocol}//${location.host}/?r=${userStore.username}`)
-const link = computed(() => `${config.base_url}?start=${userStore.username}`)
+const link = computed(() => `${config.base_url}?&start=${userStore.username}`)
 
 
 
