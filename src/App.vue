@@ -6,7 +6,7 @@ div
 
 
 <script setup lang="ts">
-import { onUnmounted, onMounted, computed, ref } from 'vue';
+import { onUnmounted, onMounted, computed, ref, onBeforeMount } from 'vue';
 import { useBlockchainStore } from '~/stores/blockchain'
 import { useUserStore } from '~/stores/user'
 import { useHostStore } from '~/stores/host'
@@ -19,21 +19,23 @@ import config from '~/config'
 const $q = useQuasar()
 import { useQuasar } from 'quasar'
 
-onMounted(async () => {
-
+onBeforeMount(() => {
   try{
 
 
-    let tg = window.Telegram.WebApp;
-    let scheme = tg.colorScheme
-    // if (scheme == "dark")
-      $q.dark.set(true)
-    
-  } catch(e){
-    console.log("e", e)
-  }
+      let tg = window.Telegram.WebApp;
+      let scheme = tg.colorScheme
+      if (scheme == "dark")
+        $q.dark.set(true)
+      
+    } catch(e){
+      console.log("e", e)
+    }
 
+  
+})
 
+onMounted(async () => {
 
   try {
     

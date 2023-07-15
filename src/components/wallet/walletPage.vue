@@ -2,9 +2,9 @@
 div
   div.row.justify-center.q-pa-md
     div.col-md-4.col-sm-6.col-xs-12
-      div.row.justify-center
+      div.row.justify-center.no-select
         div.col-12
-          q-input(style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname")
+          q-input(input-class='inputclass' style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").inputclass
             template(v-slot:prepend)
               q-btn(v-if="isEdit" @click="saveNickname" color="teal" flat  size="md")
                 i.fas.fa-check
@@ -134,9 +134,15 @@ const copy = async (address) => {
 
 </script>
 
-<style>
+<style> 
+  .inputclass .q-field__label{
+    font-size: 10px;
+  }
+  .inputclass{
+    font-size: 10px;
+  }
   .userheader {
-    font-size: 20px;
+    font-size: 10px;
   }
   .sign {
     font-size: 10px;
