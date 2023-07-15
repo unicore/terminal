@@ -25,6 +25,7 @@ import { useRouter } from 'vue-router';
 import partnerItem from '~/components/core/partners/partnerItem.vue'
 import loader from '~/components/common/loader.vue'
 import { copyToClipboard, Notify } from 'quasar'
+import config from '~/config'
 
 const router = useRouter();
 const hostStore = useHostStore();
@@ -36,7 +37,7 @@ const tree = ref([]);
 const partnersTree = ref([]);
 
 const MAX_DEPTH = 7;
-const link = computed(() => `${location.protocol}//${location.host}/?r=${userStore.username}`)
+const link = computed(() => `${config.base_url}/?r=${userStore.username}`)
 
 
 
