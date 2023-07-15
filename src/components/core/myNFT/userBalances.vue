@@ -3,8 +3,9 @@ div(v-if="balances")
   div(v-if="Object.values(balances).length > 0")
     div(v-if="whiteBalances.length > 0")
       div(style="display: flex; align-items: center; justify-content: center;").full-width.text-center
-        i(v-if="!whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
-        i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
+        i( style="font-size: 26px; color: black; margin-right: 10px;").far.fa-circle
+        // i(v-if="!whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
+        // i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
         
         p(style="font-size: 26px;") белые токены
       div
@@ -16,11 +17,13 @@ div(v-if="balances")
         template(v-slot:default="{item}")
           userBalance(:balance="item" color="white" :host="props.host").col-4
     
-    div(v-if="blackBalances.length > 0")
+    div(v-if="blackBalances.length > 0").q-mt-lg
       div(style="display: flex; align-items: center; justify-content: center;").full-width.text-center
-        i(v-if="whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
-        i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
+        // i(v-if="whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
+        // i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
         
+        i(style="font-size: 26px; color: black; margin-right: 10px;").fa-solid.fa-circle
+
         p(style="font-size: 26px;") чёрные токены
       div
         // p(v-if="whiteIsWin").text-grey.text-center получают доступ в клуб

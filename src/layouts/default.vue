@@ -5,53 +5,26 @@ q-layout(view="hHh LpR fFf")
     q-toolbar
       
       q-toolbar-title
-        // q-btn(color="teal" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleLeftDrawer" :dense="isMobile")
-        //   i.fa.fa-solid.fa-toolbox
-
-        // template(v-if="loggedIn")
-        q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal" :dense="isMobile")
+        q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="" :dense="isMobile")
           i.fa-solid.fa-circle-chevron-left
-        
-        
-          // q-btn(stretch flat class="btn-title" @click="goToMarket")
-          //   img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
-        
-        // template(v-if="!loggedIn")
-        // q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="teal")
-        //   i.fa-solid.fa-circle-chevron-left
-        
-        q-btn(v-if="router.currentRoute.value.name == 'index'" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
+        q-btn(v-if="router.currentRoute.value.name == 'index' && !loggedIn" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
           img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
-          // 
-      // q-btn(color="teal" stretch size="lg" flat @click="router.push({name: 'info'})") 
-        // i.fa-solid.fa-info
-        // p(style="padding-right: 10px;") о платформе
-        
-      // q-btn(color="teal" v-if="loggedIn" stretch size="lg" flat @click="router.push({name: 'create'})") 
-        // p(style="font-size: 12px; font-weight: 600; padding-right: 10px;") создать NFT
-        // i.fa.fa-plus
       q-toggle(v-if="loggedIn && isAdmin" size="xs" v-model="showAdmin" val="false" label="админ" left-label)
   
 
-      q-btn(color="teal" class="btn-menu" v-if="!loggedIn" stretch size="lg" flat @click="login" :dense="isMobile") 
-        i.fa-solid.fa-right-to-bracket
-    
-      q-btn(color="teal" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer" :dense="isMobile")
-        i.fa.fa-user
+      // q-btn(color="" class="btn-menu2" v-if="!loggedIn" stretch size="lg" flat @click="login" :dense="isMobile")
+      //   p.q-pr-sm регистрация
+      //   i.fa-solid.fa-right-to-bracket
+        
 
-
-  // q-drawer(:mini="true"  v-model="leftDrawerOpen"  show-if-above side="left" persistent :mini-width="60" :width="300" class="drawer-left")
-    // UserProfile(:mini="isMini")
-    // adminMenu(:mini="true")
-    // MenuFooter(:mini="isMini")
-    
-
+      q-btn(color="" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer" :dense="isMobile")
+        // span {{userStore.username}}
+        i.fa-solid.fa-bars
 
   q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer-right")
     template(v-if="!showAdmin")
       UserProfile(:mini="isMini")
       Menu(:mini="isMini")
-      MenuFooter(:mini="isMini")
     template(v-else)
       adminMenu(:mini="isMini")
 
@@ -59,7 +32,6 @@ q-layout(view="hHh LpR fFf")
     template(v-if="!showAdmin")
       UserProfile(:mini="false")
       Menu(:mini="false")
-      MenuFooter(:mini="false")
 
     template(v-else)
       adminMenu(:mini="false")  
@@ -68,21 +40,23 @@ q-layout(view="hHh LpR fFf")
     template(v-if="!showAdmin")
     
       UserProfile
-      MenuFooter(:mini="isMini")
-    
   
+
   
+  q-footer(v-if="loggedIn && isMobile" style="height: 50px; border-top: 1px solid #00800038 !important;").bg-grey-1
+    mobileMenu
+
   q-page-container
-    // p {{subLoaded}}
-    // p userStatus: {{userStatus}}
     q-page(v-if="subLoaded" class="page")
       subscribe(v-if="!isSubscribed")
       
       
       router-view(v-else v-slot="{ Component }")
-        component(:is="Component" style="padding-bottom: 100px;")
+        component(:is="Component")
     div(v-else).q-mt-lg
       loader
+
+  
 </template>
 
 
@@ -100,9 +74,11 @@ q-layout(view="hHh LpR fFf")
   import UserProfile from '~/components/user/UserProfile.vue'
   import Menu from '~/components/menu/index.vue'
   import adminMenu from '~/components/menu/admin.vue'
-  import MenuFooter from '~/components/menu/MenuFooter.vue'
+  
   import loader from '~/components/common/loader.vue'
   import subscribe from '~/components/subscribe/index.vue'
+
+  import mobileMenu from '~/components/menu/footerMobileMenu.vue'
 
   const $q = useQuasar()
   defineExpose({
@@ -247,8 +223,15 @@ q-layout(view="hHh LpR fFf")
   }
 
 
+  .btn-menu2 {
+    font-size: 20px;
+    height: 60px;
+    
+  }
+
+
   .q-toolbar {
-    border-bottom: 1px solid #00800038 !important;
+    
     padding-left: 0px !important;
     padding-right: 0px !important;
   }

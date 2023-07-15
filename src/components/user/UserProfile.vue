@@ -15,7 +15,7 @@ div(:class="props.mini ? 'layout-mini' : 'layout-full'")
           | Партнерская ссылка 
           q-icon(name="content_copy" color="teal" size="12px")
         div(class="ref-link-body") {{ link }}
-    WalletsCarousel(v-if="!props.mini" :mini="props.mini")
+    // WalletsCarousel(v-if="!props.mini" :mini="props.mini")
 
 </template>
 

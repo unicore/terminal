@@ -1,35 +1,20 @@
 <template lang="pug">
-q-list.pt-0.pr-0.pl-0.menu
+div.row.justify-around.full-height
   q-item(
     v-for="(item, index) in routesInMenu"
     :key="index"
-    v-ripple
     :active="isRouteActive(item)"
     active-class="menu-item-active"
     clickable
-    class="cursor-pointer menu-item"
-    @click="open(item)"
-  )
-    q-item-section.menu-item-section
-      div.menu-item-icon
-        i(:class="item.icon")
-      div.menu-item-text(v-if="!props.mini") {{ t(item.pageName) }}
-    q-tooltip(v-if="props.mini" anchor="center right" self="center left" :offset="[10, 10]") {{ t(item.pageName) }}
-  
-  q-item(@click="openWidget" class="cursor-pointer menu-item" active-class="menu-item-active" v-ripple clickable)
-    q-item-section.menu-item-section
-      div.menu-item-icon
-        q-icon(name="support")
-      div.menu-item-text(v-if="!props.mini") Поддержка
-    q-tooltip(v-if="props.mini" anchor="center right" self="center left" :offset="[10, 10]") Вызвать поддержку
-
-  q-item(@click="logout" class="cursor-pointer menu-item" active-class="menu-item-active" v-ripple clickable)
-    q-item-section.menu-item-section
-      div.menu-item-icon
-        q-icon(name="logout")
-      div.menu-item-text(v-if="!props.mini") Выход
-    q-tooltip(v-if="props.mini" anchor="center right" self="center left" :offset="[10, 10]") Выйти из приложения
+    class="cursor-pointer menu-item col-2 text-center"
+    @click="router.push({ name: item.name, params: item.params })"
+  ).full-height
+    div(style="height: 22px;")
+      i(:class="item.icon" style="width: auto; height: 20px;")
+    div().no-select
+      q-item-label(style="font-size: 8px;") {{item.pageName}}
 </template>
+
 
 <script setup lang="ts">
   import { computed } from 'vue'
@@ -45,21 +30,14 @@ q-list.pt-0.pr-0.pl-0.menu
   import { useUserStore } from '~/stores/user'
 
   const props = defineProps<{
-    mini?: boolean
+    mini?: boolean,
+    isMobile?: boolean
   }>()
 
   const { t } = useI18n()
   const router = useRouter()
   const userStore = useUserStore()
   const route = useRoute()
-
-  const ICONS = {
-    cart: CartIcon,
-    history: HistoryIcon,
-    order: OrderIcon,
-    union: UnionIcon,
-  }
-
 
   const currentRoute = computed(() => {
     return route
@@ -71,25 +49,9 @@ q-list.pt-0.pr-0.pl-0.menu
   })
 
 
-  const open = (item) => {
-    if (item.url) {
-      window.open(item.url)
-    } else {
-      router.push({ name: item.name, params: item.params })  
-    }
-    
-  }
-
-  const openWidget = () => {
-        window.Tiledesk('show');
-        window.Tiledesk('open');
-
-    }
-
   const logout = () => {
     router.push({ name: 'index' })
     userStore.logout()
-
   }
 
   const isRouteActive = (item) => {
@@ -105,31 +67,22 @@ q-list.pt-0.pr-0.pl-0.menu
   }
 
   const routesInMenu = computed(() => {
-    return config.userMenu
+    return config.userMenu.filter(el => el.isMobile == true)
   })
 
 </script>
 
 <style lang="scss" scoped>
-  
-  .menu-item-section {
-    display: flex !important;
-    gap: 7px;
-    flex-direction: row;
-    justify-content: flex-start !important;
-    width: 100%;
-    position: relative;
-  }
+
 
   .menu-item {
-    text-align: left !important;
-    justify-content: flex-start;
-    padding: 10px 0 10px 13px !important;
-    min-width: 0;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-transform: none;
+    height: 100%;
+
 
     color: #8a8a8a;
 
@@ -169,4 +122,5 @@ q-list.pt-0.pr-0.pl-0.menu
       }
     }
   }
+
 </style>

@@ -22,14 +22,24 @@ export const componentsMap = {
   listInfoClients: () => import('../components/products/admin/listClients.vue'),
   adminDashboard: () => import('../components/dashboard/admin.vue'),
   adminCore: () => import('../components/dashboard/admin/core.vue'),
+  adminInfo: () => import('../components/dashboard/admin/baseHostInfo.vue'),
   adminPartners: () => import('../components/dashboard/admin/partners.vue'),
+  p2p: () => import("../components/p2p/index.vue"),
+  wallet: () => import("../components/wallet/walletPage.vue")
+
   // Добавьте остальные компоненты из componentsMap
 };
 
 const createRoute = (route) => {
-  const component = componentsMap[route.component];
-  if (!component) {
-    throw new Error(`Компонент "${route.component}" не подключен.`);
+  let component = ""
+
+  if (route.component){
+    component = componentsMap[route.component];
+
+    if (!component) {
+      throw new Error(`Компонент "${route.component}" не подключен.`);
+    }
+
   }
   const children = route.children ? route.children.map(child => createRoute(child)) : [];
 

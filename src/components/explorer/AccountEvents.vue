@@ -1,9 +1,11 @@
 <template>
   <div>
+     <!-- :title="`Действия аккаунта ${props.username}`" -->
+      
     <q-table
+      flat
       v-model:pagination="pagination"
       :loading="loading"
-      :title="`Действия аккаунта ${props.username}`"
       :rows="rows"
       :columns="columns"
       row-key="k"

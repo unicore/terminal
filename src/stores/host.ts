@@ -3,6 +3,7 @@ import chains from '~/chainsMain'
 import config from "~/config"
 import {lazyFetch} from '~/utils/fetcher'
 import moment from 'moment-with-locales-es6';
+import { useUserStore } from '~/stores/user'
 
 // import 
 interface Hosts {
@@ -51,6 +52,44 @@ export const useHostStore = defineStore('host', {
       sysPercents: {}
     } as HostState),
   actions: {
+    
+    async editHost(hostname, title, purpose, manifest){
+      const userStore = useUserStore()
+      const rootChain = chains.getRootChain()
+      const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
+      
+      let data = {
+              architect: userStore.username,
+              host: hostname, 
+              platform: hostname,
+              title,
+              purpose,
+              manifest: manifest || "",
+              power_market_id: "",
+              meta: "",
+              
+            }
+
+      console.log('data: ', data)
+
+      let res = await api.transact({ 
+          actions: [
+          {
+            account: config.tableCodeConfig.core,
+            name: 'edithost',
+            authorization: [{
+              actor: userStore.username as string,
+              permission: 'active',
+            }],
+            data,
+          }]
+        }, {
+          blocksBehind: 3,
+          expireSeconds: 30,
+        })
+
+       return res
+    },
 
     async loadAllBalances(hostname) {
 

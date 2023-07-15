@@ -18,22 +18,26 @@
       </q-carousel-slide>
     </q-carousel>
     <template v-else>
-      <div
+      <q-card
+        bordered
+        style="border: 1px solid grey; height: 120px"
         v-for="symbol in walletStore.symbols"
         :key="symbol"
-        class="wallet-bg text-white shadow-1 rounded-borders q-mt-md"
-        style="height: 120px">
+        class="shadow-1 rounded-borders q-mt-md"
+        >
         <UserWallet :symbol="symbol" :mini="props.mini" />
-      </div>
+      </q-card>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref, watch, onMounted,onUnmounted } from 'vue'
 
   import { useWalletStore } from '~/stores/wallet'
   import UserWallet from './UserWallet.vue'
+  import { useUserStore } from '~/stores/user'
+  
 
   const walletStore = useWalletStore()
   const slide = ref('')
@@ -41,6 +45,24 @@
     asCarousel?: boolean
     mini?: boolean
   }>()
+  const refresh_id = ref(null)
+
+
+  const userStore = useUserStore()
+
+  onMounted(async () => {
+
+    refresh_id.value = setInterval(function() { 
+      userStore.getUserBalances()
+    }, 20000);
+
+  })
+
+
+  onUnmounted(async() => {
+      clearInterval(refresh_id.value)
+  })
+
 
   watch(
     () => walletStore.symbols,

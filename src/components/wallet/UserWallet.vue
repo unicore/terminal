@@ -3,16 +3,21 @@
 div  
 .column.justify-between(:class="props.mini ? 'wallet-mini' : 'wallet'")
   .col(v-if="!props.mini")
-    .wallet-header Кошелёк {{ symbol }}
+    .wallet-header Кошелёк {{symbol}}
+    
   .balance(v-if="!props.mini")
     img.wallet-icon(:src="walletIcon", alt="")
     | {{ userStore.userBalancesSafe[symbol] }}
-  .buttons.flex.stretch.row(:class="wallet?.canDeposit && wallet?.canTransfer && 'three-items'")
+  .buttons.flex.stretch.row(:class="wallet?.canDeposit && wallet?.canTransfer && wallet?.canChange && wallet?.canWithdraw && 'three-items'")
     .stretch.col-6
       q-btn.full-width(flat, dense, size="10px", label="Пополнить"  @click="showDepositDialog" v-if="wallet?.canDeposit")
     .stretch.col-6
-      q-btn.full-width(flat, dense, size="10px", label="Вывести" @click="showWithdrawDialog" v-if="wallet?.canWithdraw")
-  
+      q-btn.full-width(flat, dense, size="10px", label="Вывести" @click="showWithdrawDialog"  v-if="wallet?.canWithdraw")
+    .stretch.col-6
+      q-btn.full-width(flat, dense, size="10px", label="Перевести" @click="showWithdrawDialog" disable v-if="wallet?.canTransfer")
+    .stretch.col-6
+      q-btn.full-width(flat, dense, size="10px", label="Обменять" disable @click="showChangeDialog" v-if="wallet?.canChange")
+    
 
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
     q-card(style="min-width: 350px; max-width: 100%;").bg-primary.text-white
@@ -46,6 +51,11 @@ div
   import walletIcon from '~/assets/wallet.svg'
   import deposit from '~/components/wallet/deposit.vue'
   import withdraw from '~/components/wallet/withdraw.vue'
+  import { useRouter } from 'vue-router'
+
+  import config from '~/config'
+
+  const router = useRouter()
 
   const props = defineProps({
     symbol: {
@@ -71,10 +81,20 @@ div
   let showWithdraw = ref(false)
   let showDeposit = ref(false)
 
+  const showChangeDialog = () => {
+    router.push({name: 'p2p'})
+  }
 
   const showWithdrawDialog = () => {
-    dialog.value = true
-    showWithdraw.value = true
+    if (config.wallet.p2pMode){
+
+      router.push({name: 'p2p'})
+
+    }else {
+      dialog.value = true
+      showWithdraw.value = true
+    }
+    
   }
 
   const withdrawFinish = () => {
@@ -82,8 +102,14 @@ div
   }
 
   const showDepositDialog = () => {
-    dialog.value = true
-    showDeposit.value = true
+    if (config.wallet.p2pMode){
+      router.push({name: 'p2p'})
+    } else {
+      dialog.value = true
+      showDeposit.value = true  
+    }
+
+    
   }
 
   watch(dialog, () => {
@@ -114,7 +140,7 @@ div
     font-weight: 700;
     font-size: 14px;
     line-height: 18px;
-    color: #ecb464;
+    
   }
 
   .balance {

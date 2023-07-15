@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { AccountData } from 'unicore/ts/src/auth'
+import {lazyFetch} from '~/utils/fetcher'
 
 import chains from '~/chainsMain'
 import { useWalletStore } from './wallet'
@@ -22,8 +23,58 @@ export const useUserStore = defineStore('user', {
       userBalances: null,
       referrer: '',
       registerNow: false,
+      partner: null,
     } as UserState),
   actions: {
+
+    async saveNickname(nickname: string) {
+      this.partner = {}
+      const rootChain = chains.getRootChain()
+
+      const api = rootChain.getEosPassInstance(this.authData?.wif as string)
+      console.log("nickname: ", nickname)
+       let res = await api.transact({ 
+          actions: [
+          {
+            account: config.tableCodeConfig.part,
+            name: 'setnickname',
+            authorization: [{
+              actor: this.username as string,
+              permission: 'active',
+            }],
+            data: {
+              username: this.username,
+              nickname: nickname as string
+            },
+          }]
+        }, {
+          blocksBehind: 3,
+          expireSeconds: 30,
+        })
+
+       return res
+      
+    },
+    async getUserPartnerInfo(username: string) {
+      this.partner = {}
+      const rootChain = chains.getRootChain()
+
+      let [partner] = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.part,
+          config.tableCodeConfig.part,
+          'partners2',
+          username,
+          username,
+          null,
+          1
+        )
+
+      this.partner = partner
+      return partner
+
+    },
+
     async setReferrer(ref: string) {
       this.referrer = ''
       const rootChain = chains.getRootChain()

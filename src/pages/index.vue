@@ -28,7 +28,6 @@ if (userStore.hasAuth)
 else target = config.homePageWithoutAuth
 
 
-console.log("target: ", target)
 const componentWithoutAuth = computed(() => componentsMap[target]())
 const resolvedComponent = shallowRef(null)
 

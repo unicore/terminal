@@ -16,7 +16,7 @@
       type="submit"
       label="Войти"
       class="full-width"
-      color="teal"
+      color="green"
       :loading="loading"
       :disable="!privateKey" />
   
@@ -31,7 +31,7 @@
   import { isValidWif, makeAccountByWif, makeAccountByMnemonic } from 'unicore'
   import Chains from '~/chainsMain'
   import { useUserStore } from '~/stores/user'
-
+  import config from '~/config'
   const privateKey = ref('')
   const loading = ref(false)
   const userStore = useUserStore()
@@ -64,7 +64,7 @@
         account.name = username
 
         await userStore.login(account)
-        await router.push({ name: 'market' })
+        await router.push({ name: config.homePageWithAuth })
         Notify.create({
           message: 'Добро пожаловать',
           type: 'positive',

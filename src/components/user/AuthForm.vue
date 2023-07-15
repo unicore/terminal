@@ -7,13 +7,14 @@
     </div>
   </div>
   <div v-else>
-    <RegisterForm />
-    <div class="q-mt-lg text-center">
-      <p class="text-grey">Уже есть ключ?</p>
+    <RegisterForm @hideEnter="hideEnter"/>
+    <div v-if="showEnter" class="q-mt-lg text-center">
+      <span class="text-grey">Уже зарегистрированы?</span>
       <q-btn
         flat
-        rounded
-        color="teal"
+        
+        dense
+        color="green"
         label="Войти"
         @click="isRegister = false" />
     </div>
@@ -26,6 +27,11 @@
   import RegisterForm from '~/components/user/RegisterForm.vue'
 
   const isRegister = ref(true)
+  const showEnter = ref(true)
+
+  const hideEnter = () => {
+    showEnter.value = false
+  }
 </script>
 
 <style lang="scss" scoped></style>

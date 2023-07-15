@@ -1,7 +1,7 @@
 <template lang="pug">
 
-q-btn(color="teal" size="lg" @click="dialog=true") Внести {{host.symbol}}
-
+q-btn(color="teal" size="lg" @click="dialog=true") Заложить {{host.symbol}}
+  
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
     q-card(style="min-width: 350px; max-width: 450px;")
       div
@@ -13,29 +13,36 @@ q-btn(color="teal" size="lg" @click="dialog=true") Внести {{host.symbol}}
 
       q-card(v-if="host")
         q-card-section
-          div.text-h6 Введите сумму в {{host.symbol}}
-        // q-card-section
-          // div.text-subtitle2 Стоимость токена: {{ quantCost }}
-          // div.text-subtitle2 Осталось токенов: {{ remainQuants }}
-          // div.text-subtitle2 Доступно для внесения: {{ remain }}
-        // q-card-section
-        //   q-input(outlined v-model.number="quantAmount" label="Введите количество токенов" type="number" step="1")
-        
+          
+          p(style="font-size: 22px;") Введите сумму в {{host.symbol}}
+          // q-card-section
+            // div.text-subtitle2 Стоимость токена: {{ quantCost }}
+            // div.text-subtitle2 Осталось токенов: {{ remainQuants }}
+            // div.text-subtitle2 Доступно для внесения: {{ remain }}
+          // q-card-section
+          //   q-input(outlined v-model.number="quantAmount" label="Введите количество токенов" type="number" step="1")
+          
         q-card-section  
           // span Введите сумму для внесения в целевую программу. 
-          
-          q-input(outlined v-model.number="rootAmount" label="Введите сумму" type="number" step="1")
-            template(v-slot:append)
-              q-badge() {{host.symbol}}
-          div.row.justify-between
-            q-btn(size="xs" flat @click="setMin") min: {{quantCost}}
-            q-btn(size="xs" flat @click="setMax") max: {{remain}}
+          p(style="font-size: 12px;").text-grey ваш баланс: {{userBalance}}
+          div(v-if="hasMin")
+            q-input(outlined v-model.number="rootAmount" :step="0.0001" label="Введите сумму" type="number" step="1")
+              template(v-slot:append)
+                q-badge() {{host.symbol}}
+            q-slider(track-size="10px" :max="parseFloat(max)" color="teal" v-model="rootAmount" ).q-pa-xs
+    
+
+            div.row.justify-between
+              q-btn(size="xs" flat @click="setMin") min: {{quantCost}}
+              q-btn(size="xs" flat @click="setMax") max: {{max}}
+          div(v-else).q-mt-lg.full-width.text-center
+            q-btn(outline color="teal" @click="gotowallet") пополнить баланс
         // q-card-section
         //   q-input(outlined v-model="message"  type="textarea" rows="1" label="Оставьте сообщение")
 
           // textarea(rows="5" v-model="message" )
 
-        q-card-section(align="right")
+        q-card-section(v-if="hasMin" align="right")
           q-btn(flat label="Отмена" color="primary" v-close-popup)
           q-btn(label="Внести" color="primary" @click="buy") 
 
@@ -50,6 +57,10 @@ import chains from '~/chainsMain'
 import config from '~/config'
 import { useUserStore } from '~/stores/user'
 import { Notify } from 'quasar';
+const userStore = useUserStore()
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const props = defineProps({
   hostname: {
@@ -68,7 +79,11 @@ const rootAmount = ref(0);
 let quantAmount = ref(0);
 
 const setMax = () => {
-  rootAmount.value = parseFloat(remain.value)
+  rootAmount.value = parseFloat(max.value)
+}
+
+const gotowallet = () => {
+  router.push({name: 'wallet'})
 }
 
 const setMin = () => {
@@ -83,6 +98,16 @@ onMounted(async () => {
 
 const dialog = ref(false);
 
+const hasMin = computed(() => {
+  return (parseFloat(userBalance.value) > 0)
+})
+
+const max = computed(() => {
+  if (parseFloat(remain.value) <= parseFloat(userBalance.value))
+    return remain.value
+  else return userBalance.value
+})
+
 const quantCost = computed(() => {
   const cost = host.value.currentPool.quant_cost;
   return cost;
@@ -93,24 +118,32 @@ const remainQuants = computed(() => {
   return remain;
 });
 
+const userBalance = computed(() => {
+  return userStore.userBalancesSafe[host.value.symbol]
+})
 
 const remain = computed(() => {
   const remain = host.value.currentPool.remain
   return remain;
 });
 
-watch(rootAmount, (newVal) => {
-  const cost = parseFloat(host.value.currentPool.quant_cost);
-  quantAmount.value = newVal / cost;
+watch(rootAmount, (newVal, oldVal) => {
+  if (newVal != oldVal){
+    const cost = parseFloat(host.value.currentPool.quant_cost);
+    quantAmount.value = newVal / cost;
+  }
 });
 
-watch(quantAmount, (newVal) => {
-  const cost = parseFloat(host.value.currentPool.quant_cost);
-  rootAmount.value = newVal * cost;
+watch(quantAmount, (newVal, oldVal) => {
+  if (newVal != oldVal){
+    const cost = parseFloat(host.value.currentPool.quant_cost);
+    rootAmount.value = newVal * cost;
+  }
 });
 
 
-watch(host, (newVal) => {
+watch(host, (newVal, oldVal) => {
+  if (newVal.current_pool_id != oldVal.current_pool_id)
     quantAmount.value = 1
 })
 
@@ -129,9 +162,10 @@ const buy = async () => {
   
   dialog.value = false;
 
-  const userStore = useUserStore()
+  
 
   try {
+      
       const rootChain = chains.getRootChain()
       const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
       let data = {
@@ -140,7 +174,8 @@ const buy = async () => {
         quantity: parseFloat(amount).toFixed(host.value.precision) + ` ${host.value.symbol}`,
         memo: '100-' + host.value.username + '-' + message.value
       }
-    
+      
+      console.log("data", data)
       await api.transact(
         {
           actions: [
@@ -165,7 +200,7 @@ const buy = async () => {
       hostStore.loadHost(props.hostname)
       hostStore.loadBalances(userStore.username, props.hostname)
       hostStore.loadHistory(props.hostname)
-
+      userStore.getUserBalances()
       // host.value = hostStore.getCurrentHost(props.hostname)
       
       Notify.create({
