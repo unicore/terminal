@@ -26,7 +26,7 @@ onMounted(async () => {
 
     let tg = window.Telegram.WebApp;
     let scheme = tg.colorScheme
-    if (scheme == "dark")
+    // if (scheme == "dark")
       $q.dark.set(true)
     
   } catch(e){

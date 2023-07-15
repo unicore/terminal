@@ -9,7 +9,7 @@ div
           //   span 2024
           img(:src="HeaderLogo" alt="Homeunity logo" style="height: 120px; margin: auto;")
 
-        q-card(flat style="padding-bottom: 100px;")
+        div(flat)
           div.text-center
             p
               span.header Экосистема 
