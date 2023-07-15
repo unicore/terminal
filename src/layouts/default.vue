@@ -2,14 +2,14 @@
 q-layout(view="hHh LpR fFf")
   
   q-header(reveal class="bg-white text-black text-left")
-    q-toolbar
+    // q-toolbar
       
-      q-toolbar-title
-        q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="" :dense="isMobile")
-          i.fa-solid.fa-circle-chevron-left
-        q-btn(v-if="router.currentRoute.value.name == 'index' && !loggedIn" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
-          img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
-      q-toggle(v-if="loggedIn && isAdmin" size="xs" v-model="showAdmin" val="false" label="админ" left-label)
+    //   q-toolbar-title
+    //     q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="" :dense="isMobile")
+    //       i.fa-solid.fa-circle-chevron-left
+    //     q-btn(v-if="router.currentRoute.value.name == 'index' && !loggedIn" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
+    //       img(:src="HeaderLogo" alt="Homeunity logo" style="height: 60px;").q-mr-md
+    //   q-toggle(v-if="loggedIn && isAdmin" size="xs" v-model="showAdmin" val="false" label="админ" left-label)
   
 
       // q-btn(color="" class="btn-menu2" v-if="!loggedIn" stretch size="lg" flat @click="login" :dense="isMobile")
@@ -44,15 +44,15 @@ q-layout(view="hHh LpR fFf")
 
   
   q-footer(v-if="loggedIn && isMobile" style="height: 50px; border-top: 1px solid #00800038 !important;").bg-grey-1
-    mobileMenu
+    mobileMenu(@toogleMore="toggleRightDrawer")
 
   q-page-container
-    q-page(v-if="subLoaded" class="page")
+    q-page(v-if="subLoaded" class="page" )
       subscribe(v-if="!isSubscribed")
       
       
       router-view(v-else v-slot="{ Component }")
-        component(:is="Component")
+        component(:is="Component" )
     div(v-else).q-mt-lg
       loader
 
@@ -243,6 +243,9 @@ q-layout(view="hHh LpR fFf")
 
   .drawer-left {
     border-right: 1px solid #00800038 !important;
+  }
+  .page {
+    padding-top: 30px;
   }
 
 </style>

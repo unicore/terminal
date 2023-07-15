@@ -7,7 +7,7 @@ div.row.justify-around.full-height
     active-class="menu-item-active"
     clickable
     class="cursor-pointer menu-item col-2 text-center"
-    @click="router.push({ name: item.name, params: item.params })"
+    @click="push({ name: item.name, params: item.params })"
   ).full-height
     div(style="height: 22px;")
       i(:class="item.icon" style="width: auto; height: 20px;")
@@ -26,6 +26,7 @@ div.row.justify-around.full-height
   import UnionIcon from '~/assets/union.svg?component'
   
   import config from '~/config'
+  const emit = defineEmits(['toogleMore'])
 
   import { useUserStore } from '~/stores/user'
 
@@ -54,6 +55,18 @@ div.row.justify-around.full-height
     userStore.logout()
   }
 
+  const push = (item) => {
+    if (item.name == "toogleMore") {
+
+      emit('toogleMore')
+    } else {
+      
+      router.push({ name: item.name, params: item.params })  
+
+    }
+    
+  }
+
   const isRouteActive = (item) => {
     if (item.name === route.name) {
       return true
@@ -67,7 +80,15 @@ div.row.justify-around.full-height
   }
 
   const routesInMenu = computed(() => {
-    return config.userMenu.filter(el => el.isMobile == true)
+    let native = config.userMenu.filter(el => el.isMobile == true)
+    native.push({
+      path: 'toogleMore',
+      name: "toogleMore",
+      pageName: "Ещё",
+      icon: 'fa-solid fa-ellipsis',
+      isMobile: true,
+    })
+    return native
   })
 
 </script>
