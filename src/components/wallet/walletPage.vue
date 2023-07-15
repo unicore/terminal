@@ -137,12 +137,15 @@ const copy = async (address) => {
 <style> 
   .inputclass .q-field__label{
     font-size: 10px;
+    text-align: right;
   }
   .inputclass{
     font-size: 10px;
+    text-align: right;
   }
   .userheader {
     font-size: 10px;
+    padding-top: 14px;
   }
   .sign {
     font-size: 10px;

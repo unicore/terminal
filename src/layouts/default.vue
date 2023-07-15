@@ -1,25 +1,6 @@
 <template lang="pug">
 q-layout(view="hHh LpR fFf")
-  // q-header(reveal class="bg-white text-black text-left")
-  //   // q-toolbar
-      
-  //   //   q-toolbar-title
-  //   //     q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="" :dense="isMobile")
-  //   //       i.fa-solid.fa-circle-chevron-left
-  //   //     q-btn(v-if="router.currentRoute.value.name == 'index' && !loggedIn" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
-  //   //       img(:src="HeaderLogo" alt="" style="height: 60px;").q-mr-md
-  //   //   q-toggle(v-if="loggedIn && isAdmin" size="xs" v-model="showAdmin" val="false" label="админ" left-label)
   
-
-  //     // q-btn(color="" class="btn-menu2" v-if="!loggedIn" stretch size="lg" flat @click="login" :dense="isMobile")
-  //     //   p.q-pr-sm регистрация
-  //     //   i.fa-solid.fa-right-to-bracket
-        
-
-  //     q-btn(color="" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer" :dense="isMobile")
-  //       // span {{userStore.username}}
-  //       i.fa-solid.fa-bars
-
   q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer-right")
     template(v-if="!showAdmin")
       UserProfile(:mini="isMini")
@@ -42,7 +23,9 @@ q-layout(view="hHh LpR fFf")
   
 
   
-  q-footer(v-if="loggedIn && isMobile" style="height: 50px; border-top: 1px solid #00800038 !important;").bg-grey-2
+  q-footer(v-if="loggedIn && isMobile" style="height: 50px; border-top: 1px solid #00800038 !important; " :style="{ 'background': $q.dark.isActive ? 'black' : 'white' }") 
+    // .light-bg
+    // :class="{ 'dark-bg': $q.dark.isActive }"
     mobileMenu(@toogleMore="toggleRightDrawer")
 
   q-page-container
@@ -247,5 +230,14 @@ q-layout(view="hHh LpR fFf")
   .page {
     
   }
+
+  .dark-bg {
+    background: black !important;
+  }
+
+  .light-bg {
+    background: white important;
+  }
+
 
 </style>
