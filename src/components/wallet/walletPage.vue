@@ -17,15 +17,16 @@ div
               
               // q-btn(v-if="isEdit" @click="cancel" color="red" dense flat size="md").q-mr-xs
               //   i.fas.fa-cancel
-              div
+              div(v-if="partner.nickname != ''")
                 div
-                  p(style="position: relative;").q-field__label Адрес
+                  p(style="position: relative;").q-field__label Ваш адрес
                 div
                   p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
               q-btn(rounded icon="fa fa-copy" flat color="teal" size="sm" @click="copy(userStore.username)").q-ml-md
                   
           
           
+          p(v-if="partner.nickname == ''").text-grey.full-width.text-center.userheader для получения адреса введите псевдоним
           
         
             
@@ -80,11 +81,11 @@ onMounted(async () => {
 const dynamicLabel = computed(() => {
   if (nicknameIsSet.value)
     return 'Ваш псевдоним'
-  else return 'Введите псевдоним'
+  else return 'Введите ваш псевдоним'
 })
 
 const nicknameIsSet = computed(() => {
-  if (userStore?.partner?.nickname != '')
+  if (partner.value.nickname != '')
     return true
   else return false
 })
