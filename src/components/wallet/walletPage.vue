@@ -4,7 +4,7 @@ div
     div.col-md-4.col-sm-6.col-xs-12
       div.row.justify-center.no-select.q-mt-lg
         div.col-12
-          q-input(standout="bg-green text-white" dense rounded @keyup.enter="saveNickname" input-class='inputclass' style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").inputclass
+          q-input(@blur="saveNickname" standout="bg-green text-white" dense rounded @keyup.enter="saveNickname" input-class='inputclass' style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").inputclass
             template(v-slot:prepend)
               q-btn(rounded v-if="isEdit" @click="saveNickname" color="teal" flat  size="md")
                 i.fas.fa-check
