@@ -2,8 +2,8 @@
 q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})").nft-card.bg-secondary.text-white
   img(:src="host?.meta.host_image")
   q-card-section
-    div.text-h5 {{host.title}}
-    div.text-h6 DAO {{host.username.toUpperCase()}}
+    div.text-h6 {{host.title}}
+    // div.text-h6 DAO {{host.username.toUpperCase()}}
     div {{host.purpose}}
     // q-card-section
     //   q-badge шаг цены: +5%
