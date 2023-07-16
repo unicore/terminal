@@ -3,6 +3,7 @@
     <q-input
       v-model="privateKey"
       label="Введите приватный ключ"
+      color="green"
       hint=""
       outlined
       class="full-width"

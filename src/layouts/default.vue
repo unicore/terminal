@@ -1,7 +1,30 @@
 <template lang="pug">
 q-layout(view="hHh LpR fFf")
+  // q-header(reveal class="bg-white text-black text-left")
+  //   // q-toolbar
+      
+  //   //   q-toolbar-title
+  //   //     q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="" :dense="isMobile")
+  //   //       i.fa-solid.fa-circle-chevron-left
+  //   //     q-btn(v-if="router.currentRoute.value.name == 'index' && !loggedIn" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
+  //   //       img(:src="HeaderLogo" alt="" style="height: 60px;").q-mr-md
+      
   
+
+  //     // q-btn(color="" class="btn-menu2" v-if="!loggedIn" stretch size="lg" flat @click="login" :dense="isMobile")
+  //     //   p.q-pr-sm регистрация
+  //     //   i.fa-solid.fa-right-to-bracket
+        
+
+  //     q-btn(color="" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer" :dense="isMobile")
+  //       // span {{userStore.username}}
+  //       i.fa-solid.fa-bars
+
   q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer-right")
+    div(v-if="loggedIn && isAdmin").full-width.text-center
+      q-toggle( size="xs" v-model="showAdmin" val="false" left-label).full-width.text-center
+      span(style="font-size: 10px;") админ
+
     template(v-if="!showAdmin")
       UserProfile(:mini="isMini")
       Menu(:mini="isMini")

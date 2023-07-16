@@ -3,7 +3,6 @@ div
   q-btn(color="secondary" @click="save").full-width сохранить
   q-card(bordered flat).q-pa-md
     
-    
     div.flex.justify-between.q-pa-xs
       span Ваша прибыль, {{dacs_percent}} %
       

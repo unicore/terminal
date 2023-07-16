@@ -4,7 +4,7 @@ div
   div#super.section.q-pa-lg
     div.row.justify-center
       div(v-if="!showRegistration").col-md-6.col-xs-12
-        div.full-width.text-center
+        div.q-mb-md.full-width.text-center
           // p(style="font-size: 60px;") MMM-
           //   span 2024
           img(:src="HeaderLogo" alt="Homeunity logo" style="height: 120px; margin: auto;")
@@ -12,9 +12,9 @@ div
         div(flat)
           div.text-center
             p
-              span.header Экосистема 
-              span.header Финансовых 
-              span.header Продуктов 
+              span.header БЛОКЧЕЙН - 
+              span.header ПЛАТФОРМА
+              // span.header Продуктов 
             p(style="font-size: 18px;").q-mt-lg.q-ml-lg
               vueWriter(:array="hello" :typeSpeed="20" :eraseSpeed="20")
               
@@ -74,15 +74,16 @@ import { useUserStore } from '~/stores/user'
 import AuthForm from '~/components/user/AuthForm.vue'
 const userStore = useUserStore()
 import config from '~/config'
-import HeaderLogo from '~/assets/mmm_logo2.svg?url'
+import HeaderLogo from '~/assets/mmm_logo3.svg?url'
 
 let hello = ref([
-  'имени братьев Мавроди'
-  // 'Управляй развитием бизнеса и получай доход', 
-  // 'Учись новому на практике',
-  // 'Создавай прогресс',
-  // 'Играй в дополненной реальности',
-  // 'Совладей',
+  'спиральных пулов ликвидности',
+  'бесконечной доходности',
+  'ограниченных рисков',
+  'имени братьев Мавроди',
+  'под управлением участников',
+  'с открытым исходным кодом',
+  'для сообществ и бизнеса', 
   ])
 
 
@@ -129,7 +130,7 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
+<style >
 
 .section{
   
@@ -161,12 +162,13 @@ onMounted(async () => {
 }
 
 .header{ 
-  font-size: 48px;
+
+  font-size: 35px;
 }
 
 @media (max-width: 768px) {
   .header {
-    font-size: 28px !important;
+    font-size: 24px !important;
   }
 
   .section{
@@ -268,4 +270,38 @@ onMounted(async () => {
 }
 
 
+.is-typed {
+  font-family: 'Monaco';
+}
+.is-typed span.typed {
+  color: black;
+}
+.is-typed span.cursor {
+  display: inline-block;
+  width: 3px;
+  background-color: black;
+  animation: blink 1s infinite;
+}
+.is-typed span.underscore {
+  display: inline-flex;
+  width: 10px;
+  height: 1px;
+  align-items: flex-end;
+  background-color: black;
+  animation: blink 1s infinite;
+}
+.is-typed span.cursor.typing {
+  animation: none;
+}
+@keyframes blink {
+  49% {
+    background-color: black;
+  }
+  50% {
+    background-color: transparent;
+  }
+  99% {
+    background-color: transparent;
+  }
+}
 </style>
