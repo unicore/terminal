@@ -2,14 +2,14 @@
 div
   div.row.justify-center.q-pa-md
     div.col-md-4.col-sm-6.col-xs-12
-      div.row.justify-center.no-select
+      div.row.justify-center.no-select.q-mt-lg
         div.col-12
-          q-input(@keyup.enter="saveNickname" input-class='inputclass' style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").inputclass
+          q-input(standout="bg-green text-white" dense rounded @keyup.enter="saveNickname" input-class='inputclass' style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").inputclass
             template(v-slot:prepend)
-              q-btn(v-if="isEdit" @click="saveNickname" color="teal" flat  size="md")
+              q-btn(rounded v-if="isEdit" @click="saveNickname" color="teal" flat  size="md")
                 i.fas.fa-check
               
-              q-btn(v-if="!isEdit" @click="edit" color="teal" flat  size="md")
+              q-btn(rounded v-if="!isEdit" @click="edit" color="teal" flat  size="md")
                 i.fas.fa-pen
                 
             
@@ -17,16 +17,21 @@ div
               
               // q-btn(v-if="isEdit" @click="cancel" color="red" dense flat size="md").q-mr-xs
               //   i.fas.fa-cancel
-              p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
-              q-btn(icon="fa fa-copy" flat color="teal" size="sm" @click="copy(userStore.username)").q-ml-md
-              
-        
+              div
+                div
+                  p(style="position: relative;").q-field__label Адрес
+                div
+                  p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
+              q-btn(rounded icon="fa fa-copy" flat color="teal" size="sm" @click="copy(userStore.username)").q-ml-md
+                  
+          
+          
           
         
             
           // p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
     
-        p.sign это адрес вашего кошелька
+        
         
         
 
@@ -145,10 +150,17 @@ const copy = async (address) => {
   }
   .userheader {
     font-size: 10px;
-    padding-top: 14px;
+    
   }
   .sign {
     font-size: 10px;
     color: grey;
   }
+
+  .inputclass .q-field__append{
+    align-items: stretch;
+  }
+
+      
+
 </style>

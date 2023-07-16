@@ -16,16 +16,16 @@ div
           // q-badge(size="lg" v-if="currentHost.currentPool.color != 'white'" color="black").text-white.q-pa-sm №{{currentHost.current_pool_num}} чёрный
                     
       
-        div.full-width.q-pl-md.q-pr-md
+        div.full-width.q-pl-md.q-pr-md.q-mt-lg
           //
-          q-linear-progress( size="80px" v-if="currentHost.currentPool.color=='black'" :value="progress / 100" color="black" track-color="white" style="border: 1px solid grey;" rounded).full-width
+          q-linear-progress( size="60px" v-if="currentHost.currentPool.color=='black'" :value="progress / 100" color="black" track-color="white" style="border: 1px solid grey;" rounded).full-width
             div.absolute-full.flex.flex-center
               
               // q-badge(color="primary" text-color="white" :label="'заполнение ' + (progress) + '%'")
               q-badge(style="font-size: 16px;" v-if="currentHost.currentPool.color != 'white'" color="black").text-white.q-pa-sm Чёрный пул №{{currentHost.current_pool_num}} ({{progress}}%)
           
 
-          q-linear-progress(size="80px" v-if="currentHost.currentPool.color=='white'"   :value="progress / 100" color="white" track-color="black" style="border: 1px solid grey;" rounded).full-width.bg-black
+          q-linear-progress(size="60px" v-if="currentHost.currentPool.color=='white'"   :value="progress / 100" color="white" track-color="black" style="border: 1px solid grey;" rounded).full-width.bg-black
             div.absolute-full.flex.flex-center
               q-badge(style="font-size: 16px;"  v-if="currentHost.currentPool.color == 'white'" color="white").text-black.q-pa-sm Белый пул №{{currentHost.current_pool_num}} ({{progress}}%)
           
@@ -54,18 +54,18 @@ div
       div.col-md-6.col-xs-12
         // WalletsCarousel( :mini="false" )
         
-        q-card().nft-card.bg-secondary.text-white.q-mb-lg
+        // q-card().nft-card.bg-secondary.text-white.q-mb-lg
         
-          q-card-section
-            div.text-h5 {{currentHost.title}}
-            // div.text-h6 DAO {{currentHost.username.toUpperCase()}}
-            pre.q-mt-sm.purpose {{displayedPurpose}}
+        //   q-card-section
+        //     div.text-h5 {{currentHost.title}}
+        //     // div.text-h6 DAO {{currentHost.username.toUpperCase()}}
+        //     pre.q-mt-sm.purpose {{displayedPurpose}}
             
-          q-btn(dense size="sm" @click="showMore = !showMore").full-width.text-center {{showMore ? 'Показать меньше' : 'Показать больше'}}
+        //   q-btn(dense size="sm" @click="showMore = !showMore").full-width.text-center {{showMore ? 'Показать меньше' : 'Показать больше'}}
         
            
 
-        div().row.justify-center.q-pa-md
+        div().row.justify-center
           div.col-md-12.col-xs-12
             q-card(flat )
               div.q-pa-sm

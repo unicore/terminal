@@ -22,7 +22,7 @@ q-layout(view="hHh LpR fFf")
 
   q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer-right")
     div(v-if="loggedIn && isAdmin").full-width.text-center
-      q-toggle( size="xs" v-model="showAdmin" val="false" left-label).full-width.text-center
+      q-toggle( size="xs" v-model="showAdmin" val="false")
       span(style="font-size: 10px;") админ
 
     template(v-if="!showAdmin")
