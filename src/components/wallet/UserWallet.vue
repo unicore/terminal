@@ -7,10 +7,10 @@ div.row
           // img(:src="walletIcon" alt="").full-width
         p(style="font-size: 18px;").full-width.text-center {{ userStore.userBalancesSafe[symbol] }}
       div.row.justify-around.q-mt-md
-        q-btn.col-6(dense size="sm" flat label="Пополнить" @click="showDepositDialog" v-if="wallet?.canDeposit" icon="fa-solid fa-arrow-turn-down")
-        q-btn.col-6(dense size="sm" flat label="Вывести" @click="showWithdrawDialog" v-if="wallet?.canWithdraw" icon="fa-solid fa-arrow-turn-up")
-        q-btn.col-6(dense size="sm" flat disable color="grey" label="Перевести" @click="showWithdrawDialog" v-if="wallet?.canTransfer" icon="fa-solid fa-arrow-right")
-        q-btn.col-6(dense size="sm" flat disable color="grey" label="Обменять" @click="showChangeDialog" v-if="wallet?.canChange" icon="fa-solid fa-arrow-right-arrow-left")
+        q-btn.col-6(dense size="xs" flat label="Пополнить" @click="showDepositDialog" v-if="wallet?.canDeposit" icon="fa-solid fa-arrow-turn-down")
+        q-btn.col-6(dense size="xs" flat label="Вывести" @click="showWithdrawDialog" v-if="wallet?.canWithdraw" icon="fa-solid fa-arrow-turn-up")
+        q-btn.col-6(dense size="xs" flat disable color="grey" label="Перевести" @click="showWithdrawDialog" v-if="wallet?.canTransfer" icon="fa-solid fa-arrow-right")
+        q-btn.col-6(dense size="xs" flat disable color="grey" label="Обменять" @click="showChangeDialog" v-if="wallet?.canChange" icon="fa-solid fa-arrow-right-arrow-left")
 
 
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")

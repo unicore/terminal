@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   div.row.q-pa-md
-    q-card(flat bordered).col-md-4.col-xs-12.q-pa-md
+    q-card(flat).col-md-4.col-xs-12
       q-input(@click="copyRLink" square bordedless label="Ссылка для приглашения" readonly v-model="link" style="cursor: pointer;")
         template(v-slot:append)
           q-btn(@click="copyRLink" icon="content_copy" flat color="teal")

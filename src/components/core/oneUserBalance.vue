@@ -19,10 +19,11 @@ div
         q-separator(:dark="isDark")
 
 
-      // div
-      //   span процент выгоды: 
-      //   span.q-pa-sm {{balance.convert_percent}}
-      //   q-separator
+      div
+        span получено: 
+        span.q-pa-sm {{balance.withdrawed}}
+        q-separator
+        
       // div
       //   span старт конвертации: 
       //   span.q-pa-sm {{balance.start_convert_amount}}

@@ -31,23 +31,24 @@ div
           
               // q-badge(color="white" text-color="primary" :label="'заполнение ' + (progress) + '%'")
 
-          div(v-if="!currentHost.sale_is_enabled" style="font-size: 10px;").full-width.text-center.text-grey
-            
-            p(v-if="!waitingMode") завершение цикла {{untilRestart}}
-            p(v-if="waitingMode") режим ожидания
+          
+          div.q-pa-sm.full-width.text-center
+            div(v-if="currentHost.sale_is_enabled")
+              span(style="font-size: 12px;").q-pa-xs до следующего пула: 
+              q-badge(flat color="white" text-color="black").q-pa-sm {{currentHost.currentPool.remain}}
+              
+            div(v-if="!currentHost.sale_is_enabled")
 
-
-          div(v-if="currentHost.sale_is_enabled" style="font-size: 10px;").full-width.text-center.text-grey
-            
-            p до заполнения: {{currentHost.currentPool.remain}}
-        
+              span(style="font-size: 12px;").q-pa-xs до перезагрузки: 
+              q-badge(color="black" flat v-if="!waitingMode").q-pa-sm {{untilRestart}}
+              q-badge(color="black" flat v-if="waitingMode").q-pa-sm -
 
         div(style="padding-top: 30px; margin-bottom: 50px;").row.justify-center
 
           div.col-6.q-pa-xs
             buyWindow(:hostname="currentHost.username").full-width
           div.col-6.q-pa-xs
-            q-btn(color="teal" flat size="md"  @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})").full-width Мои балансы
+            q-btn(color="green" flat size="md"  @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})").full-width Мои балансы
         
         
 
@@ -67,27 +68,99 @@ div
 
         div().row.justify-center
           div.col-md-12.col-xs-12
-            q-card(flat )
-              div.q-pa-sm
-                span Доходность: 
-                q-badge.q-pa-sm +{{profitStep}}%
-                p.text-grey на каждом одноцветном пуле
-              q-separator
+            div.row
+
+              div.col-12.q-mb-lg
+                q-card(flat )
+                  div(style="align-items: center;")
+                    p(style="font-size: 12px;").text-grey Режим
+                      // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
+                    p(color="black" outline) {{mode}}
+                    // p.text-grey на каждом одноцветном пуле
+
+                  q-separator
+                
+
+              div(v-if="currentHost.sale_is_enabled").col-12.q-mb-lg
+                q-card(flat )
+                  div(style="align-items: center; ")
+                    p(style="font-size: 12px;").text-grey Курс
+                      // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
+                    p(color="black" outline) {{currentHost?.quants_convert_rate / 10000}} USDT / MAVRO
+                    // p.text-grey на каждом одноцветном пуле
+
+                  q-separator
+                
+
+
+                // div.col-1.q-pa-xs
+                  // q-btn(flat rounded outline color="grey").full-width.full-height ?
             
-            q-card(flat v-if="!currentHost.sale_is_enabled")
-              div.q-pa-sm
-                span Комиссия: 
-                q-badge.q-pa-sm -{{currentHost.spiral?.loss_percent / 10000}}%
-                p.text-grey на первом противоцветном пуле
-              q-separator
 
-            q-card(flat v-if="currentHost.sale_is_enabled")
-              div.q-pa-sm
-                span Курс: 
-                q-badge.q-pa-sm {{currentHost?.quants_convert_rate / 10000}} USDT / MAVRO
-                p.text-grey растёт на новом пуле
-              q-separator
 
+              div.col-12.q-mb-lg
+                q-card(flat )
+                  div(style="align-items: center; ")
+                    p(style="font-size: 12px;").text-grey Доходность
+                      // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
+                    p(color="black" outline) +{{profitStep}}%
+                    // p.text-grey на каждом одноцветном пуле
+                    
+                  q-separator
+                
+
+
+              // div(style="align-items: center;").text-center.col-12.q-pa-md
+              //   q-card(flat bordered)
+              //     div.q-pa-sm
+              //       p(style="font-size: 12px;").q-pa-xs Доходность
+              //       q-badge(color="black" outline).q-pa-sm +{{profitStep}}%
+              //       p(style="font-size: 12px;").text-grey на каждом одноцветном пуле
+
+                    
+                  // q-separator
+                // div.col-1.q-pa-xs
+                  // q-btn(flat rounded outline color="grey").full-width.full-height ?
+
+
+              div(v-if="!currentHost.sale_is_enabled").col-12.q-mb-lg
+                q-card(flat )
+                  div(style="align-items: center; ")
+                    p(style="font-size: 12px;").text-grey Риск
+                      // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
+                    p(color="black" outline) -{{currentHost.spiral?.loss_percent / 10000}}%
+                    // p.text-grey на каждом одноцветном пуле
+
+                  q-separator
+                
+              div(v-if="currentHost.sale_is_enabled").col-12.q-mb-lg
+                q-card(flat )
+                  div(style="align-items: center; ")
+                    p(style="font-size: 12px;").text-grey Риск
+                      // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
+                    p(color="black" outline) 0%
+                    // p.text-grey на каждом одноцветном пуле
+
+                  q-separator
+                
+
+
+
+                    // p.text-grey на первом противоцветном пуле
+                  // q-separator
+
+                
+
+                // div.col-1.q-pa-xs
+                  // q-btn(flat rounded outline color="grey").full-width.full-height ?
+                
+              
+
+              div(style="align-items: center;" ).text-center.col-12.q-pa-md
+
+            
+
+        
               // q-card-section
               //   span осталось: 
               //   q-badge.q-pa-sm {{currentHost.currentPool.remain_quants / 1000000}}
@@ -156,6 +229,10 @@ let progress = ref(0);
 
 const profitStep = computed(() => {
   return currentHost.value.profitStep
+})
+
+const mode = computed(() => {
+  return currentHost.value.type == 'tokensale' ? `токенсейл ${currentHost.value.asset_on_sale_symbol}` : 'спираль'
 })
 
 let currentTime = computed(() => {
