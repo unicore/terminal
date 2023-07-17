@@ -26,7 +26,7 @@ export const componentsMap = {
   adminPartners: () => import('../components/dashboard/admin/partners.vue'),
   p2p: () => import("../components/p2p/index.vue"),
   wallet: () => import("../components/wallet/walletPage.vue")
-
+  
   // Добавьте остальные компоненты из componentsMap
 };
 

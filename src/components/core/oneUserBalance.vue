@@ -13,17 +13,28 @@ div
         span сумма стейкинга: 
         span.q-pa-sm {{balance.purchase_amount}}
         q-separator(:dark="isDark")
+      // div
+      //   span сумма конвертаций: 
+      //   span.q-pa-sm {{balance.start_convert_amount}}
+      //   q-separator(:dark="isDark")
+      
+      div
+        // (v-if="balance.root_percent > 0")
+        span доход: 
+        span.q-pa-sm +{{balance.root_percent / 10000}}% USDT | +{{balance.convert_percent / 10000}}% MAVRO
+        q-separator(:dark="isDark")
+      
       div
         span доступно: 
         span.q-pa-sm {{balance.available}} | {{balance.convert_amount}}
         q-separator(:dark="isDark")
 
 
-      div
-        span получено: 
-        span.q-pa-sm {{balance.withdrawed}}
-        q-separator
-        
+      // div
+      //   span получено: 
+      //   span.q-pa-sm {{balance.withdrawed}}
+      //   q-separator
+
       // div
       //   span старт конвертации: 
       //   span.q-pa-sm {{balance.start_convert_amount}}
@@ -40,11 +51,6 @@ div
 
       
       // p {{balance.root_percent}}
-      div
-        // (v-if="balance.root_percent > 0")
-        span доход: 
-        span.q-pa-sm +{{balance.root_percent / 10000}}% USDT | +{{balance.convert_percent / 10000}}% MAVRO
-        q-separator(:dark="isDark")
       // div(v-if="balance.root_percent == 0")
       //   span комиссия: 
       //   span.q-pa-sm {{lossAvailable}}%
