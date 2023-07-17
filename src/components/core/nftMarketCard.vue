@@ -1,10 +1,12 @@
 <template lang="pug">
-q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})").nft-card.bg-secondary.text-white
+q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})" flat bordered style="border: 1px solid grey;").nft-card.q-mt-md
   img(:src="host?.meta.host_image")
   q-card-section
+    q-badge(style="position: absolute; top: -5px; right: 0px;") {{hostType}} {{host.asset_on_sale_symbol}}
+    q-badge(style="position: absolute; top: -5px; left: 0px;") DAO {{host.username.toUpperCase()}}
     div.text-h6 {{host.title}}
-    // div.text-h6 DAO {{host.username.toUpperCase()}}
-    div {{host.purpose}}
+    
+    div.q-mt-xs {{host.purpose}}
     // q-card-section
     //   q-badge шаг цены: +5%
     //   q-badge цена фракции: {{host.currentPool.quant_cost}}
@@ -26,6 +28,11 @@ q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})").
   const hostStore = useHostStore()
 
   let dialog = ref(false)
+  
+  const hostType = computed(() => {
+    if (props.host.type == 'tokensale') return 'токенсейл'
+      else return ''
+  })
 
   const props = defineProps({
     host: {
