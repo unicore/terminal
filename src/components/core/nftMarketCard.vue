@@ -2,8 +2,8 @@
 q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})" flat bordered style="border: 1px solid grey;").nft-card.q-mt-md
   img(:src="host?.meta.host_image")
   q-card-section
-    q-badge(style="position: absolute; top: -5px; right: 0px;") {{hostType}} {{host.asset_on_sale_symbol}}
-    q-badge(style="position: absolute; top: -5px; left: 0px;") DAO {{host.username.toUpperCase()}}
+    q-badge(color="green" style="position: absolute; top: -5px; right: 0px;") {{hostType}} {{host.asset_on_sale_symbol}}
+    q-badge(color="green" style="position: absolute; top: -5px; left: 0px;") DAO {{host.username.toUpperCase()}}
     div.text-h6 {{host.title}}
     
     div.q-mt-xs {{host.purpose}}
@@ -12,8 +12,8 @@ q-card(@click="$router.push({name: 'nft', params: {hostname: host.username}})" f
     //   q-badge цена фракции: {{host.currentPool.quant_cost}}
     //   q-badge осталось фракций: {{host.currentPool.total_quants / 1000000}}
   
-  q-card-actions(align="left")
-    q-btn(flat v-if="!$route.params.hostname") Подробнее
+  q-card-actions(align="right")
+    q-btn(v-if="!$route.params.hostname" outline) Войти
     // buyWindow(v-if="props.host" :hostname="props.host.username")
 
       
