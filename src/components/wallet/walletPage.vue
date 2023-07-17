@@ -1,15 +1,15 @@
 <template lang="pug">
 div
-  div.row.justify-center.q-pa-md
+  div.row.justify-center
     div.col-md-4.col-sm-6.col-xs-12
-      div.row.justify-center.no-select.q-mt-lg
+      div.row.justify-center.no-select
         div.col-12
-          q-input(@blur="saveNickname" standout="bg-green text-white" dense rounded @keyup.enter="saveNickname" input-class='inputclass' style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").inputclass
+          q-input(color="green" square @blur="saveNickname" filled dense  @keyup.enter="saveNickname" input-class='inputclass' style="text-align: right;" ref="inputRef" :readonly="!isEdit" :label="dynamicLabel" placeholder="" v-model="partner.nickname").inputclass
             template(v-slot:prepend)
-              q-btn(rounded v-if="isEdit" @click="saveNickname" color="teal" flat  size="md")
+              q-btn( v-if="isEdit" @click="isEdit=false" color="green" flat  size="md")
                 i.fas.fa-check
               
-              q-btn(rounded v-if="!isEdit" @click="edit" color="teal" flat  size="md")
+              q-btn( v-if="!isEdit" @click="edit" color="grey" flat  size="md")
                 i.fas.fa-pen
                 
             
@@ -22,7 +22,7 @@ div
                   p(style="position: relative;").q-field__label Ваш адрес
                 div
                   p(style="cursor: pointer;" @click="copy(userStore.username)").userheader @{{userStore.username}}
-              q-btn(rounded icon="fa fa-copy" flat color="teal" size="sm" @click="copy(userStore.username)").q-ml-md
+              q-btn( icon="fa fa-copy" flat color="grey" size="sm" @click="copy(userStore.username)").q-ml-md
                   
           
           
@@ -36,7 +36,7 @@ div
         
         
 
-  div.row.justify-center.q-pa-md
+  div.row.justify-center.q-pa-md.q-mt-lg
     div.col-md-4.col-sm-6.col-xs-12
       
       WalletsCarousel(:mini="false" :asCarousel="false").col-md-4.col-sm-6.col-xs-12
