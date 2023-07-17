@@ -28,8 +28,9 @@ div(:class="props.mini ? 'layout-mini' : 'layout-full'")
   import WalletsCarousel from '~/components/wallet/WalletsCarousel.vue'
 
   const userStore = useUserStore()
-  const link = computed(() => `${location.protocol}//${location.host}/?r=${userStore.username}`)
-
+  // const link = computed(() => `${location.protocol}//${location.host}/?r=${userStore.username}`)
+  const link = computed(() => `${config.base_url}?&start=${userStore.username}`)
+  
   const props = defineProps<{
     mini?: boolean
   }>()
