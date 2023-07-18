@@ -60,15 +60,15 @@ div
     div().q-mt-sm.flex  
       q-btn(flat dense @click="refreshbal" @loading="loading").q-pa-xs
         i(color="orange" ).full-width.fa.fa-refresh.q-mr-xs.q-mt-xs
-        span(style="font-size: 8px;").full-width обновить
+        span(style="font-size: 8px;") обновить
       
       q-btn(flat dense @click="withdrawbal" :disabled="!rootIsNull") 
         i(color="green").full-width.fa-solid.fa-angle-down.q-mr-xs.q-mt-xs
-        span(style="font-size: 8px;").full-width вывести USDT
+        span(style="font-size: 8px;") вывести USDT
 
       q-btn(flat dense @click="convertbal" @loading="loading") 
         i(color="red" ).full-width.fa-solid.fa-angles-down.q-mr-xs.q-mt-xs
-        span(style="font-size: 8px;").full-width вывести MAVRO
+        span(style="font-size: 8px;") вывести MAVRO
       
       // !needRefresh && isWin && isAvailable
 
