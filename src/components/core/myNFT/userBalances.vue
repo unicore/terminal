@@ -37,7 +37,7 @@ div(v-if="balances")
           userBalance(:balance="item" color="black" :host="props.host").col-4
     
     
-  div(v-else).text-center у вас нет токенов
+  div(v-else).text-center у вас нет токенов пула
     
 </template>//
 

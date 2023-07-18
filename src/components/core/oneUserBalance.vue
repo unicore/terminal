@@ -57,18 +57,18 @@ div
       //   q-separator
 
 
-    q-card-actions(align="right").q-mt-sm  
-      q-btn(outline dense color="orange" @click="refreshbal" @loading="loading").q-pa-xs
-        i.full-width.fa.fa-refresh.q-mr-xs.q-mt-xs
-        span(style="font-size: 10px;").full-width обновить
+    div().q-mt-sm.flex  
+      q-btn(flat dense @click="refreshbal" @loading="loading").q-pa-xs
+        i(color="orange" ).full-width.fa.fa-refresh.q-mr-xs.q-mt-xs
+        span(style="font-size: 8px;").full-width обновить
       
-      q-btn(outline dense color="green"  @click="withdrawbal" :disabled="!rootIsNull") 
-        i.full-width.fa-solid.fa-angle-down.q-mr-xs.q-mt-xs
-        span(style="font-size: 10px;").full-width вывести USDT
+      q-btn(flat dense @click="withdrawbal" :disabled="!rootIsNull") 
+        i(color="green").full-width.fa-solid.fa-angle-down.q-mr-xs.q-mt-xs
+        span(style="font-size: 8px;").full-width вывести USDT
 
-      q-btn(outline dense color="red" @click="convertbal" @loading="loading") 
-        i.full-width.fa-solid.fa-angles-down.q-mr-xs.q-mt-xs
-        span(style="font-size: 10px;").full-width вывести MAVRO
+      q-btn(flat dense @click="convertbal" @loading="loading") 
+        i(color="red" ).full-width.fa-solid.fa-angles-down.q-mr-xs.q-mt-xs
+        span(style="font-size: 8px;").full-width вывести MAVRO
       
       // !needRefresh && isWin && isAvailable
 
