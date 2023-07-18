@@ -19,7 +19,10 @@ q-layout(view="hHh LpR fFf")
   //     q-btn(color="" class="btn-menu" v-if="loggedIn" size="lg" stretch flat @click="toggleRightDrawer" :dense="isMobile")
   //       // span {{userStore.username}}
   //       i.fa-solid.fa-bars
-
+  
+  // q-btn(@click="$q.dark.set(true)") set dark
+  // q-btn(@click="$q.dark.set(false)") set light
+  
   q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer-right")
     div(v-if="loggedIn && isAdmin").full-width.text-center
       q-toggle( size="xs" v-model="showAdmin" val="false")

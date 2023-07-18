@@ -72,10 +72,10 @@ div
 
               div.col-12.q-mb-lg
                 q-card(flat )
-                  div(style="align-items: center;")
+                  div(style="align-items: center;").q-pa-xs
                     p(style="font-size: 12px;").text-grey Режим
                       // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
-                    p(color="black" outline) {{mode}}
+                    p(color="black" outline).q-ml-sm {{mode}}
                     // p.text-grey на каждом одноцветном пуле
 
                   q-separator
@@ -83,10 +83,10 @@ div
 
               div(v-if="currentHost.sale_is_enabled").col-12.q-mb-lg
                 q-card(flat )
-                  div(style="align-items: center; ")
+                  div(style="align-items: center; ").q-pa-xs
                     p(style="font-size: 12px;").text-grey Курс
                       // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
-                    p(color="black" outline) {{currentHost?.quants_convert_rate / 10000}} USDT / MAVRO
+                    p(color="black" outline).q-ml-sm {{currentHost?.quants_convert_rate / 10000}} USDT / MAVRO
                     // p.text-grey на каждом одноцветном пуле
 
                   q-separator
@@ -100,12 +100,12 @@ div
 
               div.col-12.q-mb-lg
                 q-card(flat )
-                  div(style="align-items: center; ")
+                  div(style="align-items: center; ").q-pa-xs
                     p(style="font-size: 12px;").text-grey Доходность
                       // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
-                    p(color="black" outline) +{{profitStep}}%
+                    p(color="black" outline).q-ml-sm +{{profitStep}}%
                     // p.text-grey на каждом одноцветном пуле
-                    
+
                   q-separator
                 
 
@@ -125,20 +125,20 @@ div
 
               div(v-if="!currentHost.sale_is_enabled").col-12.q-mb-lg
                 q-card(flat )
-                  div(style="align-items: center; ")
+                  div(style="align-items: center; ").q-pa-xs
                     p(style="font-size: 12px;").text-grey Риск
                       // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
-                    p(color="black" outline) -{{currentHost.spiral?.loss_percent / 10000}}%
+                    p(color="black" outline).q-ml-sm -{{currentHost.spiral?.loss_percent / 10000}}%
                     // p.text-grey на каждом одноцветном пуле
 
                   q-separator
                 
               div(v-if="currentHost.sale_is_enabled").col-12.q-mb-lg
                 q-card(flat )
-                  div(style="align-items: center; ")
+                  div(style="align-items: center; ").q-pa-xs
                     p(style="font-size: 12px;").text-grey Риск
                       // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
-                    p(color="black" outline) 0%
+                    p(color="black" outline).q-ml-sm 0%
                     // p.text-grey на каждом одноцветном пуле
 
                   q-separator

@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  q-card(bordered flat :dark="isDark").nft-balance
+  q-card(bordered flat :dark="isDark" v-bind:style="{color: color}").nft-balance
     
     q-badge(floating) № {{balance.id}}
     
@@ -58,16 +58,16 @@ div
 
 
     q-card-actions(align="right").q-mt-sm  
-      q-btn( flat dense color="orange" @click="refreshbal" @loading="loading")
-        i.full-width.fa.fa-refresh.q-mr-xs
+      q-btn(outline dense color="orange" @click="refreshbal" @loading="loading").q-pa-xs
+        i.full-width.fa.fa-refresh.q-mr-xs.q-mt-xs
         span(style="font-size: 10px;").full-width обновить
       
-      q-btn(flat dense color="teal"  @click="withdrawbal" :disabled="!rootIsNull") 
-        i.full-width.fa-solid.fa-angle-down.q-mr-xs
+      q-btn(outline dense color="green"  @click="withdrawbal" :disabled="!rootIsNull") 
+        i.full-width.fa-solid.fa-angle-down.q-mr-xs.q-mt-xs
         span(style="font-size: 10px;").full-width вывести USDT
 
-      q-btn(flat dense color="red" @click="convertbal" @loading="loading") 
-        i.full-width.fa-solid.fa-angles-down.q-mr-xs
+      q-btn(outline dense color="red" @click="convertbal" @loading="loading") 
+        i.full-width.fa-solid.fa-angles-down.q-mr-xs.q-mt-xs
         span(style="font-size: 10px;").full-width вывести MAVRO
       
       // !needRefresh && isWin && isAvailable
@@ -107,6 +107,13 @@ const props = defineProps({
 
 const isDark = computed(() => {
   return props.color != "white"
+})
+
+const color = computed(() => {
+  if (props.color == 'white')
+    return "black"
+  else return "white"
+  // style="color: grey;"
 })
 
 const needRefresh = computed(() => {

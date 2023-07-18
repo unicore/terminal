@@ -3,9 +3,11 @@ div(v-if="balances")
   div(v-if="Object.values(balances).length > 0")
     div(v-if="whiteBalances.length > 0")
       div(style="display: flex; align-items: center; justify-content: center;").full-width.text-center
-        i( style="font-size: 26px; color: black; margin-right: 10px;").far.fa-circle
-        // i(v-if="!whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
-        // i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
+        // p {{isDarkMode}}
+        // i(v-if="!$q.dark.isActive" style="font-size: 26px; margin-right: 10px;" ).far.fa-circle
+        // i(v-if="$q.dark.isActive" style="font-size: 26px; margin-right: 10px;" ).fa-solid.fa-circle
+        // // i(v-if="!whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
+        // // i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
         
         p(style="font-size: 26px;") белые токены
       div
@@ -21,8 +23,9 @@ div(v-if="balances")
       div(style="display: flex; align-items: center; justify-content: center;").full-width.text-center
         // i(v-if="whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
         // i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
+        // i(v-if="$q.dark.isActive" style="font-size: 26px; margin-right: 10px;" ).far.fa-circle
         
-        i(style="font-size: 26px; color: black; margin-right: 10px;").fa-solid.fa-circle
+        // i(v-if="!$q.dark.isActive" style="font-size: 26px; margin-right: 10px;").fa-solid.fa-circle
 
         p(style="font-size: 26px;") чёрные токены
       div
@@ -46,7 +49,9 @@ import { useUserStore } from '~/stores/user'
 import { useHostStore } from '~/stores/host'
 import { useRouter } from 'vue-router'
 import userBalance from '~/components/core/oneUserBalance.vue'
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar()
 const router = useRouter()
 
 const hostStore = useHostStore()
@@ -71,6 +76,21 @@ const options = {
     { start: 576, end: 768, size: 2 },
     { size: 3 },
   ]}
+
+// const isDarkMode = computed(() => {
+//   return $q?.dark?.isActive
+// })
+
+let colorWhite = computed(() => {
+  // if ($q.dark.isActive)
+  // console.log("IS DARK: ", $q.dark.isActive)
+  // if ($q.dark.)
+    return 'red'
+})
+
+let colorBlack = computed(() => {
+  return 'red'
+})
 
 onMounted(async () => {
   await hostStore.loadBalances(userStore.username, props.host.username)
