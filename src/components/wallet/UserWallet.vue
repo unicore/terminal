@@ -3,20 +3,22 @@ div.row
   q-card(flat).col
     q-card-section
       div.row.text-center
+
         // div(style="max-width: 30px;")
           // img(:src="walletIcon" alt="").full-width
-        p(style="font-size: 18px;").full-width.text-center {{ userStore.userBalancesSafe[symbol] }}
+        p(style="font-size: 22px;").full-width.text-center {{ userStore.userBalancesSafe[symbol] }}
       div.row.justify-around.q-mt-md
-        q-btn.col-6(dense size="xs" flat label="Пополнить" @click="showDepositDialog" v-if="wallet?.canDeposit" icon="fa-solid fa-arrow-turn-down")
-        q-btn.col-6(dense size="xs" flat label="Вывести" @click="showWithdrawDialog" v-if="wallet?.canWithdraw" icon="fa-solid fa-arrow-turn-up")
-        q-btn.col-6(dense size="xs" flat disable color="grey" label="Перевести" @click="showWithdrawDialog" v-if="wallet?.canTransfer" icon="fa-solid fa-arrow-right")
-        q-btn.col-6(dense size="xs" flat disable color="grey" label="Обменять" @click="showChangeDialog" v-if="wallet?.canChange" icon="fa-solid fa-arrow-right-arrow-left")
+        q-btn(dense size="xs"  label="Пополнить" @click="showDepositDialog" v-if="wallet?.canDeposit" icon="fa-solid fa-arrow-turn-down").q-ma-xs.q-pa-sm
+        q-btn(dense size="xs"  label="Вывести" @click="showWithdrawDialog" v-if="wallet?.canWithdraw" icon="fa-solid fa-arrow-turn-up").q-ma-xs.q-pa-sm
+        q-btn(dense size="xs"   color="green" label="Перевод" @click="showTransferDialog" v-if="wallet?.canTransfer" icon="fa-solid fa-arrow-right").q-ma-xs.q-pa-sm
+        q-btn(dense size="xs"   color="green" label="Пополнить / вывести" @click="showChangeDialog" v-if="wallet?.canChange" icon="fa-solid fa-arrow-right-arrow-left").q-ma-xs.q-pa-sm
+        q-btn(dense size="xs"   color="green" label="Стейкинг" @click="showStakeDialog" v-if="wallet?.symbol == 'MAVRO'" icon="fa-solid fa-arrow-right-arrow-left").q-ma-xs.q-pa-sm
 
 
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
-    q-card(style="min-width: 350px; max-width: 100%;").bg-primary.text-white
+    q-card(style="min-width: 350px; max-width: 100%;")
       div(v-if="showWithdraw")
-        q-bar
+        q-bar(style="background: 'green'")
           span Вывод
           q-space
           q-btn(dense flat icon="close" v-close-popup)
@@ -25,13 +27,22 @@ div.row
         withdraw(:wallet="wallet" @withdrawFinish="withdrawFinish")
       
       div(v-if="showDeposit")
-        q-bar
+        q-bar(style="background: 'green'")
           span Депозит
           q-space
           q-btn(dense flat icon="close" v-close-popup)
             q-tooltip Close
 
         deposit()
+
+      div(v-if="showTransfer")
+        q-bar(style="background: 'green'")
+          span Перевод
+          q-space
+          q-btn(dense flat icon="close" v-close-popup)
+            q-tooltip Close
+
+        transfer(:wallet="wallet" @withdrawFinish="withdrawFinish")
 
 
       
@@ -45,6 +56,7 @@ div.row
   import walletIcon from '~/assets/wallet.svg'
   import deposit from '~/components/wallet/deposit.vue'
   import withdraw from '~/components/wallet/withdraw.vue'
+  import transfer from '~/components/wallet/transfer.vue'
   import { useRouter } from 'vue-router'
 
   import config from '~/config'
@@ -74,14 +86,26 @@ div.row
 
   let showWithdraw = ref(false)
   let showDeposit = ref(false)
+  let showTransfer = ref(false)
 
   const showChangeDialog = () => {
     router.push({name: 'p2p'})
   }
 
+
+  const showStakeDialog = () => {
+    router.push({name: 'pools'})
+  }
+
   const showWithdrawDialog = () => {
     dialog.value = true
     showWithdraw.value = true
+  }
+
+
+  const showTransferDialog = () => {
+    dialog.value = true
+    showTransfer.value = true
   }
 
   const withdrawFinish = () => {

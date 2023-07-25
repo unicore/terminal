@@ -1,14 +1,16 @@
 <template>
-  <div>
+  <div style="width: 100%;">
      <!-- :title="`Действия аккаунта ${props.username}`" -->
       
     <q-table
       flat
+      dense
       v-model:pagination="pagination"
       :loading="loading"
       :rows="rows"
       :columns="columns"
       row-key="k"
+      style="width: 100%;"
       @request="changePageFromTable">
       <template #body-cell-transaction_id="p">
         <q-td :props="p">
@@ -54,13 +56,13 @@
   const rows = ref<any[]>([])
 
   const columns: QTableProps['columns'] = [
-    {
-      name: 'transaction_id',
-      required: true,
-      label: 'ID транзакции',
-      align: 'left',
-      field: (row: any) => row.transaction_id,
-    },
+    // {
+    //   name: 'transaction_id',
+    //   required: true,
+    //   label: 'ID транзакции',
+    //   align: 'left',
+    //   field: (row: any) => row.transaction_id,
+    // },
     {
       name: 'timestamp',
       required: true,
@@ -79,16 +81,16 @@
       name: 'data',
       required: true,
       label: 'Данные',
-      align: 'left',
+      align: 'center',
       field: (row: any) => row.data,
     },
-    {
-      name: 'memo',
-      required: true,
-      label: 'Памятка',
-      align: 'right',
-      field: (row: any) => row.data.memo,
-    },
+    // {
+    //   name: 'memo',
+    //   required: true,
+    //   label: 'Памятка',
+    //   align: 'right',
+    //   field: (row: any) => row.data.memo,
+    // },
   ]
 
   const loadPage = async () => {

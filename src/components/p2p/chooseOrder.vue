@@ -175,6 +175,7 @@ import chains from '~/chainsMain'
 import {Notify} from "quasar"
 import { useWindowSize } from 'vue-window-size'
 const { width } = useWindowSize()
+import axios from 'axios'
 
 const router = useRouter()
 
@@ -531,6 +532,26 @@ const create = async() => {
       //       classes: 'notify-class',
       //   })
       // })
+      // 
+      // this.dialog = false
+            // var self = this
+            // let notify_params = {
+            //       notify_to: this.orderOnAct.creator,
+            //       status: 0,
+            //       signature: "signature",
+            //     }
+        
+            // this.$axios.get(self.registrator + '/notify', 
+            //   {                
+            //     params: notify_params
+            //   }).then(message =>{
+
+            //     console.log('notify', message)
+
+            //   }).catch(e => {
+            //     console.log('notify', e.message)
+            //   })
+              
 
 
     } else if (data.type === "buy") {
@@ -564,7 +585,28 @@ const create = async() => {
             classes: 'notify-class',
         })
 
+
+        var self = this
+    
+        var notify_params = {
+              notify_to: orderOnAct.value.creator,
+              status: 0,
+              signature: "signature",
+            }
+        
+         axios.get(config.registrator.api + '/notify', 
+          {                
+            params: notify_params
+          }).then(message => {
+
+            console.log('notify success', message)
+
+          }).catch(e => {
+            console.log('notify error', e.message)
+          })
+        
         router.push({name: "p2p"})
+
 
       }).catch(e => {
          Notify.create({

@@ -115,7 +115,7 @@ import { useBlockchainStore } from '~/stores/blockchain'
 import {Notify, copyToClipboard} from 'quasar'
 
 const router = useRouter()
-
+import axios from 'axios'
 const hostStore = useHostStore()
 const userStore = useUserStore()
 const bcStore = useBlockchainStore()
@@ -250,39 +250,40 @@ const accept = async (order) => {
     })
     
   }
-  // let notify_params = {
-  //                 notify_to: order.creator,
-  //                 status: 1,
-  //                 signature: "signature",
-  //               }
 
-  //NOTIFY USERS! THROW BOT
+          let notify_params = {
+                  notify_to: order.creator,
+                  status: 1,
+                  signature: "signature",
+                }
 
-   // this.$axios.get(this.$config.registrator + '/notify', 
-   //      {                
-   //        params: notify_params
-   //      }).then(message =>{
+          axios.get(config.registrator.api + '/notify', 
+              {                
+                params: notify_params
+              }).then(message =>{
 
-   //        console.log('notify', message)
+                console.log('notify', message)
 
-   //      }).catch(e => {
-   //        console.log('notify', e.message)
-   //      })
+              }).catch(e => {
+                console.log('notify error', e.message)
+              })
 
-   //  this.$axios.get(this.$config.registrator + '/notify', 
-   //      {                
-   //        params: {
-   //          notify_to: order.parent_creator,
-   //          status: 1,
-   //          signature: "signature",
-   //        }
-   //      }).then(message =>{
+          
+          axios.get(config.registrator.api + '/notify', 
+              {                
+                params: {
+                  notify_to: order.parent_creator,
+                  status: 1,
+                  signature: "signature",
+                }
+              }).then(message =>{
 
-   //        console.log('notify', message)
+                console.log('notify2', message)
 
-   //      }).catch(e => {
-   //        console.log('notify', e.message)
- //      })
+              }).catch(e => {
+                console.log('notify error 2', e.message)
+              })
+
 
 }
 
@@ -298,41 +299,40 @@ const confirm = async (order) => {
         color: 'teal', //'negative' 'teal'
         classes: 'notify-class',
     })
-  
-        
-  //   let notify_params = {
-  //             notify_to: order.parent_creator,
-  //             status: 2,
-  //             signature: "signature",
-  //           }
+     
+    let notify_params = {
+      notify_to: order.parent_creator,
+      status: 2,
+      signature: "signature",
+    }
 
-  //    this.$axios.get(this.$config.registrator + '/notify', 
-  //         {                
-  //           params: notify_params
-  //         }).then(message =>{
+     axios.get(config.registrator.api + '/notify', 
+      {                
+        params: notify_params
+      }).then(message =>{
 
-  //           console.log('notify', message)
+        console.log('notify', message)
 
-  //         }).catch(e => {
-  //           console.log('notify', e.message)
-  //         })
+      }).catch(e => {
+        console.log('notify err', e.message)
+      })
 
-  //   let notify_params2 = {
-  //             notify_to: order.creator,
-  //             status: 2,
-  //             signature: "signature",
-  //           }
+     let notify_params2 = {
+              notify_to: order.creator,
+              status: 2,
+              signature: "signature",
+            }
 
-  //    this.$axios.get(this.$config.registrator + '/notify', 
-  //         {                
-  //           params: notify_params2
-  //         }).then(message =>{
+     axios.get(config.registrator.api + '/notify', 
+      {                
+        params: notify_params2
+      }).then(message =>{
 
-  //           console.log('notify', message)
+        console.log('notify', message)
 
-  //         }).catch(e => {
-  //           console.log('notify', e.message)
-  //         })
+      }).catch(e => {
+        console.log('notify err', e.message)
+      })
 
 
 

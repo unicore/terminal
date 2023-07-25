@@ -13,7 +13,7 @@ interface UserBalances {
 interface UserState {
   authData: AccountData | null
   userBalances: UserBalances | null
-  referrer: string
+  referrer: string,
 }
 
 export const useUserStore = defineStore('user', {
@@ -24,6 +24,7 @@ export const useUserStore = defineStore('user', {
       referrer: '',
       registerNow: false,
       partner: null,
+      userObject: null
     } as UserState),
   actions: {
 
@@ -82,6 +83,20 @@ export const useUserStore = defineStore('user', {
         const res = await rootChain.readApi.getAccount(ref)
         if (res) {
           this.referrer = ref
+        }
+      } catch (e) {
+        console.error(ref, 'there is no referer')
+      }
+    },
+    async getAccount(username: string) {
+      this.referrer = ''
+      const rootChain = chains.getRootChain()
+      try {
+        const res = await rootChain.readApi.getAccount(username)
+        if (res) {
+          this.userObject = res
+          console.log("getAccount: ", res)
+
         }
       } catch (e) {
         console.error(ref, 'there is no referer')

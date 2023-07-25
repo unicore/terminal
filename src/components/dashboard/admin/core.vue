@@ -1,6 +1,6 @@
 <template lang="pug">
 div.row.justify-center.q-pa-md
-  coreFlow.col-md-4.col-xs-12.q-pa-xs
+  income(:host="config.coreHost").col-md-4.col-xs-12.q-pa-xs
   flows.col-md-8.col-xs-12.q-pa-xs
   
 </template>
@@ -15,7 +15,7 @@ import userBalance from '~/components/core/oneUserBalance.vue'
 import config from '~/config'
 import chains from '~/chainsMain'
 import {Notify} from 'quasar'
-import coreFlow from './coreFlow.vue'
+import income from '~/components/core/partners/income.vue'
 import flows from './flows.vue'
 
 const router = useRouter()

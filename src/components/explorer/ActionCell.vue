@@ -4,7 +4,6 @@
     <template v-else>{{ actionName }}</template>
   </q-badge>
 </template>
-
 <script setup lang="ts">
   import { computed } from 'vue'
 
@@ -26,6 +25,7 @@
     SENDTOKEN: 'SENDTOKEN',
     RECEIVETOKEN: 'RECEIVETOKEN',
     RAMFEE: 'RAMFEE',
+    NEWACCOUNT: 'NEWACCOUNT',
   }
 
   const ACTION_NAMES = {
@@ -35,6 +35,8 @@
     [ACTION_TYPES.SENDTOKEN]: 'Отправка токенов',
     [ACTION_TYPES.RECEIVETOKEN]: 'Приём токенов',
     [ACTION_TYPES.RAMFEE]: 'Продажа RAM',
+    [ACTION_TYPES.NEWACCOUNT]: 'Регистрация аккаунта',
+    
   }
 
   const ACTION_BADGE_COLORS = {
@@ -44,6 +46,7 @@
     [ACTION_TYPES.SENDTOKEN]: 'red',
     [ACTION_TYPES.RECEIVETOKEN]: 'green',
     [ACTION_TYPES.RAMFEE]: 'red',
+    [ACTION_TYPES.NEWACCOUNT]: 'blue',
   }
 
   const getActionType = (row: any, currentAccount: string) => {
@@ -59,9 +62,13 @@
       }
     } else if (row.action === 'delegatebw') {
       return ACTION_TYPES.STAKECPUNET
-    } else if (row.action === 'buyram') {
+    } else if (row.action === 'buyram' || row.action === 'buyrambytes') {
       return ACTION_TYPES.BUYRAM
-    }
+    } else if (row.action === 'newaccount') {
+      return ACTION_TYPES.NEWACCOUNT
+    } 
+
+
     return ACTION_TYPES.OTHER
   }
 
@@ -75,8 +82,8 @@
   }>()
 
   const actionType = computed(() => getActionType(props.actionData, props.account))
-  const actionName = computed(() => getActionNameByType(props.actionData.action, props.account))
-  const contract = computed(() => getActionContract(props.actionData, props.account))
+  const actionName = computed(() => getActionNameByType(props.actionData.action, actionType.value))
+  const contract = computed(() => getActionContract(props.actionData, actionName.value))
   const badgeColor = computed(
     () => ACTION_BADGE_COLORS[actionType.value] || ACTION_BADGE_COLORS.OTHER
   )

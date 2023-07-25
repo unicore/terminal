@@ -49,7 +49,8 @@ export const useHostStore = defineStore('host', {
       isUserSubscribed: false,
       subLoaded: false,
       flows: {},
-      sysPercents: {}
+      sysPercents: {},
+      userTokenStats: {}
     } as HostState),
   actions: {
     
@@ -89,6 +90,37 @@ export const useHostStore = defineStore('host', {
         })
 
        return res
+    },
+
+
+    async getUserStat(username, symbol, contract){
+
+      const rootChain = await chains.getRootChain()
+     
+      try {
+
+        let stats = await lazyFetch(
+          rootChain.readApi, 
+          config.tableCodeConfig.core,
+          symbol,
+          'userstat',
+          username,
+          username,
+          null, 
+          2,
+          'i64'
+        )
+        
+        console.log("stats: ", stats)
+        stats = stats.filter(el => el.symbol == symbol && el.contract == contract)
+
+        this.userTokenStats = stats.reduce((a, n) => ({ ...a, [n.symbol]: n }), {})
+
+      } catch(e){
+
+        console.log("error on load userbalances: ", e.message)
+
+      }
     },
 
     async loadAllBalances(hostname) {

@@ -20,10 +20,10 @@
     <template v-else>
       <q-card
         bordered
-        style="border: 1px solid grey; "
+        style="border: 1px solid green; "
         v-for="symbol in walletStore.symbols"
         :key="symbol"
-        class="shadow-1 rounded-borders q-mt-md"
+        class="shadow-1 rounded-borders q-mb-md"
         >
         <UserWallet :symbol="symbol" :mini="props.mini" />
       </q-card>

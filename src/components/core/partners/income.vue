@@ -1,11 +1,11 @@
 <template lang="pug">
-div
+div(v-if="incomes.length > 0")
   q-list( clickable)
     q-card(bordered flat)
-      q-btn(:disable="incomes.length == 0" color="secondary" @click="withdrawAll" :loading="loading").full-width получить
+      q-btn(:disable="incomes.length == 0" color="secondary" @click="withdrawAll" :loading="loading").full-width получить вознаграждения
       div.q-pa-md
-        p(v-if="incomes.length == 0").text-grey Бизнес-доход отсутствует
-        p(v-if="incomes.length > 0").text-grey Бизнес-доход:
+        // p(v-if="incomes.length == 0").text-grey Бизнес-доход отсутствует
+        // p(v-if="incomes.length > 0").text-grey Бизнес-доход:
         q-item(bordered v-ripple v-for="inc of incomes" v-bind:key="inc.id")
           q-item-section
             p {{inc.amount}} | {{inc.contract}}
@@ -34,7 +34,12 @@ const userStore = useUserStore()
 const incomes = computed(() => Object.values(hostStore.incomes))
 
 onMounted(async () => {
-  hostStore.loadDacsIncome(config.coreHost)
+  hostStore.loadDacsIncome(props.host)
+})
+
+
+const props = defineProps({
+  host: String
 })
 
 const withdrawAll = async () => {
@@ -59,7 +64,7 @@ const withdrawAll = async () => {
             },
           ],
           data: {
-              host: config.coreHost
+              host: props.host
           }
         }
       ]
@@ -75,7 +80,14 @@ const withdrawAll = async () => {
         }
       )
 
-     
+      loading.value = false
+
+      hostStore.loadDacsIncome(props.host)
+      
+      Notify.create({
+        message: 'Токены получены',
+        color: 'positive',
+      })
     } catch (e: any) {
       loading.value = false
       console.log(e)
@@ -86,15 +98,9 @@ const withdrawAll = async () => {
     }
 
 
-   Notify.create({
-      message: 'Токены получены',
-      color: 'positive',
-    })
+   
 
 
-    loading.value = false
-
-    hostStore.loadDacsIncome(config.coreHost)
     
 
 

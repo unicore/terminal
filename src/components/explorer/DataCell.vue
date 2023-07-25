@@ -1,21 +1,34 @@
-<template>
-  <div v-if="props.action === 'transfer'">
-    <AccountLink :account-name="actionData.from"></AccountLink>{{ ' → ' }}
-    <AccountLink :account-name="actionData.to"></AccountLink>{{ ' ' }}{{ actionData.quantity }}
-  </div>
-  <div v-else>
-    <ul class="q-pl-md">
-      <li v-for="row in dataParams" :key="row.key">
-        <strong>{{ row.key }}:</strong>{{ ' ' }}
-        <AccountLink v-if="row.isAccount" :account-name="row.value"></AccountLink>
-        <template v-else>{{ row.value }}</template>
-      </li>
-    </ul>
-  </div>
+<template lang="pug">
+div
+  div(v-if="props.action === 'transfer'")
+    AccountLink(:account-name="actionData.from") →
+    AccountLink(:account-name="actionData.to") {{ ' ' }}{{ actionData.quantity }}
+  div(v-else)
+    q-btn(@click="dialog=true" flat ) ...
+    // 
+      
+  q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
+    q-card(style="min-width: 350px; max-width: 350px;")
+      div()
+        q-bar
+          span Транзакция
+          q-space
+          q-btn(dense flat icon="close" v-close-popup)
+            q-tooltip Close
+
+        div.q-pa-sm
+          ul
+            li(v-for="row in dataParams" :key="row.key" style="    word-wrap: break-word;").q-mt-md
+              strong.q-mr-xs {{ row.key }}:
+              AccountLink(v-if="row.isAccount" :account-name="row.value")
+              span(v-else) {{ row.value }}
+
+        q-btn(@click="dialog=false").full-width закрыть
+
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed,ref } from 'vue'
 
   import AccountLink from './AccountLink.vue'
 
@@ -35,6 +48,8 @@
     username: 1,
   }
   const isAccount = (s: string) => /(^[a-z1-5.]{1,11}[a-z1-5]$)|(^[a-z1-5.]{12}[a-j1-5]$)/.test(s)
+
+  const dialog = ref(false)
 
   const props = defineProps<{
     actionData: any

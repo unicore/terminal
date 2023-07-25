@@ -5,6 +5,8 @@ div
       q-input(@click="copyRLink" square bordedless label="Ссылка для приглашения" readonly v-model="link" style="cursor: pointer; " dense input-class='link')
         template(v-slot:append)
           q-btn(@click="copyRLink" icon="content_copy" flat color="teal")
+    div.q-mt-lg.col-md-12.col-xs-12
+      income(:host="userStore.username")
 
         
   div(v-if="!loading")
@@ -26,6 +28,7 @@ import partnerItem from '~/components/core/partners/partnerItem.vue'
 import loader from '~/components/common/loader.vue'
 import { copyToClipboard, Notify } from 'quasar'
 import config from '~/config'
+import income from '~/components/core/partners/income.vue'
 
 const router = useRouter();
 const hostStore = useHostStore();

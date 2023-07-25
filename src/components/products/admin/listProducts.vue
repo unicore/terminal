@@ -113,7 +113,7 @@ const host = computed(() => {
 })
 
 onMounted(async () => {
-  hostStore.loadHost(props.product.host)
+  hostStore.loadHost(config.coreHost)
   hostStore.loadProducts(config.coreHost)
   hostStore.loadFlows(config.coreHost)
 })

@@ -9,48 +9,62 @@ div.row
       chooseOrder(id="getParentOrders" :btc_rate="Number(usd_rate)" :type="'buy'" :out_token="out_token" :orders="sell_orders" :root_contract="root_token.contract" :quote_token="quote_token" :root_symbol="root_token.symbol" :root_token="root_token" :quote_symbol="'USD'" :out_currency="out_token.symbol" :bonus_rate="bonus_rate")
       
   div(v-else).col-12
-    div.row.justify-center.q-mt-md
-      div.col-md-6.col-sm-8.col-xs-12
-        q-card( id="p2pUSDrate" style="border: 1px solid grey; margin-bottom: 0px !important; padding-bottom: 0px !important;").text-center.q-ma-md.q-pa-sm
+    div.row.justify-center.q-mt-xs
+      div.col-md-4.col-sm-8.col-xs-12
+        q-card( id="p2pUSDrate" style="border: 1px solid grey; margin-bottom: 50px !important; padding: 15px !important;").text-center.q-ma-md.q-pa-sm
           div
             q-input(square readonly borderless label="Рекомендуемый курс" v-model="bonus_rate" )
               template(v-slot:append)
                 span(style="font-size: 16px;") {{bonus_symbol}}
 
-          div
-            q-input(square readonly borderless label="Стоимость вашего аккаунта" v-model="coreUsdTokenBalance" )
-              template(v-slot:append)
-                span(style="font-size: 16px;") {{out_token.symbol}}
+          // div
+          //   q-input(square readonly borderless label="Стоимость вашего аккаунта" v-model="coreUsdTokenBalance" )
+          //     template(v-slot:append)
+          //       span(style="font-size: 16px;") {{out_token.symbol}}
               
         // div().text-right.text-grey
         //   q-btn( flat size="sm" dense @click="startEducation").q-ml-sm.q-mr-md как это работает?
     
       
-    div(style="align-items: end;").q-mt-lg.row.justify-around
+    div(style="align-items: start;").q-mt-lg.row.justify-around
       // UNCOMMENT IT
-      div().col-md-4.col-sm-6.col-xs-12
+      div().col-md-4.col-sm-6.col-xs-6
         //BUY
         
         // p(style="margin-bottom: 0px;").text-center.text-grey-6 хотят купить
         q-list(id="giveHelp" separator ).q-ma-md
           div.text-center
             span(v-if="!loggedIn").text-grey для оказания помощи сперва зарегистрируйтесь
-            q-btn(:disable="!loggedIn" id="giveHelpButton" color="teal" @click="provideHelp" size="lg").full-width Оказать помощь
-            span.text-grey и получить {{root_token.symbol}}
+            q-btn(:disable="!loggedIn" id="giveHelpButton" color="teal" @click="provideHelp").button.full-width
+              div(style="display:block;")
+                div
+                  span оказать
+                div
+                  span помощь
+                // i(style="font-size: 12px !important;").fa.fa-copy
+                
+            // span.text-grey и получить {{root_token.symbol}}
             //depositDialog('buy')
           // chooseOrder(id="giveParentOrders" :btc_rate="usd_rate" :type="'sell'" :out_token="out_token"  :orders="buy_orders" :root_contract="root_token.contract" :quote_token="quote_token" :root_symbol="root_token.symbol" :root_token="root_token"  :quote_symbol="'USD'" :out_currency="out_token.symbol" :bonus_rate="bonus_rate")
     
 
-      div().col-md-4.col-sm-6.col-xs-12
+      div().col-md-4.col-sm-6.col-xs-6
         // p test
         //SELL
         // p(style="margin-bottom: 0px;").text-center.text-grey-6 хотят продать
         q-list(id="getHelp" separator ).q-ma-md 
           //style="border: 2px solid red;"
           div.text-center
+            q-btn(:disable="coreTokenBalance == 0 || !loggedIn" id="getHelpButton" color="red" @click="depositDialog('sell')").button.full-width 
+              div(style="display:block; ")
+                div
+                  span запросить
+                div
+                  span помощь
+                // i(style="font-size: 12px !important;").fa.fa-copy
             span(v-if="coreTokenBalance == 0").text-grey для получения помощи сперва окажите её
-            q-btn(:disable="coreTokenBalance == 0 || !loggedIn" id="getHelpButton" color="red" @click="depositDialog('sell')" size="lg").full-width Запросить помощь
-            span.text-grey и получить {{out_token.symbol}}
+            
+            // span.text-grey и получить {{out_token.symbol}}
         
     // div(v-if="!loggedIn").q-mt-lg.row.justify-center
     //   q-card(bordered).bg-grey-2.col-md-4.col-sm-6.col-xs-12.q-pa-md
@@ -773,3 +787,9 @@ watch(root_quantity, (newValue, oldValue) => {
 
 
 </script>
+<style>
+.button{
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+</style>

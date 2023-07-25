@@ -15,8 +15,7 @@ import { useRouter } from 'vue-router'
 import config from '~/config'
 import chains from '~/chainsMain'
 import {Notify} from 'quasar'
-import coreFlow from './coreFlow.vue'
-import flows from './flows.vue'
+
 
 const host = computed(() => hostStore.getCurrentHost(config.coreHost))
 
