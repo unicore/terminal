@@ -147,7 +147,8 @@ let confirmation = ref(false)
 
 
 let p2pSale = computed(() => {
-   return config.p2p.isExchange
+   return true
+   // return config.p2p.isExchange
 })
 
 const isAutoGateway = () => {

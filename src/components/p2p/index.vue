@@ -11,7 +11,7 @@ div.row
   div(v-else).col-12
     div.row.justify-center.q-mt-xs
       div.col-md-4.col-sm-8.col-xs-12
-        q-card( id="p2pUSDrate" style="border: 1px solid grey; margin-bottom: 50px !important; padding: 15px !important;").text-center.q-ma-md.q-pa-sm
+        q-card( id="p2pUSDrate" style="border: 1px solid grey; margin-bottom: 25px !important; padding: 15px !important;").text-center.q-ma-md.q-pa-sm
           div
             q-input(square readonly borderless label="Рекомендуемый курс" v-model="bonus_rate" )
               template(v-slot:append)
@@ -38,9 +38,9 @@ div.row
             q-btn(:disable="!loggedIn" id="giveHelpButton" color="teal" @click="provideHelp").button.full-width
               div(style="display:block;")
                 div
-                  span оказать
+                  span купить
                 div
-                  span помощь
+                  span {{root_token.symbol}}
                 // i(style="font-size: 12px !important;").fa.fa-copy
                 
             // span.text-grey и получить {{root_token.symbol}}
@@ -58,9 +58,9 @@ div.row
             q-btn(:disable="coreTokenBalance == 0 || !loggedIn" id="getHelpButton" color="red" @click="depositDialog('sell')").button.full-width 
               div(style="display:block; ")
                 div
-                  span запросить
+                  span продать
                 div
-                  span помощь
+                  span {{root_token.symbol}}
                 // i(style="font-size: 12px !important;").fa.fa-copy
             span(v-if="coreTokenBalance == 0").text-grey для получения помощи сперва окажите её
             
@@ -82,7 +82,7 @@ div.row
       //мои ордера
       div.col-md-4.col-xs-12
         div(v-if="(my_orders.length > 0)")
-          p(style="margin-bottom: 0px;").text-center.text-grey-6 мои заявки на получение помощи
+          p(style="margin-bottom: 0px;").text-center.text-grey-6 мои заявки
           q-list(separator).q-ma-md
             myOrders(:btc_rate="Number(usd_rate)" :orders="my_orders" :out_token="out_token" :root_contract="root_token.contract" :quote_token="quote_token" :root_symbol="root_token.symbol" :root_token="root_token"  :quote_symbol="'USD'" :out_currency="out_token.symbol")
    
@@ -107,45 +107,45 @@ div.row
           template(v-if="out_token.symbol")
             div
               //установка курса
-              div(v-if="step == 1")
-                div(style="margin-top: 10px;").q-pt-lg.q-pb-lg
+              // div(v-if="step == 1")
+              //   div(style="margin-top: 10px;").q-pt-lg.q-pb-lg
                   
-                  div(style="margin: auto;").row.justify-center.q-ml-md.q-mr-md
-                    q-slider(
-                      track-size="20px"
-                      thumb-size="30px"
-                      label-always
-                      color="teal"
-                      thumb-color="teal"
-                      v-model="current_brate"
-                      :min=0
-                      :max="parseFloat(bonus_rate) * 2"
-                      :step="0.05"
-                      :label-value="current_brate + ' USDT / ' + root_token.symbol"
-                    ).col-8
+              //     div(style="margin: auto;").row.justify-center.q-ml-md.q-mr-md
+              //       q-slider(
+              //         track-size="20px"
+              //         thumb-size="30px"
+              //         label-always
+              //         color="teal"
+              //         thumb-color="teal"
+              //         v-model="current_brate"
+              //         :min=0
+              //         :max="parseFloat(bonus_rate) * 2"
+              //         :step="0.05"
+              //         :label-value="current_brate + ' USDT / ' + root_token.symbol"
+              //       ).col-8
                   
-                  div.row.justify-between
+              //     div.row.justify-between
 
 
-                    div.col-4
-                      q-btn(flat size="sm" @click="faster").text-grey быстрее и убыточнее
+              //       div.col-4
+              //         q-btn(flat size="sm" @click="faster").text-grey быстрее и убыточнее
 
                     
-                    div.col-4
-                      q-btn(flat size="sm" @click="normal").text-grey нормальный курс
+              //       div.col-4
+              //         q-btn(flat size="sm" @click="normal").text-grey нормальный курс
                     
 
-                    div.col-4
-                      q-btn(flat size="sm" @click="slower").text-grey медленнее и выгоднее
+              //       div.col-4
+              //         q-btn(flat size="sm" @click="slower").text-grey медленнее и выгоднее
 
-                // q-input(filled type="number" :label="'Установите курс обмена ' + root_token.symbol" v-model="brate"  controls-position="right" :precision="4" :step="0.05" :min="0")
-                //   template(v-slot:append)
-                //     span(style="font-size: 16px;") USDT
-                // p {{usd_rate}}
+              //   // q-input(filled type="number" :label="'Установите курс обмена ' + root_token.symbol" v-model="brate"  controls-position="right" :precision="4" :step="0.05" :min="0")
+              //   //   template(v-slot:append)
+              //   //     span(style="font-size: 16px;") USDT
+              //   // p {{usd_rate}}
                 
                         
 
-            div(v-if="step == 2")  
+            div(v-if="step == 1")  
               div(style="align-items: center;").bg-grey-4.row.full-width.justify-around
                 div.col-2
                   q-btn(flat size="sm" @click="set10").full-width 10%
@@ -194,21 +194,21 @@ div.row
                   q-btn(flat size="sm" @click="set100").full-width 100%
                
 
-              q-input(filled type="number" :label="'Получаю ' +  out_token.symbol" v-model="out_quantity"  controls-position="right" :precision="4" :step="0.0001" :min="0")
+              q-input(filled type="number" :label="'Получаю ' +  out_token.symbol" v-model="out_quantity"  controls-position="right" :precision="4" :step="1" :min="0")
                 template(v-slot:append)
                   span(style="font-size: 16px;") {{out_token.symbol}}
               
 
-              q-input(filled type="number" :label="'Отдаю ' + root_token.symbol " v-model="root_quantity"  controls-position="right" :precision="4" :step="0.0001" :min="0")
+              q-input(filled type="number" :label="'Отдаю ' + root_token.symbol " v-model="root_quantity"  controls-position="right" :precision="4" :step="1" :min="0")
                 template(v-slot:append)
                   span(style="font-size: 16px;") {{root_token.symbol}}
               
               
-              q-input(filled type="number" label="По курсу" v-model="current_brate" readonly controls-position="right" :precision="4" :step="0.0100" :min="0")
+              q-input(filled type="number" label="По курсу" v-model="current_brate" controls-position="right" :precision="4" :step="0.0001" :min="0")
                 template(v-slot:append)
                   span(style="font-size: 16px;") {{out_token.symbol + ' /'}} {{root_token.symbol}}  
                   
-            div(v-if="step==3")
+            div(v-if="step==2")
               q-input(v-if="orderType=='sell'" filled :label="details_caption" v-model="details.address" autogrow)
             
           
@@ -217,8 +217,8 @@ div.row
       div.row.text-center
         q-btn(v-if="step > 1" color="red" flat @click="step=step - 1"  size="sm").col-6 назад
         q-btn(v-if="step == 1" color="red" flat @click="cancelSubmit"  size="sm").col-6 отменить
-        q-btn(v-if="out_token.symbol && step == 3" color="teal" @click="create").col-6 создать заявку
-        q-btn(v-if="out_token.symbol && step < 3" color="teal" @click="step=step+1").col-6 продолжить
+        q-btn(v-if="out_token.symbol && step == 2" color="teal" @click="create").col-6 создать заявку
+        q-btn(v-if="out_token.symbol && step < 2" color="teal" @click="step=step+1").col-6 продолжить
 
 </template>
 
@@ -706,9 +706,9 @@ const to_orders = computed(() => {
     return to_orders;
 });    
 
-watch(current_brate, (newValue, oldValue) => {
-  root_quantity.value = 0
-})
+// watch(current_brate, (newValue, oldValue) => {
+//   root_quantity.value = 0
+// })
 
 watch(bonus_rate, (newValue, oldValue) => {
     if (newValue != oldValue) {
@@ -765,24 +765,23 @@ watch(root_quantity, (newValue, oldValue) => {
         out_quantity.value = out_quantity.value.toFixed(out_token.value.precision);
     }
 });
-
-// watch(brate, (newValue, oldValue) => {
+// brate
+watch(current_brate, (newValue, oldValue) => {
     
-//     if (newValue != oldValue) {
-//         if (newValue > floatTokenBalance.value && orderType.value === "sell") {
-//             root_quantity.value = floatTokenBalance.value;
-//             Notify.create({
-//                 message: 'Недостаточный баланс',
-//                 color: 'orange',
-//                 classes: 'notify-class',
-//             });
-//         }
+    if (newValue != oldValue) {
+        if (newValue > floatTokenBalance.value && orderType.value === "sell") {
+            root_quantity.value = floatTokenBalance.value;
+            Notify.create({
+                message: 'Недостаточный баланс',
+                color: 'orange',
+                classes: 'notify-class',
+            });
+        }
+        out_quantity.value = root_quantity.value / usd_rate.value * quote_rate.value;
+        out_quantity.value = out_quantity.value.toFixed(out_token.value.precision);
+    }
 
-//         out_quantity.value = newValue / usd_rate.value * quote_rate.value;
-//         out_quantity.value = out_quantity.value.toFixed(out_token.value.precision);
-//     }
-
-// });
+});
 
 
 

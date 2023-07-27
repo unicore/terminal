@@ -44,7 +44,7 @@
     [ACTION_TYPES.BUYRAM]: 'red',
     [ACTION_TYPES.STAKECPUNET]: 'blue',
     [ACTION_TYPES.SENDTOKEN]: 'red',
-    [ACTION_TYPES.RECEIVETOKEN]: 'green',
+    [ACTION_TYPES.RECEIVETOKEN]: 'primary',
     [ACTION_TYPES.RAMFEE]: 'red',
     [ACTION_TYPES.NEWACCOUNT]: 'blue',
   }

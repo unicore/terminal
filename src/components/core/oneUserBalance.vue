@@ -21,12 +21,14 @@ div
       div
         // (v-if="balance.root_percent > 0")
         span доход: 
-        span.q-pa-sm +{{balance.root_percent / 10000}}% USDT | +{{balance.convert_percent / 10000}}% MAVRO
+        span.q-pa-sm +{{balance.root_percent / 10000}}% {{host.symbol}}
+        span(v-if="isTokensale") +{{balance.convert_percent / 10000}}% {{host.asset_on_sale_symbol}}
         q-separator(:dark="isDark")
       
       div
         span доступно: 
-        span.q-pa-sm {{balance.available}} | {{balance.convert_amount}}
+        span.q-pa-sm {{balance.available}} 
+        span(v-if="isTokensale") | {{balance.convert_amount}}
         q-separator(:dark="isDark")
 
 
@@ -62,13 +64,13 @@ div
         i(color="orange" ).full-width.fa.fa-refresh.q-mr-xs.q-mt-xs
         span(style="font-size: 8px;") обновить
       
-      q-btn(flat dense @click="withdrawbal" :disabled="!rootIsNull") 
-        i(color="green").full-width.fa-solid.fa-angle-down.q-mr-xs.q-mt-xs
-        span(style="font-size: 8px;") вывести USDT
+      q-btn(v-if="isTokensale" flat dense @click="withdrawbal" :disabled="!rootIsNull") 
+        i(color="primary").full-width.fa-solid.fa-angle-down.q-mr-xs.q-mt-xs
+        span(style="font-size: 8px;") вывести {{host.asset_on_sale_symbol}}
 
       q-btn(flat dense @click="convertbal" @loading="loading") 
         i(color="red" ).full-width.fa-solid.fa-angles-down.q-mr-xs.q-mt-xs
-        span(style="font-size: 8px;") вывести MAVRO
+        span(style="font-size: 8px;") вывести {{host.symbol}}
       
       // !needRefresh && isWin && isAvailable
 
@@ -114,6 +116,10 @@ const color = computed(() => {
     return "black"
   else return "white"
   // style="color: grey;"
+})
+
+const isTokensale = computed(() => {
+  return props.host.sale_is_enabled == 1
 })
 
 const needRefresh = computed(() => {
@@ -234,7 +240,7 @@ const convertbal = async () => {
       const api = rootChain.getEosPassInstance(userStore.authData?.wif as string)
       const actions = []
 
-      if (isAvailable.value == true){
+      if (isAvailable.value == true || props.host.sale_is_enabled == 0){
         actions.push({
               account: config.tableCodeConfig.core,
               name: 'withdraw',
@@ -253,7 +259,8 @@ const convertbal = async () => {
       
       }
 
-      actions.push({
+      if (props.host.sale_is_enabled == 1){
+        actions.push({
               account: config.tableCodeConfig.core,
               name: 'sellbalance',
               authorization: [
@@ -283,6 +290,10 @@ const convertbal = async () => {
                 balance_id: props.balance.id,
               },
             })
+
+      }
+
+      console.log("acitons; ", actions, props.host)
 
       await api.transact(
         {

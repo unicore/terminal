@@ -1,13 +1,13 @@
 <template lang="pug">
 q-layout(view="hHh LpR fFf")
-  // q-header(reveal class="bg-white text-black text-left")
-  //   // q-toolbar
+  // q-header(v-if="!isMobile" reveal class="bg-white text-black text-left" style="border-bottom: 0.5px solid green;")
+  //   q-toolbar
       
-  //   //   q-toolbar-title
-  //   //     q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="" :dense="isMobile")
-  //   //       i.fa-solid.fa-circle-chevron-left
-  //   //     q-btn(v-if="router.currentRoute.value.name == 'index' && !loggedIn" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
-  //   //       img(:src="HeaderLogo" alt="" style="height: 60px;").q-mr-md
+  //     q-toolbar-title
+  //       q-btn(v-if="router.currentRoute.value.name != 'index'"  stretch flat class="btn-menu" @click="goToBack" size="lg" color="" :dense="isMobile")
+  //         i.fa-solid.fa-circle-chevron-left
+  //       q-btn(v-if="router.currentRoute.value.name == 'index'" stretch flat class="btn-title" @click="goToIndex" :dense="isMobile")
+  //         img(:src="HeaderLogo" alt="" style="height: 60px;").q-mr-md
       
   
 
@@ -23,7 +23,7 @@ q-layout(view="hHh LpR fFf")
   // q-btn(@click="$q.dark.set(true)") set dark
   // q-btn(@click="$q.dark.set(false)") set light
   
-  q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="right" persistent :mini-width="60" :width="300" class="drawer-right")
+  q-drawer(v-if="loggedIn && !isMobile && isSubscribed" :mini="isMini" show-if-above side="left" persistent :mini-width="60" :width="300" class="drawer-left")
     div(v-if="loggedIn && isAdmin").full-width.text-center
       q-toggle( size="xs" v-model="showAdmin" val="false")
       span(style="font-size: 10px;") админ
@@ -34,7 +34,7 @@ q-layout(view="hHh LpR fFf")
     template(v-else)
       adminMenu(:mini="isMini")
 
-  q-drawer(v-if="loggedIn && isMobile && isSubscribed" v-model="rightDrawerOpen" behavior="mobile" side="right" persistent :mini-width="60" :width="300" class="drawer-right")
+  q-drawer(v-if="loggedIn && isMobile && isSubscribed" v-model="rightDrawerOpen" behavior="mobile" side="left" persistent :mini-width="60" :width="300" class="drawer-left")
     template(v-if="!showAdmin")
       UserProfile(:mini="false")
       Menu(:mini="false")
@@ -42,7 +42,7 @@ q-layout(view="hHh LpR fFf")
     template(v-else)
       adminMenu(:mini="false")  
   
-  q-drawer(v-if="!loggedIn && isSubscribed" v-model="rightDrawerOpen" overlay side="right" class="drawer-right" bordered :width="300" persistent)
+  q-drawer(v-if="!loggedIn && isSubscribed" v-model="rightDrawerOpen" overlay side="left" class="drawer-left" bordered :width="300" persistent)
     template(v-if="!showAdmin")
     
       UserProfile
@@ -75,7 +75,7 @@ q-layout(view="hHh LpR fFf")
   import { useWindowSize } from 'vue-window-size'
   import config from '~/config'
   import MenuIcon from '~/assets/menu.svg?url'
-  import HeaderLogo from '~/assets/logo.svg?url'
+  
   import { useUserStore } from '~/stores/user'
   import { useHostStore } from '~/stores/host'
   import { useWalletStore } from '~/stores/wallet'
@@ -240,7 +240,7 @@ q-layout(view="hHh LpR fFf")
 
 
   .q-toolbar {
-  
+    border-bottom: 1px solid #primary;
     padding-left: 0px !important;
     padding-right: 0px !important;
   }

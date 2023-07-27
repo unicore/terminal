@@ -9,7 +9,7 @@ div(v-if="balances")
         // // i(v-if="!whiteIsWin" style="font-size: 26px; color: teal; margin-right: 10px;").far.fa-circle
         // // i(v-else style="font-size: 26px; color: red; margin-right: 10px;").far.fa-circle
         
-        p(style="font-size: 26px;") белые токены
+        p(style="font-size: 26px;") белые токены пула
       div
         // p(v-if="!whiteIsWin").text-grey.text-center получают доступ в клуб
         // p(v-else).text-grey.text-center получают компенсацию
@@ -27,7 +27,7 @@ div(v-if="balances")
         
         // i(v-if="!$q.dark.isActive" style="font-size: 26px; margin-right: 10px;").fa-solid.fa-circle
 
-        p(style="font-size: 26px;") чёрные токены
+        p(style="font-size: 26px;") чёрные токены пула
       div
         // p(v-if="whiteIsWin").text-grey.text-center получают доступ в клуб
         // p(v-else).text-grey.text-center получают компенсацию

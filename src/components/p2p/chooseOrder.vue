@@ -52,7 +52,7 @@ div
         q-td(key="remain")
           span {{get_out_remain(props.row)}}
 
-        q-td(key="bonus" v-if="!p2pSale")
+        q-td(key="bonus" )
           span {{props.row.root_remain}}
 
         q-td(key="action")
@@ -232,7 +232,7 @@ const isMobile = computed(() => {
 })
 
 const p2pSale = computed(() => {
-  return false
+  return true
 })
 
 const columns = ref([

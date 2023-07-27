@@ -3,7 +3,7 @@
     <q-input
       v-model="privateKey"
       label="Введите приватный ключ"
-      color="green"
+      color="primary"
       hint=""
       outlined
       class="full-width"
@@ -17,7 +17,7 @@
       type="submit"
       label="Войти"
       class="full-width"
-      color="green"
+      color="primary"
       :loading="loading"
       :disable="!privateKey" />
   

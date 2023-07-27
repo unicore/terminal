@@ -5,8 +5,8 @@ q-card(v-for="order in orders" :key="order.id" flat bordered ).bg-red-1.q-mb-md
     div.row.justify-between.q-gutter-xs
       div.col-12.text-center.flex.q-gutter-xs
         span Тип: 
-        q-badge(color="teal" v-if="order.type == 'buy'" label="оказываю" )
-        q-badge(color="red" v-if="order.type == 'sell'" label="получаю" )
+        q-badge(color="teal" v-if="order.type == 'buy'" label="покупаю" )
+        q-badge(color="red" v-if="order.type == 'sell'" label="продаю" )
       div.col-12.text-center.flex.q-gutter-xs
         div Валюта: 
         // div {{order.out_symbol}}
@@ -39,7 +39,7 @@ q-card(v-for="order in orders" :key="order.id" flat bordered ).bg-red-1.q-mb-md
       //   div {{order.root_locked}}
 
       div.col-12.text-center.flex.q-gutter-xs
-        div Адрес для получения помощи:
+        div Адрес для получения:
         div {{order.details.address}}
 
 

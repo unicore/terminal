@@ -6,7 +6,7 @@ div.full-width
     q-input(filled type="number" controls-position="right" v-model="amount" :precision="8" :step="0.0001" :min="0.0001" label="Введите сумму:") 
     q-input(filled label="Сообщение (не обязательно):"  v-model="memo")
     
-  q-btn(color="green" :loading="loading" type="success" @click="transfer").full-width Перевести
+  q-btn(color="primary" :loading="loading" type="success" @click="transfer").full-width Перевести
 </template>
 
 <script setup lang="ts">//

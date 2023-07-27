@@ -39,16 +39,16 @@ div
               
             div(v-if="!currentHost.sale_is_enabled")
 
-              span(style="font-size: 12px;").q-pa-xs до перезагрузки: 
-              q-badge(color="black" flat v-if="!waitingMode").q-pa-sm {{untilRestart}}
-              q-badge(color="black" flat v-if="waitingMode").q-pa-sm -
+              span(style="font-size: 12px;").q-pa-xs перезагрузка: 
+              q-badge(flat v-if="!waitingMode").q-pa-sm {{untilRestart}}
+              q-badge(flat v-if="waitingMode").q-pa-sm -
 
         div(style="padding-top: 30px; margin-bottom: 50px;").row.justify-center
 
           div.col-6.q-pa-xs
             buyWindow(:hostname="currentHost.username").full-width
           div.col-6.q-pa-xs
-            q-btn(color="green" flat size="md"  @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})").full-width Мои балансы
+            q-btn(color="primary" flat size="md"  @click="router.push({name: 'nft-balances', params: {hostname: currentHost.username}})").full-width Мои балансы
         
         
 
@@ -70,15 +70,15 @@ div
           div.col-md-12.col-xs-12
             div.row
 
-              div.col-12.q-mb-lg
-                q-card(flat )
-                  div(style="align-items: center;").q-pa-xs
-                    p(style="font-size: 12px;").text-grey Режим
-                      // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
-                    p(color="black" outline).q-ml-sm {{mode}}
-                    // p.text-grey на каждом одноцветном пуле
+              // div.col-12.q-mb-lg
+                // q-card(flat )
+                //   div(style="align-items: center;").q-pa-xs
+                //     p(style="font-size: 12px;").text-grey Режим
+                //       // q-btn(flat size="xs" dense icon="fas fa-question").q-ml-xs 
+                //     p(color="black" outline).q-ml-sm {{mode}}
+                //     // p.text-grey на каждом одноцветном пуле
 
-                  q-separator
+                //   q-separator
                 
 
               div(v-if="currentHost.sale_is_enabled").col-12.q-mb-lg
@@ -184,10 +184,10 @@ div
 
 
         // div(v-if="!showBalances" style="padding-top: 50px;")
-        //   div
-        //     history
+          // div
+          //   history
 
-          img(:src="currentHost?.meta.host_image")
+          // img(:src="currentHost?.meta.host_image")
       
       
     

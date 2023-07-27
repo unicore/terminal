@@ -8,11 +8,11 @@
       type="email"
       label="Введите email"
       :readonly="inLoading"
-      color="green"
+      color="primary"
       @keypress.enter="setEmail" />
     <q-btn
       class="full-width q-mt-md"
-      color="green"
+      color="primary"
       label="Продолжить"
       :disable="!emailIsValid"
       :loading="inLoading"
@@ -20,7 +20,7 @@
   </div>
   <div v-if="step==2">
     <p>Для вас будет сгенерирован секретный ключ. Надёжно сохраните его и никогда и никому не показывайте.</p>
-    <q-btn color="green" label="Сгенерировать ключ" class="full-width q-mt-lg" @click="step = 3" />
+    <q-btn color="primary" label="Сгенерировать ключ" class="full-width q-mt-lg" @click="step = 3" />
   </div>
 
   <div v-if="step==3">
@@ -41,13 +41,13 @@
         <span class="q-ml-md"> скопировать</span>
       </q-btn>
     <q-checkbox
-      color="green"
+      color="primary"
       v-model="hasSavedCheckbox"
       label="Я сохранил секретный ключ"
       class="q-mt-md" />
 
     <q-btn
-      color="green"
+      color="primary"
       label="Продолжить"
       :disable="!hasSavedCheckbox"
       class="full-width"
@@ -64,12 +64,12 @@
        />
     <q-btn
       class="full-width"
-      color="green"
+      color="primary"
       label="Создать аккаунт"
       :disable="mnemonicToCheck !== generatedAccount?.mnemonic"
       @click="completeRegister" />
     <q-btn
-      color="green"
+      color="primary"
       flat
       size="sm"
       icon="arrow_back"
@@ -81,7 +81,7 @@
 
   <div v-if="step==5">
     <div class="flex flex-center q-pa-md">
-      <q-circular-progress indeterminate size="50px" color="green" />
+      <q-circular-progress indeterminate size="50px" color="primary" />
     </div>
   </div>
 

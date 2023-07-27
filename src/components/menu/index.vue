@@ -124,7 +124,7 @@ q-list.pt-0.pr-0.pl-0.menu
   .menu-item {
     text-align: left !important;
     justify-content: flex-start;
-    padding: 10px 0 10px 13px !important;
+    padding: 10px 0 10px 10px !important;
     min-width: 0;
     font-style: normal;
     font-weight: 400;
@@ -142,6 +142,7 @@ q-list.pt-0.pr-0.pl-0.menu
 
     &-active {
       color: rgba(9, 104, 114, 1) !important;
+      border-right: 1px solid green;
     }
 
     &-text {

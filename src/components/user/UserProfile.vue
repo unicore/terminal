@@ -6,15 +6,15 @@ div(:class="props.mini ? 'layout-mini' : 'layout-full'")
     // q-item(style="padding-left: 0" v-if="userStore.username && !props.mini")
     //   q-item-section
     //     q-item-label(overline class="username") {{ userStore.username?.toUpperCase() }}
-    div(class="ref-link" :class="props.mini" @click="copyRLink")
-      template(v-if="props.mini")
-        q-btn(flat).full-width.full-height.link-button.ref-link-mini
-          q-icon(name="link" color="teal" size="16px")
-      template(v-else)
-        div(class="ref-link-header")
-          | Партнерская ссылка 
-          q-icon(name="content_copy" color="teal" size="12px")
-        div(class="ref-link-body") {{ link }}
+    // div(class="ref-link" :class="props.mini" @click="copyRLink")
+    //   template(v-if="props.mini")
+    //     q-btn(flat).full-width.full-height.link-button.ref-link-mini
+    //       q-icon(name="link" color="teal" size="16px")
+    //   template(v-else)
+    //     div(class="ref-link-header")
+    //       | Партнерская ссылка 
+    //       q-icon(name="content_copy" color="teal" size="12px")
+    //     div(class="ref-link-body") {{ link }}
     // WalletsCarousel(v-if="!props.mini" :mini="props.mini")
 
 </template>

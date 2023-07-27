@@ -27,7 +27,7 @@ div.q-pa-md
         q-td(:props="props")
           q-badge(outline color="orange" v-if="props.row.status == 'process'") ожидает
           q-badge(outline color="red"  v-if="props.row.status == 'cancelled'") отклонен
-          q-badge(outline color="green"  v-if="props.row.status == 'completed'") оплачен
+          q-badge(outline color="primary"  v-if="props.row.status == 'completed'") оплачен
           
 
     

@@ -8,11 +8,11 @@ q-card(dark v-if="flow")
   
   // p {{flow.encrypted_data}}
   div(v-if="waiting")
-    q-btn( color="green" @click="refreshbal" disabled="true").full-width 
+    q-btn( color="primary" @click="refreshbal" disabled="true").full-width 
       q-spinner.q-mr-md
       p ожидаем ключ доступа
   div(v-else)
-    q-btn(v-if="isValid" color="green" @click="open" :src="decrypted").full-width войти
+    q-btn(v-if="isValid" color="primary" @click="open" :src="decrypted").full-width войти
     p(v-else).q-pa-md переданное сообщение не является ссылкой
 </template>
 

@@ -7,23 +7,23 @@ div
         div.q-mb-md.full-width.text-center
           // p(style="font-size: 60px;") MMM-
           //   span 2024
-          img(:src="HeaderLogo" alt="Homeunity logo" style="height: 120px; margin: auto;")
-
+          // img(:src="HeaderLogo" alt="Homeunity logo" style="height: 150px; margin: auto;")
+          logo(style="height: 150px; margin: auto;")
         div(flat)
           div.text-center
             p
-              span.header БЛОКЧЕЙН - 
-              span.header ПЛАТФОРМА
+              span.header СОЦИАЛЬНАЯ ФИНАНСОВАЯ 
+              span.header СЕТЬ
               // span.header Продуктов 
-            p(style="font-size: 18px;").q-mt-lg.q-ml-lg
-              vueWriter(:array="hello" :typeSpeed="20" :eraseSpeed="20")
+            // p(style="font-size: 18px;").q-mt-lg.q-ml-lg
+              // vueWriter(:array="hello" :typeSpeed="20" :eraseSpeed="20")
               
           // q-separator
         
           div(style="padding-top: 50px;").full-width.text-center
             div.row.justify-center
               div
-                q-btn(flat size="lg" @click="showRegistration = true").bg-green.text-white регистрация
+                q-btn(flat size="lg" @click="showRegistration = true").bg-primary.text-white регистрация
             
                 q-btn(flat size="md" @click="goToGithub").q-mt-md.button_header
                 
@@ -74,16 +74,11 @@ import { useUserStore } from '~/stores/user'
 import AuthForm from '~/components/user/AuthForm.vue'
 const userStore = useUserStore()
 import config from '~/config'
-import HeaderLogo from '~/assets/mmm_logo3.svg?url'
+import HeaderLogo from '~/assets/main.svg?url'
+import logo from '~/components/common/logo.vue'
 
 let hello = ref([
-  'спиральных пулов ликвидности',
-  'бесконечной доходности',
-  'ограниченных рисков',
-  'имени братьев Мавроди',
-  'под управлением участников',
-  'с открытым исходным кодом',
-  'для сообществ и бизнеса', 
+  'социальная финансовая сеть',
   ])
 
 
@@ -192,7 +187,7 @@ onMounted(async () => {
   text-align: -webkit-center;
 }
 
-.background-green{
+.background-primary{
   background: #0AC05E;
 }
 

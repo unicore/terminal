@@ -26,7 +26,7 @@ div
                 tr
                   td.text-left Статус
                   td(v-if="executed").text-left
-                    q-badge(color="green") Выполнено
+                    q-badge(color="primary") Выполнено
                   td(v-else).text-left
                     q-badge(color="orange") Не выполнено
           .col-xs-12.col.col-md-6

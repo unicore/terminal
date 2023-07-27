@@ -1,6 +1,6 @@
 <template lang="pug">
 
-q-btn(color="green" size="md" @click="dialog=true") Заложить {{host.symbol}}
+q-btn(color="primary" size="md" @click="dialog=true") Заложить {{host.symbol}}
   
   q-dialog(v-model="dialog" persistent :maximized="false" transition-show="slide-up" transition-hide="slide-down")
     q-card(style="min-width: 350px; max-width: 450px;")
@@ -28,23 +28,23 @@ q-btn(color="green" size="md" @click="dialog=true") Заложить {{host.symb
           div(v-if="hasMin")
             q-input(outlined v-model.number="rootAmount" :step="0.0001" label="Введите сумму" type="number" step="1")
               template(v-slot:append)
-                q-badge(color="green") {{host.symbol}}
-            q-slider(track-size="10px" :max="parseFloat(max)" color="green" v-model="rootAmount" ).q-pa-xs
+                q-badge(color="primary") {{host.symbol}}
+            q-slider(track-size="10px" :max="parseFloat(max)" color="primary" v-model="rootAmount" ).q-pa-xs
     
 
             div.row.justify-between
               q-btn(size="xs" flat @click="setMin") min: {{quantCost}}
               q-btn(size="xs" flat @click="setMax") max: {{max}}
           div(v-else).q-mt-lg.full-width.text-center
-            q-btn(outline color="green" @click="gotowallet") пополнить баланс
+            q-btn(outline color="primary" @click="gotowallet") пополнить баланс
         // q-card-section
         //   q-input(outlined v-model="message"  type="textarea" rows="1" label="Оставьте сообщение")
 
           // textarea(rows="5" v-model="message" )
 
         q-card-section(v-if="hasMin" align="right")
-          q-btn(flat label="Отмена" color="green" v-close-popup)
-          q-btn(label="Внести" color="green" @click="buy") 
+          q-btn(flat label="Отмена" color="primary" v-close-popup)
+          q-btn(label="Внести" color="primary" @click="buy") 
 
 </template>
 

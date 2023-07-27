@@ -8,11 +8,11 @@ div.row.justify-center.q-pa-md
           template(v-slot:append)
             q-btn(dense color="red" @click="del(index)") -
         div.full-width.text-center
-          q-btn( color="green" @click="add") +
+          q-btn( color="primary" @click="add") +
         span сумма: {{summ}}% 
         
         span(v-if="diff > 0").q-pl-md распределить: {{diff}}%
-      q-btn( color="green" :loading="loading" @click="setLevels").full-width установить
+      q-btn( color="primary" :loading="loading" @click="setLevels").full-width установить
       
 </template>
 
